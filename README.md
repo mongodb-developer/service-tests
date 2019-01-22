@@ -163,7 +163,7 @@ There are about 1000 correctness tests that are run, and looking at the each fai
 ## Requirements
 
 1. **Python 3.6**
-1. **A MongoDB instance**: The results are analyzed in MongoDB. If you're testing Atlas and another service side-by-side, you can use the Atlas instance you tested, or you can just use a free tier instance. **Note: This code will not work against DocumentDB (as of 2019-01-22), as it uses aggregation features that DocumentDB does not impleement.** 
+1. **A MongoDB instance**: The results are analyzed in MongoDB. If you're testing Atlas and another service side-by-side, you can use the Atlas instance you tested, or you can just use a free tier instance. **Note: This code will not work against DocumentDB (as of 2019-01-22), as it uses aggregation features that DocumentDB does not implement.** 
 1. **Pymongo**: This driver is needed for connecting to MongoDB instance.
 1. **[dnspython](http://www.dnspython.org/)**: You will need this if using Atlas and `mongodb+srv` connection strings.
 
