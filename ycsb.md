@@ -35,8 +35,8 @@ In order to reproduce published results, the following steps should be taken:
 *   operationcount=20000000
 *   workload=com.yahoo.ycsb.workloads.CoreWorkload
 *   readallfields=true
-*   readproportion=1.0
-*   updateproportion=0
+*   readproportion=0.5
+*   updateproportion=0.5
 *   scanproportion=0
 *   insertproportion=0.0
 *   requestdistribution=zipfian
@@ -49,8 +49,8 @@ In order to reproduce published results, the following steps should be taken:
 *   operationcount=20000000
 *   workload=com.yahoo.ycsb.workloads.CoreWorkload
 *   readallfields=true
-*   readproportion=1.0
-*   updateproportion=0
+*   readproportion=0.5
+*   updateproportion=0.5
 *   scanproportion=0
 *   insertproportion=0.0
 *   requestdistribution=zipfian
@@ -67,5 +67,5 @@ Command Line to load data:
 Command Line to run benchmark:
 
 ```
-./bin/ycsb run mongodb -s -P workloads/workload_small -threads [64, 128, 256] -p mongodb.url=mongodb://[username]:[password]@[aws.or.atlas.cluster.com]:27017/?replicaSet=rs0&w=majority
+./bin/ycsb run mongodb -s -P workloads/workload_small -p readproportion=[read_pct] -p updateproportion=[update_pct] -threads [64, 128, 256] -p mongodb.url=mongodb://[username]:[password]@[aws.or.atlas.cluster.com]:27017/?replicaSet=rs0&w=majority
 ```
