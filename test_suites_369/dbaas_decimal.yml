@@ -1,0 +1,20 @@
+test_kind: js_test
+
+selector:
+  roots:
+  - jstests/decimal/*.js
+  exclude_with_any_tags:
+  - requires_replication
+  - requires_sharding
+executor:
+  archive:
+    hooks:
+  config:
+    shell_options:
+      readMode: commands
+  hooks:
+  fixture:
+    class: MongoDFixture
+    mongod_options:
+      set_parameters:
+        enableTestCommands: 1

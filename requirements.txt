@@ -1,0 +1,2 @@
+pymongo >= 3.7.2
+dnspython >= 1.16.0

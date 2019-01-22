@@ -1,0 +1,44 @@
+test_kind: js_test
+
+selector:
+  roots:
+  - jstests/aggregation/**/*.js
+  exclude_files:
+  - jstests/aggregation/extras/*.js
+  - jstests/aggregation/data/*.js
+  - jstests/aggregation/bugs/cursor_timeout.js
+  - jstests/aggregation/bugs/lookup_unwind_getmore.js
+  - jstests/aggregation/bugs/lookup_unwind_killcursor.js
+  - jstests/aggregation/bugs/server3253.js
+  - jstests/aggregation/expressions/arrayToObject.js
+  # 3.6 tests to exclude
+  - jstests/aggregation/bugs/server6179.js
+  - jstests/aggregation/bugs/server6179.js
+  - jstests/aggregation/bugs/server7781.js
+  - jstests/aggregation/mongos_merge.js
+  - jstests/aggregation/mongos_slaveok.js
+  - jstests/aggregation/shard_targeting.js
+  - jstests/aggregation/sources/addFields/use_cases.js
+  - jstests/aggregation/sources/addFields/weather.js
+  - jstests/aggregation/sources/collStats/shard_host_info.js
+  - jstests/aggregation/sources/facet/use_cases.js
+  - jstests/aggregation/sources/graphLookup/sharded.js
+  - jstests/aggregation/sources/lookup/lookup.js
+  - jstests/aggregation/sources/replaceRoot/address.js
+  - jstests/aggregation/testshard1.js
+  - jstests/aggregation/testSlave.js
+  exclude_with_any_tags:
+  - requires_replication
+  - requires_sharding
+executor:
+  archive:
+    hooks:
+  config:
+    shell_options:
+      readMode: commands
+  hooks:
+  fixture:
+    class: MongoDFixture
+    mongod_options:
+      set_parameters:
+        enableTestCommands: 1
