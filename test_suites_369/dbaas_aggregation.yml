@@ -6,39 +6,27 @@ selector:
   exclude_files:
   - jstests/aggregation/extras/*.js
   - jstests/aggregation/data/*.js
-  - jstests/aggregation/bugs/cursor_timeout.js
-  - jstests/aggregation/bugs/lookup_unwind_getmore.js
-  - jstests/aggregation/bugs/lookup_unwind_killcursor.js
-  - jstests/aggregation/bugs/server3253.js
-  - jstests/aggregation/expressions/arrayToObject.js
-  # 3.6 tests to exclude
-  - jstests/aggregation/bugs/server6179.js
-  - jstests/aggregation/bugs/server6179.js
-  - jstests/aggregation/bugs/server7781.js
-  - jstests/aggregation/mongos_merge.js
-  - jstests/aggregation/mongos_slaveok.js
-  - jstests/aggregation/shard_targeting.js
-  - jstests/aggregation/sources/addFields/use_cases.js
-  - jstests/aggregation/sources/addFields/weather.js
-  - jstests/aggregation/sources/collStats/shard_host_info.js
-  - jstests/aggregation/sources/facet/use_cases.js
-  - jstests/aggregation/sources/graphLookup/sharded.js
-  - jstests/aggregation/sources/lookup/lookup.js
-  - jstests/aggregation/sources/replaceRoot/address.js
-  - jstests/aggregation/testshard1.js
-  - jstests/aggregation/testSlave.js
   exclude_with_any_tags:
-  - requires_replication
-  - requires_sharding
+  # Tests that aren't testing specific behaviors of authentication or authorization assume they are
+  # only ever being run with the __system user, which may not be compatible with the more
+  # restrictive permissions of a Database as a Service offering.
+  # https://docs.atlas.mongodb.com/reference/unsupported-commands-paid-tier-clusters/
+  - assumes_superuser_permissions
+  # The eval command is deprecated and isn't expected to be supported by Database as a Service
+  # offerings.
+  - requires_eval_command
+  # Tests that start their own MongoDB clusters using MongoRunner, ReplSetTest, or ShardingTest
+  # aren't meaningfully exercising anything about the Database as a Service offering.
+  - requires_spawning_own_processes
+  # Using the .host property of a Mongo connection object to establish a separate connection leads
+  # to omitting the auth+TLS connection string options.
+  - uses_multiple_connections
+  # Certains commands are only available when the testing mode of the server
+  # (`--setParameter enableTestCommands=1`) is enabled.
+  - uses_testing_only_commands
+
 executor:
-  archive:
-    hooks:
   config:
     shell_options:
       readMode: commands
-  hooks:
-  fixture:
-    class: MongoDFixture
-    mongod_options:
-      set_parameters:
-        enableTestCommands: 1
+      ssl: ''

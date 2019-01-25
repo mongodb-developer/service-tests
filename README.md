@@ -100,8 +100,8 @@ sudo usermod -a -G docker ubuntu
  * Then run this script.
 
 ```sh
-git clone https://github.com/10gen/MongoDB_Tests.git
-cd MongoDB_Tests
+git clone https://github.com/mongodb-developer/service-tests.git
+cd ./service-tests
 ./0_docker-build.sh
 ./1_docker-run.sh 'mongodb://<USER>:<PASSWORD>@documentdb-tests.cluster-c23gwlgcxzrp.eu-west-1.docdb.amazonaws.com:27017/?replicaSet=rs0&ssl=true'
 ./2_docker-collect-logs-rm.sh
@@ -196,9 +196,8 @@ After digesting the results and finding the more interesting failures, we can lo
 ### 1. Clone MongoDB repository and check out version
 The version checked out is the default version we tested with.
 ```
-$ git clone https://github.com/mongodb/mongo
+$ git clone --branch=v3.6.9-dbaas-testing https://github.com/mongodb/mongo.git
 $ cd ./mongo
-$ git checkout v3.6.9
 ```
 
 ### 2. Identify and run test

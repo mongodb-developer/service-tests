@@ -12,15 +12,9 @@ selector:
   - src/third_party/JSON-Schema-Test-Suite/tests/draft4/optional/zeroTerminatedFloats.json
   - src/third_party/JSON-Schema-Test-Suite/tests/draft4/ref.json
   - src/third_party/JSON-Schema-Test-Suite/tests/draft4/refRemote.json
+
 executor:
-  archive:
-    hooks:
   config:
     shell_options:
       readMode: commands
-  hooks:
-  fixture:
-    class: MongoDFixture
-    mongod_options:
-      set_parameters:
-        enableTestCommands: 1
+      ssl: ''
