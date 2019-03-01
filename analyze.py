@@ -326,7 +326,7 @@ def build_csv(coll, csv_f, csv_filter):
         logger.warning('filter is not valid, using empty filter')
         csv_filter = {}
     with open(csv_f, 'w+') as out:
-        out.write('test file,suite,version,run no,status,reason,description\n')
+        out.write('test file,suite,platform,version,run no,status,reason,description\n')
         for doc in coll.find(csv_filter):
             tn = doc['test_file']
             s = doc['suite']
