@@ -53,7 +53,7 @@ def parse_args():
         type=str,
         action='store',
         required=False,
-        default='v3.6.9',
+        default='3.6',
         help='version test suite was run against'
     )
 
@@ -71,7 +71,7 @@ def parse_args():
         type=str,
         action='store',
         required=False,
-        default='./results',
+        default='./results-3.6',
         help='directory where results are stored'
     )
 
