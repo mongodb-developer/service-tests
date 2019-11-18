@@ -12,6 +12,6 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/* /tmp/* /mongodb-shell-linux-x86_64-debian92-3.6.9.tgz
 COPY entrypoint.sh /entrypoint.sh
 ENV m='/mongodb-linux-x86_64-debian92-3.6.9/bin/mongo'
-ADD https://s3.amazonaws.com/rds-downloads/rds-combined-ca-bundle.pem /usr/local/share/ca-certificates/rds-combined-ca-bundle.crt
+ADD https://s3.amazonaws.com/rds-downloads/rds-ca-2019-root.pem /usr/local/share/ca-certificates/rds-ca-2019-root.crt
 RUN update-ca-certificates
 ENTRYPOINT ["/entrypoint.sh"]
