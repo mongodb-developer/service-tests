@@ -14,7 +14,8 @@ import logging.config
 logging.config.fileConfig('logging.conf')
 
 # list of suites run by the docker container
-SUITES = ['aggregation', 'change_streams', 'core', 'decimal', 'core_txns', 'json_schema']
+SUITES36 = ['aggregation', 'change_streams', 'core', 'decimal', 'json_schema']
+SUITES42 = ['aggregation', 'change_streams', 'core', 'decimal', 'core_txns', 'json_schema']
 
 def parse_args():
     """
@@ -209,9 +210,14 @@ def stage_results(coll, platform, version, run_no, results_dir):
     :return:
     """
     logger.debug('attempting to process results for {}'.format(platform))
-
+    suites = None
     bulk_insert = []
-    for suite in SUITES:
+    if version == "3.6":
+        suites = SUITES36
+    else: 
+        suites = SUITES42
+    
+    for suite in suites:
         test_results = get_tests_list(suite, platform, version, run_no, results_dir)
         log_lines = get_log_lines_as_dict(suite, results_dir)
         add_logs_lines_to_results(test_results, log_lines)
