@@ -134,8 +134,8 @@ The version 3.6 is the version you can see on the AWS website.
 | Json Schema | 23.52  | 26 | 26 | 0 | 0 | 0 |
 | Change Streams | 48.26 | 23 | 23 | 0 | 0 | 0 |
 | Aggregation | 576.59 | 204 | 204 | 0 | 0 | 0 |
-| Core | 2054.52 | 872 | 872 | 872 | 0 | 0 |
-| Transactions | 95.57 | 42 | 42 | | | |
+| Core | 2054.52 | 872 | 872 | 0 | 0 | 0 |
+| Transactions | 95.57 | 42 | 42 | 0 | 0 | 0 |
 | TOTAL | 2800.92 | 1182 | 1182 | 0 | 0 | 0 |
 | PERCENTAGES | | 100% | 100% | 0% | 0% | 0% |
 
