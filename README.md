@@ -23,7 +23,7 @@ There are only 3 things you need to run this project:
 
 The tests this harness runs are the subset of official MongoDB correctness tests that treat the system under test as a black box, without relying on fixtures or assumptions about the server's internal state.
 
-We built 5 test suites that make sense in this DBaaS context and they validate most of the features of the MongoDB 3.6 API.
+We built 6 test suites that make sense in this DBaaS context and they validate most of the features of the MongoDB 3.6 or 4.2 API.
 
 ## Recommended infrastructure
 
@@ -46,28 +46,23 @@ Note: If you provision a server other than Amazon Linux or Ubuntu, you will have
 ### On MongoDB Atlas
 
  * Build the image - it's a bit long (2-3 minutes) so go get that coffee, it's on me!
+ * Version should either be 3.6 or 4.2, depending on the suite you plan on running.
 
 ```sh
-./0_docker-build.sh
+./0_docker-build.sh <version>
 ```
 
- * Create a MongoDB Atlas Cluster v3.6, create an admin user and whitelist your public IP address. Find some help [here](https://www.youtube.com/watch?v=SIiVjgEDI7M&list=PL4RCxklHWZ9smTpR3hUdq53Su601yCPLj).
+ * Create a MongoDB Atlas Cluster v3.6 or v4.2, create an admin user and whitelist your public IP address. Find some help [here](https://www.youtube.com/watch?v=SIiVjgEDI7M&list=PL4RCxklHWZ9smTpR3hUdq53Su601yCPLj).
  * Collect the MongoDB Atlas connection string for the next command.
  * Run the 5 test suites.
 
 ```sh
-./1_docker-run.sh mongodb+srv://<USER>:<PASSWORD>@mongodb-tests-abcde.mongodb.net
+./1_docker-run.sh mongodb+srv://<USER>:<PASSWORD>@mongodb-tests-abcde.mongodb.net <version>
 ```
 
  * You can monitor by looking at the `results` folder.
  * Or you can `docker ps -a` and `docker logs -f <CONTAINER_NAME>` to check what is currently running.
- * When it's done, you just have to collect the logs in the standard output of each containers
-
-```sh
-./2_docker-collect-logs-rm.sh
-```
-
- * All the results (JSON + STDOUT) are in the results folder.
+ * All the results (JSON + STDOUT) are in the results-<version> folder.
 
 ### On AWS DocumentDB
 
@@ -102,50 +97,47 @@ sudo usermod -a -G docker ubuntu
 ```sh
 git clone https://github.com/mongodb-developer/service-tests.git
 cd ./service-tests
-./0_docker-build.sh
-./1_docker-run.sh 'mongodb://<USER>:<PASSWORD>@documentdb-tests.cluster-c23gwlgcxzrp.eu-west-1.docdb.amazonaws.com:27017/?replicaSet=rs0&ssl=true'
-./2_docker-collect-logs-rm.sh
+./0_docker-build.sh <version>
+./1_docker-run.sh 'mongodb://<USER>:<PASSWORD>@documentdb-tests.cluster-c23gwlgcxzrp.eu-west-1.docdb.amazonaws.com:27017/?replicaSet=rs0&ssl=true' <version>
 ```
 
 Notes:
  1. Please copy and paste the DocumentDB URI from the AWS interface but fix it so it looks exactly like the one above.
  2. The AWS certificate which is required to access any Document DB cluster is built into the Docker Image (see the Dockerfile for more details).
 
- * When it's over, you can collect the logs and the JSON files in the `results` folder.
+ * When it's over, you can collect the logs and the JSON files in the `results`-<version> folder.
 
 ## Test Results
 
-These results were produced on Jan 16, 2019 around 9pm GMT.
+These results were produced on Nov 11, 2019 around 9pm GMT.
 
-### AWS DocumentDB v3.6 - 1.0.200710
+### AWS DocumentDB v3.6
 
-The version 3.6 is the version you can see on the AWS website. The version 1.0.200710 was extracted from `db.serverStatus().version`.
-
-| Tests Suite | Time execution (sec) | Number of tests | Succeeded | Skipped | Failed | Errored |
-| --- | :---: | :---: | :---: | :---: | :---: | :---: |
-| Decimal | 4.43 | 13 | 7 | 0 | 6 | 0 |
-| Json Schema | 8.30 | 24 | 0 | 0 | 24 | 0 |
-| Change Streams | 2.77 | 9 | 0 | 0 | 9 | 0 |
-| Aggregation | 861.16 | 149 | 45 | 0 | 104 | 0 |
-| Core | 1459.58 | 833 | 325 | 0 | 508 | 0 |
-| TOTAL | 2336.24 | 1028 | 377 | 0 | 651 | 0 |
-| PERCENTAGES | | 100% | 36.67% | 0% | 63.33% | 0% |
-
-[DOWNLOAD THE TEST RESULTS](https://s3-eu-west-1.amazonaws.com/developer-advocacy-public/MongoDB-DocumentDB-Tests/AWS-DocumentDB-Results-v369-2019-01-16.zip).
-
-### MongoDB Atlas v3.6.9
+The version 3.6 is the version you can see on the AWS website.
 
 | Tests Suite | Time execution (sec) | Number of tests | Succeeded | Skipped | Failed | Errored |
 | --- | :---: | :---: | :---: | :---: | :---: | :---: |
-| Decimal | 4.68 | 13 | 13 | 0 | 0 | 0 |
-| Json Schema | 35.73 | 24 | 24 | 0 | 0 | 0 |
-| Change Streams | 14.64 | 9 | 9 | 0 | 0 | 0 |
-| Aggregation | 329.13 | 149 | 149 | 0 | 0 | 0 |
-| Core | 1260.79 | 833 | 833 | 0 | 0 | 0 |
-| TOTAL | 1644.97 | 1028 | 1028 | 0 | 0 | 0 |
+| Decimal | 3.59 | 15 | 9 | 0 | 6 | 0 |
+| Json Schema | 7.40 | 26 | 2 | 0 | 24 | 0 |
+| Change Streams | 11.31 | 23 | 4 | 0 | 19 | 0 |
+| Aggregation | 1022.48 | 204 | 67 | 0 | 137 | 0 |
+| Core | 2597.76 | 872 | 339 | 0 | 533 | 0 |
+| Transactions | 14.10 | 42 | 4 | 0| 38 | 0 |
+| TOTAL | 3656.64 | 1182 | 425 | 0 | 757 | 0 |
+| PERCENTAGES | | 100% | 35.96% | 0% | 64.04% | 0% |
+
+### MongoDB Atlas v4.2.1
+
+| Tests Suite | Time execution (sec) | Number of tests | Succeeded | Skipped | Failed | Errored |
+| --- | :---: | :---: | :---: | :---: | :---: | :---: |
+| Decimal | 2.46 | 15 | 15 | 0 | 0 | 0 |
+| Json Schema | 23.52  | 26 | 26 | 0 | 0 | 0 |
+| Change Streams | 48.26 | 23 | 23 | 0 | 0 | 0 |
+| Aggregation | 576.59 | 204 | 204 | 0 | 0 | 0 |
+| Core | 2054.52 | 872 | 872 | 872 | 0 | 0 |
+| Transactions | 95.57 | 42 | 42 | | | |
+| TOTAL | 2800.92 | 1182 | 1182 | 0 | 0 | 0 |
 | PERCENTAGES | | 100% | 100% | 0% | 0% | 0% |
-
-[DOWNLOAD THE TEST RESULTS](https://s3-eu-west-1.amazonaws.com/developer-advocacy-public/MongoDB-DocumentDB-Tests/MongoDB_Atlas_Results_v369_2019_01_16.zip).
 
 ## Pro tips
 
@@ -196,7 +188,7 @@ After digesting the results and finding the more interesting failures, we can lo
 ### 1. Clone MongoDB repository and check out version
 The version checked out is the default version we tested with.
 ```
-$ git clone --branch=v3.6.9-dbaas-testing https://github.com/mongodb/mongo.git
+$ git clone --branch=v4.2.1-dbaas-testing https://github.com/mongodb/mongo.git
 $ cd ./mongo
 ```
 
@@ -223,6 +215,10 @@ Should you find anything glaringly problematic with the tests, please reach out 
  * Maxime BEUGNET
  * Developer Advocate @ MongoDB
  * maxime@mongodb.com
+
+ * Greg McKeon
+ * Competitive Analyst @ MongoDB
+ * greg.mckeon@mongodb.com
 
 ## Results analyzer
 
