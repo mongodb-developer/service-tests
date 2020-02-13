@@ -14,8 +14,8 @@ import logging.config
 logging.config.fileConfig('logging.conf')
 
 # list of suites run by the docker container
-SUITES = ['aggregation', 'change_streams', 'core', 'decimal', 'json_schema']
-
+SUITES36 = ['aggregation', 'change_streams', 'core', 'decimal', 'json_schema']
+SUITES42 = ['aggregation', 'change_streams', 'core', 'decimal', 'core_txns', 'json_schema']
 
 def parse_args():
     """
@@ -53,7 +53,7 @@ def parse_args():
         type=str,
         action='store',
         required=False,
-        default='v3.6.9',
+        default='3.6',
         help='version test suite was run against'
     )
 
@@ -71,7 +71,7 @@ def parse_args():
         type=str,
         action='store',
         required=False,
-        default='./results',
+        default='./results-3.6',
         help='directory where results are stored'
     )
 
@@ -126,7 +126,7 @@ def get_tests_list(suite, platform, version, run_no, results_dir):
     logger.debug('attempt to process json file')
     json_f = '{}/{}'.format(
         results_dir,
-        fnmatch.filter(os.listdir(results_dir), '*{}*.json'.format(suite))[0]
+        fnmatch.filter(os.listdir(results_dir), '*{}.json'.format(suite))[0]
     )
     with open(json_f, 'r') as f:
         tests = json.load(f)
@@ -157,8 +157,9 @@ def get_log_lines_as_dict(suite, results_dir):
 
     log_f = '{}/{}'.format(
         results_dir,
-        fnmatch.filter(os.listdir(results_dir), '*{}*.log'.format(suite))[0]
+        fnmatch.filter(os.listdir(results_dir), '*{}.log'.format(suite))[0]
     )
+    logger.debug('LOGF {}'.format(log_f))
     # build dictionary where key is test name
     log_lines = {}
     with open(log_f) as log_file:
@@ -189,9 +190,10 @@ def add_logs_lines_to_results(test_list, log_dict):
     logger.debug('merging results')
     for test in test_list:
         # covers test file ending in js or json
-        key = re.match(r'^.*/(.*)\.js.*', test['test_file']).group(1)
-        if key and key in log_dict:
-            test['log_lines'] = log_dict[key]
+        key = re.match(r'^.*/(.*)\.js.*', test['test_file'])
+        if key and key.group(1) in log_dict:
+            test_name = key.group(1)
+            test['log_lines'] = log_dict[test_name]
         else:
             logger.warning('key {} not in log'.format(key))
 
@@ -208,9 +210,14 @@ def stage_results(coll, platform, version, run_no, results_dir):
     :return:
     """
     logger.debug('attempting to process results for {}'.format(platform))
-
+    suites = None
     bulk_insert = []
-    for suite in SUITES:
+    if version == "3.6":
+        suites = SUITES36
+    else: 
+        suites = SUITES42
+    
+    for suite in suites:
         test_results = get_tests_list(suite, platform, version, run_no, results_dir)
         log_lines = get_log_lines_as_dict(suite, results_dir)
         add_logs_lines_to_results(test_results, log_lines)
@@ -264,8 +271,8 @@ def process_documentdb_failures(coll, regex):
         {'$project': {'_id': 1, 'log_lines': 1}},
         {'$group': {'_id': '$_id', 'failure_lines': {'$addToSet': '$log_lines'}}}
     ]):
-        desc = ''.join(doc['failure_lines'])
-        desc = desc.replace(',', '').replace('\n', '')
+        desc = doc['failure_lines']
+        #desc = desc.replace(',', '').replace('\n', '')
         bulkupdate.append(
             pymongo.UpdateOne(
                 {'_id': doc['_id']},

@@ -1,0 +1,45 @@
+test_kind: js_test
+
+selector:
+  roots:
+  - jstests/change_streams/**/*.js
+  exclude_with_any_tags:
+  ##
+  # The next tags correspond to the special errors thrown by the
+  # set_read_and_write_concerns.js override when it refuses to replace the readConcern or
+  # writeConcern of a particular command. Above each tag are the message(s) that cause the tag to be
+  # warranted.
+  ##
+  # "Cowardly refusing to override write concern of command: ..."
+  - assumes_write_concern_unchanged
+  - assumes_read_concern_unchanged
+  # "Cowardly refusing to run test with overridden write concern when it uses a command that can
+  #  only perform w=1 writes: ..."
+  - requires_eval_command
+  # Tests that aren't testing specific behaviors of authentication or authorization assume they are
+  # only ever being run with the __system user, which may not be compatible with the more
+  # restrictive permissions of a Database as a Service offering.
+  # https://docs.atlas.mongodb.com/reference/unsupported-commands-paid-tier-clusters/
+  - assumes_superuser_permissions
+  # Tests that start their own MongoDB clusters using MongoRunner, ReplSetTest, or ShardingTest
+  # aren't meaningfully exercising anything about the Database as a Service offering.
+  - requires_spawning_own_processes
+  # Using the .host property of a Mongo connection object to establish a separate connection leads
+  # to omitting the auth+TLS connection string options.
+  - uses_multiple_connections
+  # Certains commands are only available when the testing mode of the server
+  # (`--setParameter enableTestCommands=1`) is enabled.
+  - uses_testing_only_commands
+
+executor:
+  config:
+    shell_options:
+      global_vars:
+        TestData:
+          defaultReadConcernLevel: majority
+          enableMajorityReadConcern: ''
+      eval: >-
+        var testingReplication = true;
+        load('jstests/libs/override_methods/set_read_and_write_concerns.js');
+      readMode: commands
+      ssl: ''
