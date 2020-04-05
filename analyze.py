@@ -320,6 +320,130 @@ def analyze_results(coll):
     else:
         logger.info('no errors to process for this pass')
 
+def summarize_results(results_coll, summary_coll, platform, version, run):
+    '''
+    Creates a summary of the run as a document in the collection "summary".
+    {
+    platform: <passed in>
+    run: <passed in>
+    timestamp: <max timestamp of a test in the run>
+    suites: [<array of suites run>]
+    passing_tests:
+    failing_tests:
+    total_tests:
+    version: <passed in>
+    }
+    '''
+    summary = results_coll.aggregate([
+    {
+        '$match': {
+            '$and': [
+                {
+                    'platform': platform
+                }, {
+                    'run': run
+                }, {
+                    'version': version
+                }
+            ]
+        }
+    }, {
+        '$facet': {
+            'suites': [
+                {
+                    '$group': {
+                        '_id': '$suite', 
+                        'passing_tests': {
+                            '$sum': {
+                                '$cond': {
+                                    'if': {
+                                        '$eq': [
+                                            '$status', 'pass'
+                                        ]
+                                    }, 
+                                    'then': 1, 
+                                    'else': 0
+                                }
+                            }
+                        }, 
+                        'failing_tests': {
+                            '$sum': {
+                                '$cond': {
+                                    'if': {
+                                        '$eq': [
+                                            '$status', 'fail'
+                                        ]
+                                    }, 
+                                    'then': 1, 
+                                    'else': 0
+                                }
+                            }
+                        }, 
+                        'total_tests': {
+                            '$sum': 1
+                        }
+                    }
+                }
+            ], 
+            'timestamp': [
+                {
+                    '$group': {
+                        '_id': None, 
+                        'timestamp': {
+                            '$max': '$end'
+                        }
+                    }
+                }
+            ]
+        }
+    }, {
+        '$unwind': {
+            'path': '$timestamp'
+        }
+    }, {
+        '$addFields': {
+            'timestamp': '$timestamp.timestamp', 
+            'passing_tests': {
+                '$reduce': {
+                    'input': '$suites', 
+                    'initialValue': '0', 
+                    'in': {
+                        '$sum': [
+                            '$$value', '$$this.passing_tests'
+                        ]
+                    }
+                }
+            }, 
+            'failing_tests': {
+                '$reduce': {
+                    'input': '$suites', 
+                    'initialValue': '0', 
+                    'in': {
+                        '$sum': [
+                            '$$value', '$$this.failing_tests'
+                        ]
+                    }
+                }
+            }, 
+            'total_tests': {
+                '$reduce': {
+                    'input': '$suites', 
+                    'initialValue': '0', 
+                    'in': {
+                        '$sum': [
+                            '$$value', '$$this.failing_tests', '$$this.passing_tests'
+                        ]
+                    }
+                }
+            },
+            'version': version,
+            'run': run,
+            'platform': platform
+        }
+    }])
+    for doc in summary:
+        summary_coll.insert(doc)
+
 
 def build_csv(coll, csv_f, csv_filter):
     """
@@ -364,11 +488,14 @@ def main():
         coll = client.get_database(args.db).get_collection(args.coll)
         stage_results(coll, args.platform, args.version, args.run, args.rdir)
         analyze_results(coll)
+        # create the summary doc in the collection 'summary'
+        summary_coll = client.get_database(args.db).get_collection('summary')
+        summarize_results(coll, summary_coll, args.platform, args.version, args.run)
         build_csv(coll, args.csv, json.loads(args.csvfilter))
         logger.info('finished analysis, csv file created: {}'.format(args.csv))
     except Exception as e:
         # general exception in case connection/inserts/finds/updates fail.
-        logger.error('exception occurred during analysis: {}'.format(e))
+        logger.error('exception occurred during analysis: {}'.format(e),  exc_info=True)
 
 
 if __name__ == '__main__':
