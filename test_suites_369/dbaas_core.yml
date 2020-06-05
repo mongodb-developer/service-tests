@@ -11,6 +11,9 @@ selector:
   # The find command fails with a different error message than the one expected when given a
   # non-string collection name argument.
   - jstests/core/commands_with_uuid.js
+  # The findAndModify command fails with a different error message than the one expected when given a
+  # non-string collection name argument.  
+  - jstests/core/explain_uuid.js
   # dbadmin.js is timing-sensitive when reporting whether there is clock skew.
   - jstests/core/dbadmin.js
   # These test run commands using legacy queries, which are not supported on sessions.
