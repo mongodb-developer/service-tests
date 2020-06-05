@@ -6,6 +6,8 @@ selector:
   exclude_files:
   - jstests/aggregation/extras/*.js
   - jstests/aggregation/data/*.js
+  # missing tag requires_spawning_own_processes in server37750.js
+  - jstests/aggregation/bugs/server37750.js
   exclude_with_any_tags:
   # Tests that aren't testing specific behaviors of authentication or authorization assume they are
   # only ever being run with the __system user, which may not be compatible with the more
