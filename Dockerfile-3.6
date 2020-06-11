@@ -1,17 +1,20 @@
 FROM debian:9.6
-COPY test_suites_369 /test_suites_369
+ARG branch
+ARG mongoshell_package
+ARG version
+COPY test_suites/$version /test_suites_$version
 COPY dev-requirements.txt /dev-requirements.txt
 COPY components-3.6 /components
 RUN apt-get update && \
     apt-get install -y git python2.7 python-pip gcc libcurl4-openssl-dev libssl-dev wget && \
-    git clone --depth 1 --branch r3.6.18 https://github.com/mongodb/mongo.git && \
+    git clone --depth 1 --branch $branch https://github.com/mongodb/mongo.git && \
     pip install --user -r /dev-requirements.txt && \
-    cp /test_suites_369/* /mongo/buildscripts/resmokeconfig/suites && \
-    wget https://downloads.mongodb.org/linux/mongodb-shell-linux-x86_64-debian92-3.6.18.tgz && \
-    tar xzf mongodb-shell-linux-x86_64-debian92-3.6.18.tgz && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /mongodb-shell-linux-x86_64-debian92-3.6.18.tgz
+    cp /test_suites_$version/* /mongo/buildscripts/resmokeconfig/suites && \
+    wget https://downloads.mongodb.org/linux/mongodb-shell-linux-x86_64-$mongoshell_package.tgz && \
+    tar xzf mongodb-shell-linux-x86_64-$mongoshell_package.tgz && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /mongodb-shell-linux-x86_64-$mongoshell_package.tgz
 COPY entrypoint.sh /entrypoint.sh
-ENV m='/mongodb-linux-x86_64-debian92-3.6.18/bin/mongo'
+ENV m=/mongodb-linux-x86_64-$mongoshell_package/bin/mongo
 ADD https://s3.amazonaws.com/rds-downloads/rds-ca-2019-root.pem /usr/local/share/ca-certificates/rds-ca-2019-root.crt
 RUN update-ca-certificates
 ENTRYPOINT ["/entrypoint.sh"]
