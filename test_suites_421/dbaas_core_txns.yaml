@@ -3,6 +3,50 @@ test_kind: js_test
 selector:
   roots:
   - jstests/core/txns/**/*.js
+  exclude_files:
+  # NEED TO INVESTIGATE
+  - jstests/core/txns/abort_expired_transaction.js
+  - jstests/core/txns/abort_prepared_transaction.js
+  - jstests/core/txns/abort_transaction_thread_does_not_block_on_locks.js
+  - jstests/core/txns/abort_unprepared_transactions_on_FCV_downgrade.js
+  - jstests/core/txns/await_prepared_transactions_on_FCV_downgrade.js
+  - jstests/core/txns/banned_txn_dbs.js
+  - jstests/core/txns/commands_banning_txnnumber_outside_transactions.js
+  - jstests/core/txns/commit_and_abort_large_prepared_transactions.js
+  - jstests/core/txns/commit_prepared_transaction.js
+  - jstests/core/txns/commit_prepared_transaction_errors.js
+  - jstests/core/txns/create_collection_not_blocked_by_txn.js
+  - jstests/core/txns/currentop_blocked_operations.js
+  - jstests/core/txns/disallow_operations_on_prepared_transaction.js
+  - jstests/core/txns/downgrade_fcv_while_large_partial_txn_in_progress.js
+  - jstests/core/txns/drop_collection_not_blocked_by_txn.js
+  - jstests/core/txns/empty_prepare.js
+  - jstests/core/txns/ensure_active_txn_for_prepare_transaction.js
+  - jstests/core/txns/errors_on_committed_transaction.js
+  - jstests/core/txns/kill_cursors_in_transaction.js
+  - jstests/core/txns/kill_op_on_txn_expiry.js
+  - jstests/core/txns/kill_sessions_kills_transaction.js
+  - jstests/core/txns/large_transactions_require_fcv42.js
+  - jstests/core/txns/listcollections_autocomplete.js
+  - jstests/core/txns/new_transaction_waits_for_previous_txn_table_updates.js
+  - jstests/core/txns/new_transactions_on_session_with_prepared_txn_block_behind_prepare.js
+  - jstests/core/txns/no_read_concern_snapshot_outside_txn.js
+  - jstests/core/txns/no_reads_from_system_dot_views_in_txn.js
+  - jstests/core/txns/no_writes_to_config_transactions_with_prepared_transaction.js
+  - jstests/core/txns/no_writes_to_system_collections_in_txn.js
+  - jstests/core/txns/prepare_conflict.js
+  - jstests/core/txns/prepare_conflict_aggregation_behavior.js
+  - jstests/core/txns/prepare_nonexistent_transaction.js
+  - jstests/core/txns/prepare_prepared_transaction.js
+  - jstests/core/txns/prepare_requires_fcv42.js
+  - jstests/core/txns/prepare_transaction_fails_on_temp_collections.js
+  - jstests/core/txns/prepare_transaction_unique_index_conflict.js
+  - jstests/core/txns/prepared_transactions_do_not_block_non_conflicting_ddl.js
+  - jstests/core/txns/rename_collection_not_blocked_by_txn.js
+  - jstests/core/txns/speculative_snapshot_includes_all_writes.js
+  - jstests/core/txns/statement_ids_accepted.js
+  - jstests/core/txns/timestamped_reads_wait_for_prepare_oplog_visibility.js
+  - jstests/core/txns/transactions_profiling_with_drops.js
   exclude_with_any_tags:
   # Transactions are not allowed to operate on capped collections.
   - requires_capped
