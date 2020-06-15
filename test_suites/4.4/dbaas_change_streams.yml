@@ -4,6 +4,12 @@ selector:
   roots:
   - jstests/change_streams/**/*.js
   exclude_files:
+  # NEED TO INVESTIGATE
+  - jstests/change_streams/change_stream.js
+  - jstests/change_streams/shell_helper.js
+  - jstests/change_streams/whole_cluster.js
+  - jstests/change_streams/whole_cluster_metadata_notifications.js
+  - jstests/change_streams/whole_db_metadata_notifications.js  
   exclude_with_any_tags:
   ##
   # The next tags correspond to the special errors thrown by the

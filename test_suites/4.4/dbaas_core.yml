@@ -19,6 +19,27 @@ selector:
   # string. This leads to afterClusterTime being specified as a readConcern option, which conflicts
   # with afterOpTime being specified as a readConcern option by the test.
   - jstests/core/read_after_optime.js
+  # NEED TO INVESTIGATE
+  - jstests/core/background_validation.js
+  - jstests/core/comment_field.js
+  - jstests/core/crud_ops_do_not_throw_locktimeout.js
+  - jstests/core/currentop_cursors.js
+  - jstests/core/currentop_waiting_for_latch.js
+  - jstests/core/explain_uuid.js
+  - jstests/core/failcommand_failpoint.js
+  - jstests/core/fsync.js
+  - jstests/core/hash.js
+  - jstests/core/hidden_index.js
+  - jstests/core/index9.js
+  - jstests/core/index_id_options.js
+  - jstests/core/internal_rename_if_options_and_indexes_match.js
+  - jstests/core/latch_analyzer.js
+  - jstests/core/list_all_local_sessions.js
+  - jstests/core/list_indexes.js
+  - jstests/core/list_local_sessions.js
+  - jstests/core/profile_hide_index.js
+  - jstests/core/queryoptimizera.js
+  - jstests/core/views/view_with_invalid_dbname.js
   exclude_with_any_tags:
   # Tests that aren't testing specific behaviors of authentication or authorization assume they are
   # only ever being run with the __system user, which may not be compatible with the more
