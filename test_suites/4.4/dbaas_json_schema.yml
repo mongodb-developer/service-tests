@@ -1,0 +1,12 @@
+test_kind: json_schema_test
+
+selector:
+  roots:
+  - src/third_party/JSON-Schema-Test-Suite/tests/draft4/**/*.json
+ 
+
+executor:
+  config:
+    shell_options:
+      readMode: commands
+      ssl: ''
