@@ -9,8 +9,8 @@ elif [[ $1 = "4.2" ]]; then
   mongoshell_package=debian10-4.2.6
   docker build -f Dockerfile-$1 --build-arg version=$1 --build-arg branch=$branch --build-arg mongoshell_package=$mongoshell_package -t mongo/mongodb-tests:$1 .
 elif [[ $1 = "4.4" ]]; then
-  branch=r4.4.0-rc7
-  mongoshell_package=debian10-4.4.0-rc8
+  branch=v4.4
+  mongoshell_package=debian10-4.4.0
   docker build -f Dockerfile-$1 --build-arg version=$1 --build-arg branch=$branch --build-arg mongoshell_package=$mongoshell_package -t mongo/mongodb-tests:$1 .
 else
   echo "Please specify either version 3.6, 4.2 or 4.4"
