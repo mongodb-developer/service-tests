@@ -173,7 +173,7 @@ def get_log_lines_as_dict(suite, results_dir):
                     logger.debug('old test:{}, current test:{}'.format(test, current_test))
                     test = current_test
                     log_lines[test] = []
-                log_lines[test].append(line.strip())
+                log_lines[test].append(line[:5000].strip())
             else:
                 logger.debug('skipping line: {}'.format(line.strip()))
     logger.info('{}:number of test:{}'.format(suite, len(log_lines.keys())))
