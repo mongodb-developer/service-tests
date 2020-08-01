@@ -470,7 +470,8 @@ def build_csv(coll, csv_f, csv_filter):
             r = doc['status']
             fr = doc['reason'] if 'reason' in doc else ''
             fd = doc['description'] if 'description' in doc else ''
-            out.write('{},{},{},{},{},{},{},{}\n'.format(tn, s, p, v, run, r, fr, fd))
+            clean_fd = '{}'.format(fd).replace('"', '""')
+            out.write('{},{},{},{},{},{},{},"{}"\n'.format(tn, s, p, v, run, r, fr, clean_fd))
 
 
 def main():
