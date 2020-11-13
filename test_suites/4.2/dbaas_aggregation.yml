@@ -10,6 +10,9 @@ selector:
   - jstests/aggregation/bugs/server42756.js
   - jstests/aggregation/sources/indexStats/verify_index_stats_output.js
   - jstests/aggregation/sources/lookup/lookup_absorb_match.js
+  # turn off profiling before dropping system.profile collection
+  - jstests/aggregation/optimize_away_pipeline.js
+  - jstests/aggregation/sources/lookup/profile_lookup.js
   exclude_with_any_tags:
   - assumes_superuser_permissions
   - requires_eval_command

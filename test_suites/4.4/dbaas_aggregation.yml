@@ -18,6 +18,9 @@ selector:
   - jstests/aggregation/sources/unionWith/unionWith.js
   - jstests/aggregation/sources/unionWith/unionWith_explain.js
   - jstests/aggregation/sources/unionWith/unionWith_invalid_usage.js
+  # turn off profiling before dropping system.profile
+  - jstests/aggregation/optimize_away_pipeline.js
+  - jstests/aggregation/sources/lookup/profile_lookup.js
   exclude_with_any_tags:
   - assumes_superuser_permissions
   - requires_eval_command
