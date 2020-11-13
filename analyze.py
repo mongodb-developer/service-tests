@@ -52,7 +52,7 @@ def parse_args():
         type=str,
         action='store',
         required=False,
-        default='v4.0'
+        default='v4.0',
         help='version test suite was run against'
     )
 
