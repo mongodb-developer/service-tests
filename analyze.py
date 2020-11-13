@@ -5,16 +5,18 @@ base assumption:
 import argparse
 import fnmatch
 import json
-import os
-import pymongo.errors
-import re
 import logging.config
+import os
+import re
+
+import pymongo.errors
 
 # hardcoded right now
 logging.config.fileConfig('logging.conf')
 
 # list of suites run by the docker container
 SUITES = ['aggregation', 'change_streams', 'core', 'decimal', 'core_txns', 'json_schema']
+
 
 def parse_args():
     """
@@ -268,7 +270,7 @@ def process_documentdb_failures(coll, regex):
         {'$group': {'_id': '$_id', 'failure_lines': {'$addToSet': '$log_lines'}}}
     ]):
         desc = doc['failure_lines']
-        #desc = desc.replace(',', '').replace('\n', '')
+        # desc = desc.replace(',', '').replace('\n', '')
         bulkupdate.append(
             pymongo.UpdateOne(
                 {'_id': doc['_id']},
@@ -280,7 +282,6 @@ def process_documentdb_failures(coll, regex):
         logger.info('modified {} documents'.format(results.modified_count))
     else:
         logger.info('no errors to process')
-
 
 
 def analyze_results(coll):
@@ -316,6 +317,7 @@ def analyze_results(coll):
     else:
         logger.info('no errors to process for this pass')
 
+
 def summarize_results(results_coll, summary_coll, platform, version, run):
     '''
     Creates a summary of the run as a document in the collection "summary".
@@ -331,112 +333,128 @@ def summarize_results(results_coll, summary_coll, platform, version, run):
     }
     '''
     summary = results_coll.aggregate([
-    {
-        '$match': {
-            '$and': [
-                {
-                    'platform': platform
-                }, {
-                    'run': run
-                }, {
-                    'version': version
-                }
-            ]
-        }
-    }, {
-        '$facet': {
-            'suites': [
-                {
-                    '$group': {
-                        '_id': '$suite', 
-                        'passing_tests': {
-                            '$sum': {
-                                '$cond': {
-                                    'if': {
-                                        '$eq': [
-                                            '$status', 'pass'
-                                        ]
-                                    }, 
-                                    'then': 1, 
-                                    'else': 0
+        {
+            '$match': {
+                '$and': [
+                    {
+                        'platform': platform
+                    }, {
+                        'run': run
+                    }, {
+                        'version': version
+                    }
+                ]
+            }
+        }, {
+            '$facet': {
+                'suites': [
+                    {
+                        '$group': {
+                            '_id': '$suite',
+                            'passing_tests': {
+                                '$sum': {
+                                    '$cond': {
+                                        'if': {
+                                            '$eq': [
+                                                '$status', 'pass'
+                                            ]
+                                        },
+                                        'then': 1,
+                                        'else': 0
+                                    }
                                 }
-                            }
-                        }, 
-                        'failing_tests': {
-                            '$sum': {
-                                '$cond': {
-                                    'if': {
-                                        '$eq': [
-                                            '$status', 'fail'
-                                        ]
-                                    }, 
-                                    'then': 1, 
-                                    'else': 0
+                            },
+                            'failing_tests': {
+                                '$sum': {
+                                    '$cond': {
+                                        'if': {
+                                            '$eq': [
+                                                '$status', 'fail'
+                                            ]
+                                        },
+                                        'then': 1,
+                                        'else': 0
+                                    }
                                 }
+                            },
+                            'total_tests': {
+                                '$sum': 1
                             }
-                        }, 
-                        'total_tests': {
-                            '$sum': 1
                         }
                     }
-                }
-            ], 
-            'timestamp': [
-                {
-                    '$group': {
-                        '_id': None, 
-                        'timestamp': {
-                            '$max': '$end'
+                ],
+                'timestamp': [
+                    {
+                        '$group': {
+                            '_id': None,
+                            'timestamp': {
+                                '$max': '$end'
+                            }
                         }
                     }
-                }
-            ]
-        }
-    }, {
-        '$unwind': {
-            'path': '$timestamp'
-        }
-    }, {
-        '$addFields': {
-            'timestamp': '$timestamp.timestamp', 
-            'passing_tests': {
-                '$reduce': {
-                    'input': '$suites', 
-                    'initialValue': '0', 
-                    'in': {
-                        '$sum': [
-                            '$$value', '$$this.passing_tests'
-                        ]
+                ]
+            }
+        }, {
+            '$unwind': {
+                'path': '$timestamp'
+            }
+        }, {
+            '$addFields': {
+                'timestamp': '$timestamp.timestamp',
+                'passing_tests': {
+                    '$reduce': {
+                        'input': '$suites',
+                        'initialValue': '0',
+                        'in': {
+                            '$sum': [
+                                '$$value', '$$this.passing_tests'
+                            ]
+                        }
                     }
-                }
-            }, 
-            'failing_tests': {
-                '$reduce': {
-                    'input': '$suites', 
-                    'initialValue': '0', 
-                    'in': {
-                        '$sum': [
-                            '$$value', '$$this.failing_tests'
-                        ]
+                },
+                'failing_tests': {
+                    '$reduce': {
+                        'input': '$suites',
+                        'initialValue': '0',
+                        'in': {
+                            '$sum': [
+                                '$$value', '$$this.failing_tests'
+                            ]
+                        }
                     }
-                }
-            }, 
-            'total_tests': {
-                '$reduce': {
-                    'input': '$suites', 
-                    'initialValue': '0', 
-                    'in': {
-                        '$sum': [
-                            '$$value', '$$this.failing_tests', '$$this.passing_tests'
-                        ]
+                },
+                'total_tests': {
+                    '$reduce': {
+                        'input': '$suites',
+                        'initialValue': '0',
+                        'in': {
+                            '$sum': [
+                                '$$value', '$$this.failing_tests', '$$this.passing_tests'
+                            ]
+                        }
                     }
-                }
-            },
-            'version': version,
-            'run': run,
-            'platform': platform
+                },
+                'version': version,
+                'run': run,
+                'platform': platform
+            }
+        }, {
+            '$addFields': {
+                'failing_percentage': {
+                    '$round': [{'$divide': [
+                        {'$multiply': [100, '$failing_tests']},
+                        '$total_tests'
+                    ]}, 2]
+                },
+                'passing_percentage': {
+                    '$round': [{'$divide': [
+                        {'$multiply': [100, '$passing_tests']},
+                        '$total_tests'
+                    ]}, 2]
+                },
+            }
         }
-    }])
+    ])
     for doc in summary:
         summary_coll.insert_one(doc)
 
@@ -492,7 +510,7 @@ def main():
         logger.info('finished analysis, csv file created: {}'.format(args.csv))
     except Exception as e:
         # general exception in case connection/inserts/finds/updates fail.
-        logger.error('exception occurred during analysis: {}'.format(e),  exc_info=True)
+        logger.error('exception occurred during analysis: {}'.format(e), exc_info=True)
 
 
 if __name__ == '__main__':
