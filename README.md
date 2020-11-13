@@ -154,7 +154,7 @@ There are about 1000 correctness tests that are run, and looking at the each fai
 
 ## Requirements
 
-1. **Python 3.6**
+1. **Python 3.6+**
 1. **A MongoDB instance**: The results are analyzed in MongoDB. If you're testing Atlas and another service side-by-side, you can use the Atlas instance you tested, or you can just use a free tier instance. **Note: This code will not work against DocumentDB (as of 2019-01-22), as it uses aggregation features that DocumentDB does not implement.** 
 1. **Pymongo**: This driver is needed for connecting to MongoDB instance.
 1. **[dnspython](http://www.dnspython.org/)**: You will need this if using Atlas and `mongodb+srv` connection strings.
@@ -164,6 +164,7 @@ After running the docker tests for a given target platform the results will be s
 in the `./results` directory. The Python program can then be run by executing the following:
 
 ```
+$ pip install -r requirements.txt
 $ python analyze.py --mdburl "mongodb://MDB_URL" --platform EMULATION_PLATFORM_NAME
 ```
 
@@ -172,13 +173,13 @@ The MongoDB URL (`--mdburl`) should point to the Atlas instance you have configu
 The `--mdburl` and `--platform` flag are required; optional parameters are:
 
 1. **--drop**: Drop the previous database set by `--db`, default: **False**
-2. **--version**: Database version run against, default: **v3.6.9**
+2. **--version**: Database version run against, default: **v4.0**
 3. **--db**: Database to store the results in, default: **results**
 4. **--coll**: Collection to store results in, default: **correctness**
 5. **--run**: Eun number, if we want to keep multiple results of the same platform, default: **1**
 6. **--csv**: CSV file name to be output, default: **./results.csv**
 7. **--csvfilter**: Filter to be applied to CSV processing, default: **{}**
-8. **--rdir**: Results directory to use, default: **./results**
+8. **--rdir**: Results directory to use, default: **./results-4.0**
 
 The `results.csv` will be generated for all data in the database (assuming an open filter). This CSV can be imported to the spreadsheet of your choice and further analysis can be done. The CSV file will contain the file, the suite, platform, version, run, status, reason, description.
 
@@ -188,7 +189,7 @@ After digesting the results and finding the more interesting failures, we can lo
 ### 1. Clone MongoDB repository and check out version
 The version checked out is the default version we tested with.
 ```
-$ git clone --branch=v4.2.1-dbaas-testing https://github.com/mongodb/mongo.git
+$ git clone --branch=v4.0 https://github.com/mongodb/mongo.git
 $ cd ./mongo
 ```
 

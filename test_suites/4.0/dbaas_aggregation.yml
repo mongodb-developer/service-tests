@@ -7,6 +7,7 @@ selector:
   - jstests/aggregation/extras/*.js
   - jstests/aggregation/data/*.js
   - jstests/aggregation/sources/lookup/lookup_absorb_match.js
+  - jstests/aggregation/sources/lookup/profile_lookup.js
   exclude_with_any_tags:
   - assumes_superuser_permissions
   - requires_eval_command
