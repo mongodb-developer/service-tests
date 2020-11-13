@@ -438,7 +438,7 @@ def summarize_results(results_coll, summary_coll, platform, version, run):
         }
     }])
     for doc in summary:
-        summary_coll.insert(doc)
+        summary_coll.insert_one(doc)
 
 
 def build_csv(coll, csv_f, csv_filter):
