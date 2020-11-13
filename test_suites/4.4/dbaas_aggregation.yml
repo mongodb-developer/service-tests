@@ -7,16 +7,17 @@ selector:
   - jstests/aggregation/extras/*.js
   - jstests/aggregation/data/*.js
   # NEED TO INVESTIGATE
-#  - jstests/aggregation/bugs/server37750.js
-#  - jstests/aggregation/bugs/server42756.js
-#  - jstests/aggregation/optimize_away_pipeline.js
-#  - jstests/aggregation/pipeline_pass_through_from_mongos.js
-#  - jstests/aggregation/sharded_agg_cleanup_on_error.js
-#  - jstests/aggregation/sources/indexStats/verify_index_stats_output.js
-#  - jstests/aggregation/sources/lookup/profile_lookup.js
-#  - jstests/aggregation/sources/merge/batch_writes.js
-#  - jstests/aggregation/sources/merge/exchange_explain.js
-#  - jstests/aggregation/sources/merge/use_cases.js
+  - jstests/aggregation/accumulators/accumulator_js_size_limits.js
+  - jstests/aggregation/bugs/server21632.js
+  - jstests/aggregation/expressions/rand.js
+  - jstests/aggregation/no_output_to_system.js
+  - jstests/aggregation/sources/facet/facet_memory_consumption.js
+  - jstests/aggregation/sources/indexStats/verify_index_stats_output.js
+  - jstests/aggregation/sources/lookup/lookup_absorb_match.js
+  - jstests/aggregation/sources/sort/explain_sort.js
+  - jstests/aggregation/sources/unionWith/unionWith.js
+  - jstests/aggregation/sources/unionWith/unionWith_explain.js
+  - jstests/aggregation/sources/unionWith/unionWith_invalid_usage.js
   exclude_with_any_tags:
   - assumes_superuser_permissions
   - requires_eval_command

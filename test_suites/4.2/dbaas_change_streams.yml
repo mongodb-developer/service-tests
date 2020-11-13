@@ -4,10 +4,10 @@ selector:
   roots:
   - jstests/change_streams/**/*.js
   exclude_files:
-#  - jstests/change_streams/change_stream.js
-#  - jstests/change_streams/whole_cluster.js
-#  - jstests/change_streams/whole_cluster_metadata_notifications.js
-#  - jstests/change_streams/whole_db_metadata_notifications.js
+  - jstests/change_streams/change_stream.js
+  - jstests/change_streams/whole_cluster.js
+  - jstests/change_streams/whole_cluster_metadata_notifications.js
+  - jstests/change_streams/whole_db_metadata_notifications.js
   exclude_with_any_tags:
   - requires_eval_command
   - assumes_superuser_permissions

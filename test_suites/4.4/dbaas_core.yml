@@ -5,32 +5,46 @@ selector:
   - jstests/core/**/*.js
   exclude_files:
   - jstests/core/txns/**/*.js
-#  # The find command fails with a different error message than the one expected when given a
-#  # non-string collection name argument.
-#  - jstests/core/commands_with_uuid.js
-#  # dbadmin.js is timing-sensitive when reporting whether there is clock skew.
-#  - jstests/core/dbadmin.js
-#  # These test run commands using legacy queries, which are not supported on sessions.
-#  - jstests/core/exhaust.js
-#  - jstests/core/validate_cmd_ns.js
-#  # Causal consistency is enabled when the retryWrites options is specified in the connection
-#  # string. This leads to afterClusterTime being specified as a readConcern option, which conflicts
-#  # with afterOpTime being specified as a readConcern option by the test.
-#  - jstests/core/read_after_optime.js
-#  # NEED TO INVESTIGATE
-#  - jstests/core/bypass_doc_validation.js
-#  - jstests/core/cannot_create_system_dot_indexes.js
-#  - jstests/core/collation.js
-#  - jstests/core/escaped-logs.js
-#  - jstests/core/explain_uuid.js
-#  - jstests/core/hostinfo.js
-#  - jstests/core/index9.js
-#  - jstests/core/index_id_options.js
-#  - jstests/core/list_all_local_sessions.js
-#  - jstests/core/list_indexes.js
-#  - jstests/core/queryoptimizera.js
-#  - jstests/core/restart_catalog.js
-
+  # NEED TO INVESTIGATE
+  - jstests/core/apitest_db_profile_level.js
+  - jstests/core/background_validation.js
+  - jstests/core/batch_write_command_w0.js
+  - jstests/core/command_json_schema_field.js
+  - jstests/core/commands_with_uuid.js
+  - jstests/core/comment_field.js
+  - jstests/core/create_index_helper_validation.js
+  - jstests/core/crud_api.js
+  - jstests/core/crud_ops_do_not_throw_locktimeout.js
+  - jstests/core/currentop_cursors.js
+  - jstests/core/currentop_waiting_for_latch.js
+  - jstests/core/exhaust.js
+  - jstests/core/explain_find.js
+  - jstests/core/explain_uuid.js
+  - jstests/core/failcommand_failpoint.js
+  - jstests/core/find_and_modify_metrics.js
+  - jstests/core/fsync.js
+  - jstests/core/hash.js
+  - jstests/core/hidden_index.js
+  - jstests/core/hostinfo.js
+  - jstests/core/index9.js
+  - jstests/core/index_id_options.js
+  - jstests/core/internal_rename_if_options_and_indexes_match.js
+  - jstests/core/invalidated_legacy_cursors.js
+  - jstests/core/ismaster.js
+  - jstests/core/latch_analyzer.js
+  - jstests/core/list_all_local_sessions.js
+  - jstests/core/list_commands.js
+  - jstests/core/list_indexes.js
+  - jstests/core/list_local_sessions.js
+  - jstests/core/merge_sort_collation.js
+  - jstests/core/null_query_semantics.js
+  - jstests/core/profile_hide_index.js
+  - jstests/core/queryoptimizera.js
+  - jstests/core/read_after_optime.js
+  - jstests/core/sample_rate.js
+  - jstests/core/update_metrics.js
+  - jstests/core/validate_cmd_ns.js
+  - jstests/core/views/view_with_invalid_dbname.js
   exclude_with_any_tags:
   - assumes_superuser_permissions
   - requires_eval_command
