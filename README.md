@@ -269,20 +269,14 @@ Should you find anything glaringly problematic with the tests, please reach out 
 
 ## Test runner
 
- * Maxime BEUGNET
- * Developer Advocate @ MongoDB
- * maxime@mongodb.com
-
- * Greg McKeon
- * Former MongoDB employee ─ Competitive Analyst
- * greg.mckeon@mongodb.com
+ * Maxime BEUGNET - Senior Developer Advocate @ MongoDB - maxime@mongodb.com
+ * Greg McKeon    - Former MongoDB employee - Competitive Analyst - greg.mckeon@mongodb.com
 
 ## Results analyzer
 
-* Shawn McCarthy
-* Former MongoDB employee ─ Developer Advocate
-* shawn.mccarthy@mongodb.com
+* Shawn McCarthy - Former MongoDB employee - Developer Advocate - shawn.mccarthy@mongodb.com
  
- # LICENSE
+# LICENSE
 
- This repository is published under the Server Side Public License (SSPL) v1. See individual files (LICENSE) for details.
+This repository is published under the Server Side Public License (SSPL) v1. See individual files (LICENSE) for details.
+
