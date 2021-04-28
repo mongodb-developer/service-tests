@@ -269,12 +269,12 @@ Should you find anything glaringly problematic with the tests, please reach out 
 
 ## Test runner
 
- * Maxime BEUGNET - Senior Developer Advocate @ MongoDB - maxime@mongodb.com
- * Greg McKeon    - Former MongoDB employee - Competitive Analyst - greg.mckeon@mongodb.com
+ * Maxime BEUGNET <maxime@mongodb.com> - Senior Developer Advocate @ MongoDB
+ * Greg McKeon - Former MongoDB employee - Competitive Analyst
 
 ## Results analyzer
 
-* Shawn McCarthy - Former MongoDB employee - Developer Advocate - shawn.mccarthy@mongodb.com
+* Shawn McCarthy - Former MongoDB employee - Developer Advocate
  
 # LICENSE
 
