@@ -114,7 +114,9 @@ Notes:
 
 ### Online results
 
-https://www.isdocumentdbreallymongodb.com/
+Available at:
+* https://www.isdocumentdbreallymongodb.com/
+* https://www.iscosmosdbreallymongodb.com/
 
 ### AWS DocumentDB v4.0 with MongoDB v4.0 Tests ─ Nov 13, 2020
 
@@ -262,8 +264,7 @@ Should you find anything glaringly problematic with the tests, please reach out 
 
 ## TODO
 1. Document Layer (FoundationDB): Run correctness results through `analyze.py`
-2. CosmosDB: Run correctness results through `analyze.py`
-3. Automate more of the analysis, it is very simplistic right now
+2. Automate more of the analysis, it is very simplistic right now
 
 # Authors & Contact
 
