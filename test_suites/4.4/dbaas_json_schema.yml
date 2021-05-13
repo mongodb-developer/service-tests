@@ -4,7 +4,6 @@ selector:
   roots:
   - src/third_party/JSON-Schema-Test-Suite/tests/draft4/**/*.json
   exclude_files:
-  # NEED TO INVESTIGATE 
   - src/third_party/JSON-Schema-Test-Suite/tests/draft4/default.json
   - src/third_party/JSON-Schema-Test-Suite/tests/draft4/definitions.json
   - src/third_party/JSON-Schema-Test-Suite/tests/draft4/optional/bignum.json

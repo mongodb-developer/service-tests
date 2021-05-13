@@ -23,7 +23,7 @@ There are only 3 things you need to run this project:
 
 The tests this harness runs are the subset of official MongoDB correctness tests that treat the system under test as a black box, without relying on fixtures or assumptions about the server's internal state.
 
-We built 6 test suites that make sense in this DBaaS context and they validate most of the features of the MongoDB 3.6 or 4.2 API.
+We built 6 test suites that make sense in this DBaaS context and they validate most of the features of the MongoDB 4.0, 4.2 or 4.4 API.
 
 ## Recommended infrastructure
 
@@ -46,23 +46,23 @@ Note: If you provision a server other than Amazon Linux or Ubuntu, you will have
 ### On MongoDB Atlas
 
  * Build the image - it's a bit long (2-3 minutes) so go get that coffee, it's on me!
- * Version should either be 3.6 or 4.2, depending on the suite you plan on running.
+ * Version should either be 4.0, 4.2 or 4.4, depending on the suite you plan on running.
 
 ```sh
 ./0_docker-build.sh <version>
 ```
 
- * Create a MongoDB Atlas Cluster v3.6 or v4.2, create an admin user and whitelist your public IP address. Find some help [here](https://www.youtube.com/watch?v=SIiVjgEDI7M&list=PL4RCxklHWZ9smTpR3hUdq53Su601yCPLj).
+ * Create a MongoDB Atlas Cluster v4.0, 4.2 or v4.4, create an admin user and whitelist your public IP address. Find some help [here](https://www.youtube.com/watch?v=SIiVjgEDI7M&list=PL4RCxklHWZ9smTpR3hUdq53Su601yCPLj).
  * Collect the MongoDB Atlas connection string for the next command.
  * Run the 5 test suites.
 
 ```sh
-./1_docker-run.sh mongodb+srv://<USER>:<PASSWORD>@mongodb-tests-abcde.mongodb.net <version>
+./1_docker-run.sh 'mongodb+srv://<USER>:<PASSWORD>@mongodb-tests-abcde.mongodb.net' <version>
 ```
 
  * You can monitor by looking at the `results` folder.
  * Or you can `docker ps -a` and `docker logs -f <CONTAINER_NAME>` to check what is currently running.
- * All the results (JSON + STDOUT) are in the results-<version> folder.
+ * All the results (JSON + STDOUT) are in the `results-<version>` folder.
 
 ### On AWS DocumentDB
 
@@ -98,45 +98,102 @@ sudo usermod -a -G docker ubuntu
 git clone https://github.com/mongodb-developer/service-tests.git
 cd ./service-tests
 ./0_docker-build.sh <version>
-./1_docker-run.sh 'mongodb://<USER>:<PASSWORD>@documentdb-tests.cluster-c23gwlgcxzrp.eu-west-1.docdb.amazonaws.com:27017/?replicaSet=rs0&ssl=true' <version>
+./1_docker-run.sh 'mongodb://<USER>:<PASSWORD>@documentdb-tests.cluster-c23gwlgcxzrp.eu-west-1.docdb.amazonaws.com:27017/?replicaSet=rs0&ssl=true&readPreference=secondaryPreferred&retryWrites=false' <version>
 ```
 
 Notes:
- 1. Please copy and paste the DocumentDB URI from the AWS interface but fix it so it looks exactly like the one above.
- 2. The AWS certificate which is required to access any Document DB cluster is built into the Docker Image (see the Dockerfile for more details).
+ 1. Please copy and paste the DocumentDB URI from the AWS interface but confirm that it contains the same flags and none extra.
+ 2. The AWS certificate which is required to access any Document DB cluster is built into the Docker Image (see the Dockerfile for more details). There is no need to pass the "ssl_ca_certs" argument found in the connection string AWS provides.
 
- * When it's over, you can collect the logs and the JSON files in the `results`-<version> folder.
+ * When it's over, you can collect the logs and the JSON files in the `results-<version>` folder.
 
 ## Test Results
 
-These results were produced on Nov 11, 2019 around 9pm GMT.
+- Download Cosmos latest logs: [2021_03_04](https://developer-advocacy-public.s3-eu-west-1.amazonaws.com/MongoDB-DocumentDB-Tests/cosmosdb-44-2021_03_04.zip)
+- Download Atlas & DocDB latest logs: [2020_11_13](https://developer-advocacy-public.s3-eu-west-1.amazonaws.com/MongoDB-DocumentDB-Tests/atlas-docdb-2020_11_13.zip)
 
-### AWS DocumentDB v3.6
+### Online results
 
-The version 3.6 is the version you can see on the AWS website.
+Available at:
+* https://www.isdocumentdbreallymongodb.com/
+* https://www.iscosmosdbreallymongodb.com/
 
-| Tests Suite | Time execution (sec) | Number of tests | Succeeded | Skipped | Failed | Errored |
-| --- | :---: | :---: | :---: | :---: | :---: | :---: |
-| Decimal | 3.59 | 15 | 9 | 0 | 6 | 0 |
-| Json Schema | 7.40 | 26 | 2 | 0 | 24 | 0 |
-| Change Streams | 11.31 | 23 | 4 | 0 | 19 | 0 |
-| Aggregation | 1022.48 | 204 | 67 | 0 | 137 | 0 |
-| Core | 2597.76 | 872 | 339 | 0 | 533 | 0 |
-| Transactions | 14.10 | 42 | 4 | 0| 38 | 0 |
-| TOTAL | 3656.64 | 1182 | 425 | 0 | 757 | 0 |
-| PERCENTAGES | | 100% | 35.96% | 0% | 64.04% | 0% |
-
-### MongoDB Atlas v4.2.1
+### AWS DocumentDB v4.0 with MongoDB v4.0 Tests ─ Nov 13, 2020
 
 | Tests Suite | Time execution (sec) | Number of tests | Succeeded | Skipped | Failed | Errored |
 | --- | :---: | :---: | :---: | :---: | :---: | :---: |
-| Decimal | 2.46 | 15 | 15 | 0 | 0 | 0 |
-| Json Schema | 23.52  | 26 | 26 | 0 | 0 | 0 |
-| Change Streams | 48.26 | 23 | 23 | 0 | 0 | 0 |
-| Aggregation | 576.59 | 204 | 204 | 0 | 0 | 0 |
-| Core | 2054.52 | 872 | 872 | 0 | 0 | 0 |
-| Transactions | 95.57 | 42 | 42 | 0 | 0 | 0 |
-| TOTAL | 2800.92 | 1182 | 1182 | 0 | 0 | 0 |
+| Decimal | 3.37 | 13 | 7 | 0 | 6 | 0 |
+| Json Schema | 6.67 | 24 | 0 | 0 | 24 | 0 |
+| Change Streams | 606.01 | 20 | 0 | 0 | 20 | 0 |
+| Aggregation | 899.83 | 166 | 76 | 0 | 90 | 0 |
+| Core | 1789.21 | 849 | 348 | 0 | 501 | 0 |
+| Transactions | 94.48 | 32 | 12 | 0| 20 | 0 |
+| TOTAL | 3399.57 | 1104 | 443 | 0 | 661 | 0 |
+| PERCENTAGES | | 100% | 40.13% | 0% | 59.87% | 0% |
+
+### AWS DocumentDB v4.0 with MongoDB v4.4 Tests ─ Nov 13, 2020
+
+| Tests Suite | Time execution (sec) | Number of tests | Succeeded | Skipped | Failed | Errored |
+| --- | :---: | :---: | :---: | :---: | :---: | :---: |
+| Decimal | 3.11 | 15 | 9 | 0 | 6 | 0 |
+| Json Schema | 6.45 | 26 | 2 | 0 | 24 | 0 |
+| Change Streams | 185.63 | 22 | 2 | 0 | 20 | 0 |
+| Aggregation | 936.68 | 234 | 79 | 0 | 155 | 0 |
+| Core | 2141.28 | 890 | 342 | 0 | 548 | 0 |
+| Transactions | 107.83 | 49 | 24 | 0| 25 | 0 |
+| TOTAL | 3380.98 | 1236 | 458 | 0 | 778 | 0 |
+| PERCENTAGES | | 100% | 37.06% | 0% | 62.94% | 0% |
+
+### Azure CosmosDB v4.0 with MongoDB v4.4 Tests ─ Mar 4, 2021
+
+| Tests Suite | Time execution (sec) | Number of tests | Succeeded | Skipped | Failed | Errored |
+| --- | :---: | :---: | :---: | :---: | :---: | :---: |
+| Decimal | 19.83 | 15 | 10 | 0 | 5 | 0 |
+| Json Schema | 43.05 | 26 | 2 | 0 | 24 | 0 |
+| Change Streams | 38.00 | 22 | 2 | 0 | 20 | 0 |
+| Aggregation | 1625.44 | 236 | 88 | 0 | 148 | 0 |
+| Core | 8531.10 | 891 | 303 | 0 | 588 | 0 |
+| Transactions | 28.32 | 49 | 4 | 0 | 45 | 0 |
+| TOTAL | 10285.74 | 1239 | 409 | 0 | 830 | 0 |
+| PERCENTAGES | | 100% | 33.01% | 0% | 66.99% | 0% |
+
+### MongoDB Atlas v4.0 with MongoDB v4.0 Tests ─ Nov 13, 2020
+
+| Tests Suite | Time execution (sec) | Number of tests | Succeeded | Skipped | Failed | Errored |
+| --- | :---: | :---: | :---: | :---: | :---: | :---: |
+| Decimal | 3.77 | 13 | 13 | 0 | 0 | 0 |
+| Json Schema | 17.29  | 24 | 24 | 0 | 0 | 0 |
+| Change Streams | 38.27 | 20 | 20 | 0 | 0 | 0 |
+| Aggregation | 123.14 | 166 | 166 | 0 | 0 | 0 |
+| Core | 457.96 | 849 | 849 | 0 | 0 | 0 |
+| Transactions | 16.64 | 32 | 32 | 0 | 0 | 0 |
+| TOTAL | 657.07 | 1104 | 1104 | 0 | 0 | 0 |
+| PERCENTAGES | | 100% | 100% | 0% | 0% | 0% |
+
+### MongoDB Atlas v4.2 with MongoDB v4.2 Tests ─ Nov 13, 2020
+
+| Tests Suite | Time execution (sec) | Number of tests | Succeeded | Skipped | Failed | Errored |
+| --- | :---: | :---: | :---: | :---: | :---: | :---: |
+| Decimal | 1.60 | 15 | 15 | 0 | 0 | 0 |
+| Json Schema | 15.15  | 26 | 26 | 0 | 0 | 0 |
+| Change Streams | 47.83 | 24 | 24 | 0 | 0 | 0 |
+| Aggregation | 156.42 | 206 | 206 | 0 | 0 | 0 |
+| Core | 435.17 | 879 | 879 | 0 | 0 | 0 |
+| Transactions | 24.54 | 39 | 39 | 0 | 0 | 0 |
+| TOTAL | 680.71 | 1189 | 1189 | 0 | 0 | 0 |
+| PERCENTAGES | | 100% | 100% | 0% | 0% | 0% |
+
+### MongoDB Atlas v4.4 with MongoDB v4.4 Tests ─ Nov 13, 2020
+
+| Tests Suite | Time execution (sec) | Number of tests | Succeeded | Skipped | Failed | Errored |
+| --- | :---: | :---: | :---: | :---: | :---: | :---: |
+| Decimal | 1.83 | 15 | 15 | 0 | 0 | 0 |
+| Json Schema | 15.32  | 26 | 26 | 0 | 0 | 0 |
+| Change Streams | 40.81 | 22 | 22 | 0 | 0 | 0 |
+| Aggregation | 223.77 | 234 | 234 | 0 | 0 | 0 |
+| Core | 480.89 | 890 | 890 | 0 | 0 | 0 |
+| Transactions | 34.67 | 49 | 49 | 0 | 0 | 0 |
+| TOTAL | 797.29 | 1236 | 1236 | 0 | 0 | 0 |
 | PERCENTAGES | | 100% | 100% | 0% | 0% | 0% |
 
 ## Pro tips
@@ -146,6 +203,7 @@ The version 3.6 is the version you can see on the AWS website.
  * If you want to run the test suites individually, you can. Read the `1_docker-run.sh` and run the docker command manually with the correct URI.
 
 # Test Results Analyzer
+
 Once you have finished running the test suite, the next step is to analyze and understand the failures from the run. 
 
 The goal of this analysis is to allow us to quickly see what core MongoDB features are and are not supported by a given implementation. The analysis attempts to categorize failures into **UNSUPPORTED** and **FURTHER_INVESTIGATION** to help reduce the amount of debugging and allow us to quickly focus on more *interesting* failures.
@@ -154,16 +212,17 @@ There are about 1000 correctness tests that are run, and looking at the each fai
 
 ## Requirements
 
-1. **Python 3.6**
+1. **Python 3.6+**
 1. **A MongoDB instance**: The results are analyzed in MongoDB. If you're testing Atlas and another service side-by-side, you can use the Atlas instance you tested, or you can just use a free tier instance. **Note: This code will not work against DocumentDB (as of 2019-01-22), as it uses aggregation features that DocumentDB does not implement.** 
-1. **Pymongo**: This driver is needed for connecting to MongoDB instance.
-1. **[dnspython](http://www.dnspython.org/)**: You will need this if using Atlas and `mongodb+srv` connection strings.
+1. **[pymongo](https://pypi.org/project/pymongo/) package**: This driver is needed for connecting to MongoDB instance.
+1. **[dnspython](http://www.dnspython.org/) package**: You will need this if using Atlas and `mongodb+srv` connection strings.
 
 ### Steps to Run
 After running the docker tests for a given target platform the results will be stored
 in the `./results` directory. The Python program can then be run by executing the following:
 
 ```
+$ pip install -r requirements.txt
 $ python analyze.py --mdburl "mongodb://MDB_URL" --platform EMULATION_PLATFORM_NAME
 ```
 
@@ -172,13 +231,13 @@ The MongoDB URL (`--mdburl`) should point to the Atlas instance you have configu
 The `--mdburl` and `--platform` flag are required; optional parameters are:
 
 1. **--drop**: Drop the previous database set by `--db`, default: **False**
-2. **--version**: Database version run against, default: **v3.6.9**
+2. **--version**: Database version run against, default: **v4.0**
 3. **--db**: Database to store the results in, default: **results**
 4. **--coll**: Collection to store results in, default: **correctness**
 5. **--run**: Eun number, if we want to keep multiple results of the same platform, default: **1**
 6. **--csv**: CSV file name to be output, default: **./results.csv**
 7. **--csvfilter**: Filter to be applied to CSV processing, default: **{}**
-8. **--rdir**: Results directory to use, default: **./results**
+8. **--rdir**: Results directory to use, default: **./results-4.0**
 
 The `results.csv` will be generated for all data in the database (assuming an open filter). This CSV can be imported to the spreadsheet of your choice and further analysis can be done. The CSV file will contain the file, the suite, platform, version, run, status, reason, description.
 
@@ -188,7 +247,7 @@ After digesting the results and finding the more interesting failures, we can lo
 ### 1. Clone MongoDB repository and check out version
 The version checked out is the default version we tested with.
 ```
-$ git clone --branch=v4.2.1-dbaas-testing https://github.com/mongodb/mongo.git
+$ git clone --branch=v4.0 https://github.com/mongodb/mongo.git
 $ cd ./mongo
 ```
 
@@ -205,27 +264,20 @@ Should you find anything glaringly problematic with the tests, please reach out 
 
 ## TODO
 1. Document Layer (FoundationDB): Run correctness results through `analyze.py`
-2. CosmosDB: Run correctness results through `analyze.py`
-3. Automate more of the analysis, it is very simplistic right now
+2. Automate more of the analysis, it is very simplistic right now
 
 # Authors & Contact
 
 ## Test runner
 
- * Maxime BEUGNET
- * Developer Advocate @ MongoDB
- * maxime@mongodb.com
-
- * Greg McKeon
- * Competitive Analyst @ MongoDB
- * greg.mckeon@mongodb.com
+ * Maxime BEUGNET <maxime@mongodb.com> - Senior Developer Advocate @ MongoDB
+ * Greg McKeon - Former MongoDB employee - Competitive Analyst
 
 ## Results analyzer
 
-* Shawn McCarthy
-* Developer Advocate @ MongoDB
-* shawn.mccarthy@mongodb.com
+* Shawn McCarthy - Former MongoDB employee - Developer Advocate
  
- # LICENSE
+# LICENSE
 
- This repository is published under the Server Side Public License (SSPL) v1. See individual files (LICENSE) for details.
+This repository is published under the Server Side Public License (SSPL) v1. See individual files (LICENSE) for details.
+
