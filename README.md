@@ -98,12 +98,12 @@ sudo usermod -a -G docker ubuntu
 git clone https://github.com/mongodb-developer/service-tests.git
 cd ./service-tests
 ./0_docker-build.sh <version>
-./1_docker-run.sh 'mongodb://<USER>:<PASSWORD>@documentdb-tests.cluster-c23gwlgcxzrp.eu-west-1.docdb.amazonaws.com:27017/?replicaSet=rs0&ssl=true' <version>
+./1_docker-run.sh 'mongodb://<USER>:<PASSWORD>@documentdb-tests.cluster-c23gwlgcxzrp.eu-west-1.docdb.amazonaws.com:27017/?replicaSet=rs0&ssl=true&readPreference=secondaryPreferred&retryWrites=false' <version>
 ```
 
 Notes:
- 1. Please copy and paste the DocumentDB URI from the AWS interface but fix it so it looks exactly like the one above.
- 2. The AWS certificate which is required to access any Document DB cluster is built into the Docker Image (see the Dockerfile for more details).
+ 1. Please copy and paste the DocumentDB URI from the AWS interface but confirm that it contains the same flags and none extra.
+ 2. The AWS certificate which is required to access any Document DB cluster is built into the Docker Image (see the Dockerfile for more details). There is no need to pass the "ssl_ca_certs" argument found in the connection string AWS provides.
 
  * When it's over, you can collect the logs and the JSON files in the `results-<version>` folder.
 
