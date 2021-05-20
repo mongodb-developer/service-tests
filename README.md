@@ -110,7 +110,7 @@ Notes:
 ## Test Results
 
 - Download Cosmos latest logs: [2021_03_04](https://developer-advocacy-public.s3-eu-west-1.amazonaws.com/MongoDB-DocumentDB-Tests/cosmosdb-44-2021_03_04.zip)
-- Download Atlas & DocDB latest logs: [2020_11_13](https://developer-advocacy-public.s3-eu-west-1.amazonaws.com/MongoDB-DocumentDB-Tests/atlas-docdb-2020_11_13.zip)
+- Download Atlas & DocDB latest logs: [2020_05_18](https://developer-advocacy-public.s3-eu-west-1.amazonaws.com/MongoDB-DocumentDB-Tests/Atlas-DocumentDB-44-Tests-May-2021.zip)
 
 ### Online results
 
