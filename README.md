@@ -131,7 +131,7 @@ Available at:
 | TOTAL | 3399.57 | 1104 | 443 | 0 | 661 | 0 |
 | PERCENTAGES | | 100% | 40.13% | 0% | 59.87% | 0% |
 
-### AWS DocumentDB v4.0 with MongoDB v4.4 Tests ─ May 20, 2021
+### AWS DocumentDB v4.0 with MongoDB v4.4 Tests ─ May 18, 2021
 
 | Tests Suite | Time execution (sec) | Number of tests | Succeeded | Skipped | Failed | Errored |
 | --- | :---: | :---: | :---: | :---: | :---: | :---: |
