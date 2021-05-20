@@ -135,14 +135,14 @@ Available at:
 
 | Tests Suite | Time execution (sec) | Number of tests | Succeeded | Skipped | Failed | Errored |
 | --- | :---: | :---: | :---: | :---: | :---: | :---: |
-| Decimal | 3.11 | 15 | 9 | 0 | 6 | 0 |
-| Json Schema | 6.45 | 26 | 2 | 0 | 24 | 0 |
-| Change Streams | 185.63 | 22 | 2 | 0 | 20 | 0 |
-| Aggregation | 936.68 | 234 | 79 | 0 | 155 | 0 |
-| Core | 2141.28 | 890 | 342 | 0 | 548 | 0 |
-| Transactions | 107.83 | 49 | 24 | 0| 25 | 0 |
-| TOTAL | 3380.98 | 1236 | 458 | 0 | 778 | 0 |
-| PERCENTAGES | | 100% | 37.06% | 0% | 62.94% | 0% |
+| Decimal | 1.95 | 15 | 9 | 0 | 6 | 0 |
+| Json Schema | 4.39 | 26 | 2 | 0 | 24 | 0 |
+| Change Streams | 184.02 | 22 | 2 | 0 | 20 | 0 |
+| Aggregation | 811.16 | 236 | 82 | 0 | 154 | 0 |
+| Core | 1857.68 | 891 | 348 | 0 | 543 | 0 |
+| Transactions | 108.36 | 49 | 25 | 0 | 24 | 0 |
+| TOTAL | 2967.56 | 1239 | 468 | 0 | 771 | 0 |
+| PERCENTAGES | | 100% | 37.77% | 0% | 62.23% | 0% |
 
 ### Azure CosmosDB v4.0 with MongoDB v4.4 Tests ─ Mar 4, 2021
 
