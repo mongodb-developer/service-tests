@@ -98,7 +98,7 @@ sudo usermod -a -G docker ubuntu
 git clone https://github.com/mongodb-developer/service-tests.git
 cd ./service-tests
 ./0_docker-build.sh <version>
-./1_docker-run.sh 'mongodb://<USER>:<PASSWORD>@documentdb-tests.cluster-c23gwlgcxzrp.eu-west-1.docdb.amazonaws.com:27017/?replicaSet=rs0&ssl=true&readPreference=secondaryPreferred&retryWrites=false' <version>
+./1_docker-run.sh 'mongodb://<USER>:<PASSWORD>@documentdb-tests.cluster-c23gwlgcxzrp.eu-west-1.docdb.amazonaws.com:27017/?replicaSet=rs0&ssl=true' <version>
 ```
 
 Notes:
@@ -131,7 +131,7 @@ Available at:
 | TOTAL | 3399.57 | 1104 | 443 | 0 | 661 | 0 |
 | PERCENTAGES | | 100% | 40.13% | 0% | 59.87% | 0% |
 
-### AWS DocumentDB v4.0 with MongoDB v4.4 Tests ─ Nov 13, 2020
+### AWS DocumentDB v4.0 with MongoDB v4.4 Tests ─ May 20, 2021
 
 | Tests Suite | Time execution (sec) | Number of tests | Succeeded | Skipped | Failed | Errored |
 | --- | :---: | :---: | :---: | :---: | :---: | :---: |
