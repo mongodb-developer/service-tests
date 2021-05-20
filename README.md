@@ -271,6 +271,7 @@ Should you find anything glaringly problematic with the tests, please reach out 
 ## Test runner
 
  * Maxime BEUGNET <maxime@mongodb.com> - Senior Developer Advocate @ MongoDB
+ * Craig Homa <craig.homa@mongodb.com> - Market Intelligence Analyst
  * Greg McKeon - Former MongoDB employee - Competitive Analyst
 
 ## Results analyzer
