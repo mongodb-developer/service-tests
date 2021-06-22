@@ -1,5 +1,5 @@
 # The MongoDB API Tester
-This repository is used to perform correctness testing against a MongoDB API endpoint and analyze the results. It also contains intructions for how to run performance tests.
+This repository is used to perform correctness testing against a MongoDB API endpoint and analyze the results. It also contains instructions for how to run performance tests.
 
 ## Performance Testing
 
@@ -98,7 +98,7 @@ sudo usermod -a -G docker ubuntu
 git clone https://github.com/mongodb-developer/service-tests.git
 cd ./service-tests
 ./0_docker-build.sh <version>
-./1_docker-run.sh 'mongodb://<USER>:<PASSWORD>@documentdb-tests.cluster-c23gwlgcxzrp.eu-west-1.docdb.amazonaws.com:27017/?replicaSet=rs0&ssl=true&readPreference=secondaryPreferred&retryWrites=false' <version>
+./1_docker-run.sh 'mongodb://<USER>:<PASSWORD>@documentdb-tests.cluster-c23gwlgcxzrp.eu-west-1.docdb.amazonaws.com:27017/?replicaSet=rs0&ssl=true' <version>
 ```
 
 Notes:
@@ -110,7 +110,7 @@ Notes:
 ## Test Results
 
 - Download Cosmos latest logs: [2021_03_04](https://developer-advocacy-public.s3-eu-west-1.amazonaws.com/MongoDB-DocumentDB-Tests/cosmosdb-44-2021_03_04.zip)
-- Download Atlas & DocDB latest logs: [2020_11_13](https://developer-advocacy-public.s3-eu-west-1.amazonaws.com/MongoDB-DocumentDB-Tests/atlas-docdb-2020_11_13.zip)
+- Download Atlas & DocDB latest logs: [2020_05_18](https://developer-advocacy-public.s3-eu-west-1.amazonaws.com/MongoDB-DocumentDB-Tests/Atlas-DocumentDB-44-Tests-May-2021.zip)
 
 ### Online results
 
@@ -131,18 +131,18 @@ Available at:
 | TOTAL | 3399.57 | 1104 | 443 | 0 | 661 | 0 |
 | PERCENTAGES | | 100% | 40.13% | 0% | 59.87% | 0% |
 
-### AWS DocumentDB v4.0 with MongoDB v4.4 Tests ─ Nov 13, 2020
+### AWS DocumentDB v4.0 with MongoDB v4.4 Tests ─ May 18, 2021
 
 | Tests Suite | Time execution (sec) | Number of tests | Succeeded | Skipped | Failed | Errored |
 | --- | :---: | :---: | :---: | :---: | :---: | :---: |
-| Decimal | 3.11 | 15 | 9 | 0 | 6 | 0 |
-| Json Schema | 6.45 | 26 | 2 | 0 | 24 | 0 |
-| Change Streams | 185.63 | 22 | 2 | 0 | 20 | 0 |
-| Aggregation | 936.68 | 234 | 79 | 0 | 155 | 0 |
-| Core | 2141.28 | 890 | 342 | 0 | 548 | 0 |
-| Transactions | 107.83 | 49 | 24 | 0| 25 | 0 |
-| TOTAL | 3380.98 | 1236 | 458 | 0 | 778 | 0 |
-| PERCENTAGES | | 100% | 37.06% | 0% | 62.94% | 0% |
+| Decimal | 1.95 | 15 | 9 | 0 | 6 | 0 |
+| Json Schema | 4.39 | 26 | 2 | 0 | 24 | 0 |
+| Change Streams | 184.02 | 22 | 2 | 0 | 20 | 0 |
+| Aggregation | 811.16 | 236 | 82 | 0 | 154 | 0 |
+| Core | 1857.68 | 891 | 348 | 0 | 543 | 0 |
+| Transactions | 108.36 | 49 | 25 | 0 | 24 | 0 |
+| TOTAL | 2967.56 | 1239 | 468 | 0 | 771 | 0 |
+| PERCENTAGES | | 100% | 37.77% | 0% | 62.23% | 0% |
 
 ### Azure CosmosDB v4.0 with MongoDB v4.4 Tests ─ Mar 4, 2021
 
@@ -271,6 +271,7 @@ Should you find anything glaringly problematic with the tests, please reach out 
 ## Test runner
 
  * Maxime BEUGNET <maxime@mongodb.com> - Senior Developer Advocate @ MongoDB
+ * Craig Homa <craig.homa@mongodb.com> - Market Intelligence Analyst
  * Greg McKeon - Former MongoDB employee - Competitive Analyst
 
 ## Results analyzer
