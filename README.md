@@ -1,5 +1,5 @@
 # The MongoDB API Tester
-This repository is used to perform correctness testing against a MongoDB API endpoint and analyze the results. It also contains intructions for how to run performance tests.
+This repository is used to perform correctness testing against a MongoDB API endpoint and analyze the results. It also contains instructions for how to run performance tests.
 
 ## Performance Testing
 
