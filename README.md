@@ -23,19 +23,18 @@ There are only 3 things you need to run this project:
 
 The tests this harness runs are the subset of official MongoDB correctness tests that treat the system under test as a black box, without relying on fixtures or assumptions about the server's internal state.
 
-We built 6 test suites that make sense in this DBaaS context and they validate most of the features of the MongoDB 4.0, 4.2 or 4.4 API.
+We built 6 test suites that make sense in this DBaaS context and they validate most of the features of the MongoDB 4.0, 4.2, 4.4, or 5.0 API.
 
 ## Recommended infrastructure
 
 ### MongoDB Atlas
 
-I ran the tests in 18 minutes with:
- * MongoDB Atlas M30 Cluster with 1200 IOPS.
- * The tests were running from a PC with I7 + 16Go RAM + optical fiber connection.
+Cluster configuration:
+ * Dedicated MongoDB Atlas M30 Cluster with 1200 IOPS.
 
 ### AWS DocumentDB
 
-I ran the tests in 41 minutes in the Amazon Cloud with:
+Cluster configuration:
  * DocumentDB db.r4.large with 3 instances.
  * EC2 t3.xlarge with image "Amazon Linux AMI 2018.03.0 (HVM), SSD Volume Type - ami-08935252a36e25f85".
 
@@ -45,14 +44,14 @@ Note: If you provision a server other than Amazon Linux or Ubuntu, you will have
 
 ### On MongoDB Atlas
 
- * Build the image - it's a bit long (2-3 minutes) so go get that coffee, it's on me!
- * Version should either be 4.0, 4.2 or 4.4, depending on the suite you plan on running.
+ * Build the image - it's a bit long (2-3 minutes) so go get that coffee, it's on us!
+ * Version should either be 4.0, 4.2, 4.4, or 5.0 depending on the suite you plan on running.
 
 ```sh
 ./0_docker-build.sh <version>
 ```
 
- * Create a MongoDB Atlas Cluster v4.0, 4.2 or v4.4, create an admin user and whitelist your public IP address. Find some help [here](https://www.youtube.com/watch?v=SIiVjgEDI7M&list=PL4RCxklHWZ9smTpR3hUdq53Su601yCPLj).
+ * Create a MongoDB Atlas Cluster v4.0, 4.2, 4.4, or 5.0. Then create an admin user and whitelist your public IP address. Find some help [here](https://www.youtube.com/watch?v=SIiVjgEDI7M&list=PL4RCxklHWZ9smTpR3hUdq53Su601yCPLj).
  * Collect the MongoDB Atlas connection string for the next command.
  * Run the 5 test suites.
 
