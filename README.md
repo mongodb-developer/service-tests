@@ -56,7 +56,7 @@ Note: If you provision a server other than Amazon Linux or Ubuntu, you will have
  * Run the 5 test suites.
 
 ```sh
-./1_docker-run.sh 'mongodb+srv://<USER>:<PASSWORD>@<DATABASE NAME>.mongodb.net' <version>
+./1_docker-run.sh 'mongodb+srv://<USER>:<PASSWORD>@<DEPLOYMENT NAME>.mongodb.net' <version>
 ```
 
  * You can monitor by looking at the `results` folder.
