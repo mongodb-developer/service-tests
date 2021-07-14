@@ -9,7 +9,6 @@ selector:
   - jstests/core/find_and_modify.js
   # NEED TO INVESTIGATE
   - jstests/core/apitest_db_profile_level.js
-  - jstests/core/background_validation.js
   - jstests/core/batch_write_command_w0.js
   - jstests/core/command_json_schema_field.js
   - jstests/core/commands_with_uuid.js
