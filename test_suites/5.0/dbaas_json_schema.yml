@@ -4,6 +4,7 @@ selector:
   roots:
   - src/third_party/JSON-Schema-Test-Suite/tests/draft4/**/*.json
   exclude_files:
+  # Excluding tests requiring admin privs, sharding, a local deployment, or other non-relevance to Atlas
   - src/third_party/JSON-Schema-Test-Suite/tests/draft4/default.json
   - src/third_party/JSON-Schema-Test-Suite/tests/draft4/definitions.json
   - src/third_party/JSON-Schema-Test-Suite/tests/draft4/optional/bignum.json
