@@ -4,7 +4,7 @@ selector:
   roots:
   - jstests/core/txns/**/*.js
   exclude_files:
-  # Excluding tests intended for non-Atlas deployments
+ # Excluding tests requiring admin privs, sharding, a local deployment, or other non-relevance to Atlas
   - jstests/core/txns/abort_expired_transaction.js
   - jstests/core/txns/abort_prepared_transaction.js
   - jstests/core/txns/abort_transaction_thread_does_not_block_on_locks.js
