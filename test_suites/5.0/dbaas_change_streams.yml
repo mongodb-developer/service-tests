@@ -4,7 +4,7 @@ selector:
   roots:
   - jstests/change_streams/**/*.js
   exclude_files:
-  # Excluding tests requiring admin privs, sharding, a local deployment, or other non-relevence to Atlas
+  # Excluding tests requiring admin privs, sharding, a local deployment, or other non-relevance to Atlas
   - jstests/change_streams/pipeline_style_updates.js
   - jstests/change_streams/required_as_first_stage.js
 
