@@ -6,21 +6,26 @@ selector:
   exclude_files:
   - jstests/aggregation/extras/*.js
   - jstests/aggregation/data/*.js
-  # NEED TO INVESTIGATE
-  # - jstests/aggregation/accumulators/accumulator_js_size_limits.js
-  # - jstests/aggregation/bugs/server21632.js
-  # - jstests/aggregation/expressions/rand.js
-  # - jstests/aggregation/no_output_to_system.js
-  # - jstests/aggregation/sources/facet/facet_memory_consumption.js
-  # - jstests/aggregation/sources/indexStats/verify_index_stats_output.js
-  # - jstests/aggregation/sources/lookup/lookup_absorb_match.js
-  # - jstests/aggregation/sources/sort/explain_sort.js
-  # - jstests/aggregation/sources/unionWith/unionWith.js
-  # - jstests/aggregation/sources/unionWith/unionWith_explain.js
-  # - jstests/aggregation/sources/unionWith/unionWith_invalid_usage.js
-  # turn off profiling before dropping system.profile
-  # - jstests/aggregation/optimize_away_pipeline.js
-  # - jstests/aggregation/sources/lookup/profile_lookup.js
+  # Excluding tests requiring admin privs, sharding, a local deployment, or other non-relevence to Atlas
+  - jstests/aggregation/api_version_stage_allowance_checks.js
+  - jstests/aggregation/bugs/server21632.js
+  - jstests/aggregation/bugs/server5932.js
+  - jstests/aggregation/expressions/filter.js
+  - jstests/aggregation/expressions/regex_error_cases.js
+  - jstests/aggregation/no_output_to_system.js
+  - jstests/aggregation/sources/graphLookup/error.js
+  - jstests/aggregation/sources/indexStats/verify_index_stats_output.js
+  - jstests/aggregation/sources/lookup/lookup_query_stats.js
+  - jstests/aggregation/sources/setWindowFields/memory_limit.js
+  - jstests/aggregation/sources/setWindowFields/spill_to_disk.js
+  - jstests/aggregation/sources/sort/explain_sort.js
+  - jstests/aggregation/sources/unionWith/unionWith.js
+  - jstests/aggregation/sources/unionWith/unionWith_invalid_usage.js
+  - jstests/aggregation/view_resolution_namespace_collision.js
+  # Must be able to turn off profiling before dropping system.profile
+  - jstests/aggregation/optimize_away_pipeline.js
+  - jstests/aggregation/sources/lookup/profile_lookup.js
+
   exclude_with_any_tags:
   - assumes_superuser_permissions
   - requires_eval_command
