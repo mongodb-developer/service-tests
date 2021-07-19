@@ -29,8 +29,8 @@ We built 6 test suites that make sense in this DBaaS context and they validate m
 
 ### MongoDB Atlas
 
-Cluster configuration:
- * Dedicated MongoDB Atlas M30 Cluster with 1200 IOPS.
+Recommended cluster configuration:
+ * Dedicated MongoDB Atlas M50 Cluster with 3000 IOPS, 16000 max connections, 32GB RAM, and 8 vCPUs.
 
 ### AWS DocumentDB
 
