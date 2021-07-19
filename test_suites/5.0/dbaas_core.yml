@@ -7,7 +7,7 @@ selector:
   - jstests/core/txns/**/*.js
   # Excluding find_and_modify.js as it tests writability to the config collection, which is N/A for Atlas.
   - jstests/core/find_and_modify.js
-  # Excluding tests intended for non-Atlas deployments
+ # Excluding tests requiring admin privs, sharding, a local deployment, or other non-relevance to Atlas
   - jstests/core/api_version_parameters.js
   - jstests/core/api_version_test_expression.js
   - jstests/core/commands_with_uuid.js
