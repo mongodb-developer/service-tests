@@ -6,7 +6,7 @@ selector:
   exclude_files:
   - jstests/aggregation/extras/*.js
   - jstests/aggregation/data/*.js
-  # Excluding tests requiring admin privs, sharding, a local deployment, or other non-relevence to Atlas
+  # Excluding tests requiring admin privs, sharding, a local deployment, or other non-relevance to Atlas
   - jstests/aggregation/api_version_stage_allowance_checks.js
   - jstests/aggregation/bugs/server21632.js
   - jstests/aggregation/bugs/server5932.js
