@@ -4,6 +4,7 @@ selector:
   roots:
   - jstests/decimal/*.js
   exclude_with_any_tags:
+  # Excluding tests requiring admin privs, sharding, a local deployment, or other non-relevance to Atlas
   - assumes_superuser_permissions
   - requires_eval_command
   - requires_spawning_own_processes
