@@ -40,11 +40,14 @@ Cluster configuration:
 
 Note: If you provision a server other than Amazon Linux or Ubuntu, you will have to adapt the setup scripts accordingly to install Docker and Git.
 
+### Cosmos DB
+ * Standard Cosmos DB deoployment with their MongoDB Imitation API
+
 ## Instructions to run the tests
 
 ### On MongoDB Atlas
 
- * Build the image - it's a bit long (2-3 minutes) so go get that coffee, it's on us!
+ * Build the image - it's a bit long the first time (2-3 minutes) so go get some coffee, it's on us!
  * Version should either be 4.0, 4.2, 4.4, or 5.0 depending on the suite you plan on running.
 
 ```sh
@@ -65,7 +68,7 @@ Note: If you provision a server other than Amazon Linux or Ubuntu, you will have
 
 ### On AWS DocumentDB
 
- * Setup a DocumentDB Cluster and an EC2 server using the instructions provided [here](https://docs.aws.amazon.com/documentdb/latest/developerguide/getting-started.html).
+ * Set up a DocumentDB Cluster and an EC2 server using the instructions provided [here](https://docs.aws.amazon.com/documentdb/latest/developerguide/getting-started.html).
  * Step 1 will help you install the DocumentDB Cluster and setup the security aspect.
  * Step 2 will help you setup an EC2 server in the same VPC because it's currently not possible to connect to DocumentDB from the outside of the VPC and AWS.
  * The step 3 is optional as we are going to use the MongoDB Shell from our Docker image but you can still go through step 3 to validate your setup and that you are allowed to connect from this EC2 server.
@@ -105,6 +108,14 @@ Notes:
  2. The AWS certificate which is required to access any Document DB cluster is built into the Docker Image (see the Dockerfile for more details). There is no need to pass the "ssl_ca_certs" argument found in the connection string AWS provides.
 
  * When it's over, you can collect the logs and the JSON files in the `results-<version>` folder.
+
+### On Cosmos DB
+ * Follow the instructions to deploy the "Azure Cosmos DB API for MongoDB" [here](https://docs.microsoft.com/en-us/azure/cosmos-db/create-cosmosdb-resources-portal).
+ * Clone this repository locally
+ * Navigate to the service-tests directory
+ * Build your Docker image using `./0_docker-build.sh <version>`
+ * Run the tests using `./1_docker-run.sh '<connection string>' <version>` (Note - the connection string can be found in the Cosmos DB portal under 'Settings' -> 'Connection String'. Please truncate the string after the port number. It should look something like: 'mongodb://accountname:passwordkey@accountname.mongo.cosmos.azure.com:10255/')
+
 
 ## Test Results
 
