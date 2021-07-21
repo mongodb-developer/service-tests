@@ -47,6 +47,7 @@ Note: If you provision a server other than Amazon Linux or Ubuntu, you will have
 
 ### On MongoDB Atlas
 
+ * Clone this repo
  * Build the image - it's a bit long the first time (2-3 minutes) so go get some coffee, it's on us!
  * Version should either be 4.0, 4.2, 4.4, or 5.0 depending on the suite you plan on running.
 
