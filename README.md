@@ -100,7 +100,7 @@ sudo usermod -a -G docker ubuntu
 git clone https://github.com/mongodb-developer/service-tests.git
 cd ./service-tests
 ./0_docker-build.sh <version>
-./1_docker-run.sh 'mongodb://<USER>:<PASSWORD>@documentdb-tests.cluster-c23gwlgcxzrp.eu-west-1.docdb.amazonaws.com:27017/?replicaSet=rs0&ssl=true' <version>
+./1_docker-run.sh 'mongodb://<USER>:<PASSWORD>@db-name.cluster-xxxx.eu-west-1.docdb.amazonaws.com:27017/?replicaSet=rs0&ssl=true' <version>
 ```
 
 Notes:
