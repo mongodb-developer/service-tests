@@ -35,7 +35,7 @@ Recommended cluster configuration:
 ### AWS DocumentDB
 
 Cluster configuration:
- * DocumentDB db.r4.large with 3 instances.
+ * DocumentDB db.r5.large or xlarge with 3 instances.
  * EC2 t3.xlarge with image "Amazon Linux AMI 2018.03.0 (HVM), SSD Volume Type - ami-08935252a36e25f85".
 
 Note: If you provision a server other than Amazon Linux or Ubuntu, you will have to adapt the setup scripts accordingly to install Docker and Git.
