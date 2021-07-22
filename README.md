@@ -23,41 +23,44 @@ There are only 3 things you need to run this project:
 
 The tests this harness runs are the subset of official MongoDB correctness tests that treat the system under test as a black box, without relying on fixtures or assumptions about the server's internal state.
 
-We built 6 test suites that make sense in this DBaaS context and they validate most of the features of the MongoDB 4.0, 4.2 or 4.4 API.
+We built 6 test suites that make sense in this DBaaS context and they validate most of the features of the MongoDB 4.0, 4.2, 4.4, or 5.0 API.
 
 ## Recommended infrastructure
 
 ### MongoDB Atlas
 
-I ran the tests in 18 minutes with:
- * MongoDB Atlas M30 Cluster with 1200 IOPS.
- * The tests were running from a PC with I7 + 16Go RAM + optical fiber connection.
+Recommended cluster configuration:
+ * Dedicated MongoDB Atlas M50 Cluster with 3000 IOPS, 16000 max connections, 32GB RAM, and 8 vCPUs.
 
 ### AWS DocumentDB
 
-I ran the tests in 41 minutes in the Amazon Cloud with:
- * DocumentDB db.r4.large with 3 instances.
+Cluster configuration:
+ * DocumentDB db.r5.large or xlarge with 3 instances.
  * EC2 t3.xlarge with image "Amazon Linux AMI 2018.03.0 (HVM), SSD Volume Type - ami-08935252a36e25f85".
 
 Note: If you provision a server other than Amazon Linux or Ubuntu, you will have to adapt the setup scripts accordingly to install Docker and Git.
+
+### Cosmos DB
+ * Standard Cosmos DB deoployment with their MongoDB Imitation API
 
 ## Instructions to run the tests
 
 ### On MongoDB Atlas
 
- * Build the image - it's a bit long (2-3 minutes) so go get that coffee, it's on me!
- * Version should either be 4.0, 4.2 or 4.4, depending on the suite you plan on running.
+ * Clone this repo
+ * Build the image - it's a bit long the first time (2-3 minutes) so go get some coffee, it's on us!
+ * Version should either be 4.0, 4.2, 4.4, or 5.0 depending on the suite you plan on running.
 
 ```sh
 ./0_docker-build.sh <version>
 ```
 
- * Create a MongoDB Atlas Cluster v4.0, 4.2 or v4.4, create an admin user and whitelist your public IP address. Find some help [here](https://www.youtube.com/watch?v=SIiVjgEDI7M&list=PL4RCxklHWZ9smTpR3hUdq53Su601yCPLj).
+ * Create a MongoDB Atlas Cluster v4.0, 4.2, 4.4, or 5.0. Then create an admin user and whitelist your public IP address. Find some help [here](https://www.youtube.com/watch?v=SIiVjgEDI7M&list=PL4RCxklHWZ9smTpR3hUdq53Su601yCPLj).
  * Collect the MongoDB Atlas connection string for the next command.
  * Run the 5 test suites.
 
 ```sh
-./1_docker-run.sh 'mongodb+srv://<USER>:<PASSWORD>@mongodb-tests-abcde.mongodb.net' <version>
+./1_docker-run.sh 'mongodb+srv://<USER>:<PASSWORD>@<DEPLOYMENT NAME>.tsnei.mongodb.net' <version>
 ```
 
  * You can monitor by looking at the `results` folder.
@@ -66,7 +69,7 @@ Note: If you provision a server other than Amazon Linux or Ubuntu, you will have
 
 ### On AWS DocumentDB
 
- * Setup a DocumentDB Cluster and an EC2 server using the instructions provided [here](https://docs.aws.amazon.com/documentdb/latest/developerguide/getting-started.html).
+ * Set up a DocumentDB Cluster and an EC2 server using the instructions provided [here](https://docs.aws.amazon.com/documentdb/latest/developerguide/getting-started.html).
  * Step 1 will help you install the DocumentDB Cluster and setup the security aspect.
  * Step 2 will help you setup an EC2 server in the same VPC because it's currently not possible to connect to DocumentDB from the outside of the VPC and AWS.
  * The step 3 is optional as we are going to use the MongoDB Shell from our Docker image but you can still go through step 3 to validate your setup and that you are allowed to connect from this EC2 server.
@@ -98,7 +101,7 @@ sudo usermod -a -G docker ubuntu
 git clone https://github.com/mongodb-developer/service-tests.git
 cd ./service-tests
 ./0_docker-build.sh <version>
-./1_docker-run.sh 'mongodb://<USER>:<PASSWORD>@documentdb-tests.cluster-c23gwlgcxzrp.eu-west-1.docdb.amazonaws.com:27017/?replicaSet=rs0&ssl=true' <version>
+./1_docker-run.sh 'mongodb://<USER>:<PASSWORD>@db-name.cluster-xxxx.eu-west-1.docdb.amazonaws.com:27017/?ssl=true&replicaSet=rs0' <version>
 ```
 
 Notes:
@@ -107,10 +110,19 @@ Notes:
 
  * When it's over, you can collect the logs and the JSON files in the `results-<version>` folder.
 
+### On Cosmos DB
+ * Follow the instructions to deploy the "Azure Cosmos DB API for MongoDB" [here](https://docs.microsoft.com/en-us/azure/cosmos-db/create-cosmosdb-resources-portal).
+ * Clone this repository locally
+ * Navigate to the service-tests directory
+ * Build your Docker image using `./0_docker-build.sh <version>`
+ * Run the tests using `./1_docker-run.sh '<connection string>' <version>` (Note - the connection string can be found in the Cosmos DB portal under 'Settings' -> 'Connection String'. Please truncate the string after the port number. It should look something like: 'mongodb://accountname:passwordkey@accountname.mongo.cosmos.azure.com:10255/')
+
+<!--- Working on uploading latest results
 ## Test Results
 
 - Download Cosmos latest logs: [2021_03_04](https://developer-advocacy-public.s3-eu-west-1.amazonaws.com/MongoDB-DocumentDB-Tests/cosmosdb-44-2021_03_04.zip)
 - Download Atlas & DocDB latest logs: [2020_05_18](https://developer-advocacy-public.s3-eu-west-1.amazonaws.com/MongoDB-DocumentDB-Tests/Atlas-DocumentDB-44-Tests-May-2021.zip)
+-->
 
 ### Online results
 
@@ -118,82 +130,45 @@ Available at:
 * https://www.isdocumentdbreallymongodb.com/
 * https://www.iscosmosdbreallymongodb.com/
 
-### AWS DocumentDB v4.0 with MongoDB v4.0 Tests ─ Nov 13, 2020
+### Results Breakdown
+
+### AWS DocumentDB v4.0 with MongoDB v5.0 Tests ─ July 2021
 
 | Tests Suite | Time execution (sec) | Number of tests | Succeeded | Skipped | Failed | Errored |
 | --- | :---: | :---: | :---: | :---: | :---: | :---: |
-| Decimal | 3.37 | 13 | 7 | 0 | 6 | 0 |
-| Json Schema | 6.67 | 24 | 0 | 0 | 24 | 0 |
-| Change Streams | 606.01 | 20 | 0 | 0 | 20 | 0 |
-| Aggregation | 899.83 | 166 | 76 | 0 | 90 | 0 |
-| Core | 1789.21 | 849 | 348 | 0 | 501 | 0 |
-| Transactions | 94.48 | 32 | 12 | 0| 20 | 0 |
-| TOTAL | 3399.57 | 1104 | 443 | 0 | 661 | 0 |
-| PERCENTAGES | | 100% | 40.13% | 0% | 59.87% | 0% |
+| Decimal | 3.32 | 15 | 9 | 0 | 6 | 0 |
+| JSON Schema | 6.48 | 25 | 2 | 0 | 23 | 0 |
+| Change Streams | 185.89 | 22 | 2 | 0 | 20 | 0 |
+| Aggregation | 980.14 | 295 | 76 | 0 | 219 | 0 |
+| Core | 575.93 | 991 | 358 | 0 | 634 | 0 |
+| Transactions | 83.99 | 52 | 22 | 0 | 30 | 0 |
+| TOTAL | 1835.75 | 1401 | 469 | 0 | 932 | 0 |
+| PERCENTAGES | | 100% | 33.43% | 0% | 66.57% | 0% |
 
-### AWS DocumentDB v4.0 with MongoDB v4.4 Tests ─ May 18, 2021
-
-| Tests Suite | Time execution (sec) | Number of tests | Succeeded | Skipped | Failed | Errored |
-| --- | :---: | :---: | :---: | :---: | :---: | :---: |
-| Decimal | 1.95 | 15 | 9 | 0 | 6 | 0 |
-| Json Schema | 4.39 | 26 | 2 | 0 | 24 | 0 |
-| Change Streams | 184.02 | 22 | 2 | 0 | 20 | 0 |
-| Aggregation | 811.16 | 236 | 82 | 0 | 154 | 0 |
-| Core | 1857.68 | 891 | 348 | 0 | 543 | 0 |
-| Transactions | 108.36 | 49 | 25 | 0 | 24 | 0 |
-| TOTAL | 2967.56 | 1239 | 468 | 0 | 771 | 0 |
-| PERCENTAGES | | 100% | 37.77% | 0% | 62.23% | 0% |
-
-### Azure CosmosDB v4.0 with MongoDB v4.4 Tests ─ Mar 4, 2021
+### Azure Cosmos DB v4.0 with MongoDB v5.0 Tests ─ July 2021
 
 | Tests Suite | Time execution (sec) | Number of tests | Succeeded | Skipped | Failed | Errored |
 | --- | :---: | :---: | :---: | :---: | :---: | :---: |
-| Decimal | 19.83 | 15 | 10 | 0 | 5 | 0 |
-| Json Schema | 43.05 | 26 | 2 | 0 | 24 | 0 |
-| Change Streams | 38.00 | 22 | 2 | 0 | 20 | 0 |
-| Aggregation | 1625.44 | 236 | 88 | 0 | 148 | 0 |
-| Core | 8531.10 | 891 | 303 | 0 | 588 | 0 |
-| Transactions | 28.32 | 49 | 4 | 0 | 45 | 0 |
-| TOTAL | 10285.74 | 1239 | 409 | 0 | 830 | 0 |
-| PERCENTAGES | | 100% | 33.01% | 0% | 66.99% | 0% |
+| Decimal | 14.79| 15 | 10 | 0 | 5 | 0 |
+| JSON Schema | 40.30 | 25 | 2 | 0 | 23 | 0 |
+| Change Streams | 30.16 | 22 | 2 | 0 | 20 | 0 |
+| Aggregation | 961.91 | 295 | 35 | 0 | 260 | 0 |
+| Core | 8997.39 | 991 | 330 | 0 | 661 | 0 |
+| Transactions | 157.91 | 52 | 21 | 0 | 31 | 0 |
+| TOTAL | 10044.55 | 1400 | 400 | 0 | 1000 | 0 |
+| PERCENTAGES | | 100% | 28.57% | 0% | 71.43% | 0% |
 
-### MongoDB Atlas v4.0 with MongoDB v4.0 Tests ─ Nov 13, 2020
-
-| Tests Suite | Time execution (sec) | Number of tests | Succeeded | Skipped | Failed | Errored |
-| --- | :---: | :---: | :---: | :---: | :---: | :---: |
-| Decimal | 3.77 | 13 | 13 | 0 | 0 | 0 |
-| Json Schema | 17.29  | 24 | 24 | 0 | 0 | 0 |
-| Change Streams | 38.27 | 20 | 20 | 0 | 0 | 0 |
-| Aggregation | 123.14 | 166 | 166 | 0 | 0 | 0 |
-| Core | 457.96 | 849 | 849 | 0 | 0 | 0 |
-| Transactions | 16.64 | 32 | 32 | 0 | 0 | 0 |
-| TOTAL | 657.07 | 1104 | 1104 | 0 | 0 | 0 |
-| PERCENTAGES | | 100% | 100% | 0% | 0% | 0% |
-
-### MongoDB Atlas v4.2 with MongoDB v4.2 Tests ─ Nov 13, 2020
+### MongoDB Atlas v5.0 with MongoDB v5.0 Tests ─ July 2021
 
 | Tests Suite | Time execution (sec) | Number of tests | Succeeded | Skipped | Failed | Errored |
 | --- | :---: | :---: | :---: | :---: | :---: | :---: |
-| Decimal | 1.60 | 15 | 15 | 0 | 0 | 0 |
-| Json Schema | 15.15  | 26 | 26 | 0 | 0 | 0 |
-| Change Streams | 47.83 | 24 | 24 | 0 | 0 | 0 |
-| Aggregation | 156.42 | 206 | 206 | 0 | 0 | 0 |
-| Core | 435.17 | 879 | 879 | 0 | 0 | 0 |
-| Transactions | 24.54 | 39 | 39 | 0 | 0 | 0 |
-| TOTAL | 680.71 | 1189 | 1189 | 0 | 0 | 0 |
-| PERCENTAGES | | 100% | 100% | 0% | 0% | 0% |
-
-### MongoDB Atlas v4.4 with MongoDB v4.4 Tests ─ Nov 13, 2020
-
-| Tests Suite | Time execution (sec) | Number of tests | Succeeded | Skipped | Failed | Errored |
-| --- | :---: | :---: | :---: | :---: | :---: | :---: |
-| Decimal | 1.83 | 15 | 15 | 0 | 0 | 0 |
-| Json Schema | 15.32  | 26 | 26 | 0 | 0 | 0 |
-| Change Streams | 40.81 | 22 | 22 | 0 | 0 | 0 |
-| Aggregation | 223.77 | 234 | 234 | 0 | 0 | 0 |
-| Core | 480.89 | 890 | 890 | 0 | 0 | 0 |
-| Transactions | 34.67 | 49 | 49 | 0 | 0 | 0 |
-| TOTAL | 797.29 | 1236 | 1236 | 0 | 0 | 0 |
+| Decimal | 8.66 | 15 | 13 | 0 | 0 | 0 |
+| JSON Schema | 106.19  | 25 | 24 | 0 | 0 | 0 |
+| Change Streams | 86.42 | 22 | 20 | 0 | 0 | 0 |
+| Aggregation | 1313.92 | 295 | 166 | 0 | 0 | 0 |
+| Core | 4152.09 | 991| 991 | 0 | 0 | 0 |
+| Transactions | 152.65 | 52 | 32 | 0 | 0 | 0 |
+| TOTAL | 5819.93 | 1104 | 1400 | 0 | 0 | 0 |
 | PERCENTAGES | | 100% | 100% | 0% | 0% | 0% |
 
 ## Pro tips
@@ -247,7 +222,7 @@ After digesting the results and finding the more interesting failures, we can lo
 ### 1. Clone MongoDB repository and check out version
 The version checked out is the default version we tested with.
 ```
-$ git clone --branch=v4.0 https://github.com/mongodb/mongo.git
+$ git clone --branch=v5.0 https://github.com/mongodb/mongo.git
 $ cd ./mongo
 ```
 
