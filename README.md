@@ -222,7 +222,7 @@ After digesting the results and finding the more interesting failures, we can lo
 ### 1. Clone MongoDB repository and check out version
 The version checked out is the default version we tested with.
 ```
-$ git clone --branch=v4.0 https://github.com/mongodb/mongo.git
+$ git clone --branch=v5.0 https://github.com/mongodb/mongo.git
 $ cd ./mongo
 ```
 
