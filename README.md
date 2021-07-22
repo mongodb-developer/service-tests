@@ -23,25 +23,28 @@ There are only 3 things you need to run this project:
 
 The tests this harness runs are the subset of official MongoDB correctness tests that treat the system under test as a black box, without relying on fixtures or assumptions about the server's internal state.
 
-We built 6 test suites that make sense in this DBaaS context and they validate most of the features of the MongoDB 4.0, 4.2, 4.4, or 5.0 API.
+We built 6 test suites that make sense in this DBaaS context and validate most of the features of the MongoDB 4.0, 4.2, 4.4, or 5.0 API.
 
 ## Recommended infrastructure
 
 ### MongoDB Atlas
 
-Recommended cluster configuration:
+Cluster configuration:
  * Dedicated MongoDB Atlas M50 Cluster with 3000 IOPS, 16000 max connections, 32GB RAM, and 8 vCPUs.
 
 ### AWS DocumentDB
 
 Cluster configuration:
  * DocumentDB db.r5.large or xlarge with 3 instances.
- * EC2 t3.xlarge with image "Amazon Linux AMI 2018.03.0 (HVM), SSD Volume Type - ami-08935252a36e25f85".
+ * EC2 m5.large running AWS Cloud9 to easily connect to DocumentDB and manage the tests.
+ * Be sure to properly set up your VPC and security groups to allow the testing service to connect.
 
 Note: If you provision a server other than Amazon Linux or Ubuntu, you will have to adapt the setup scripts accordingly to install Docker and Git.
 
 ### Cosmos DB
- * Standard Cosmos DB deoployment with their MongoDB Imitation API
+
+Cluster configuration:
+ * Standard Cosmos DB deployment with their MongoDB Imitation API.
 
 ## Instructions to run the tests
 
