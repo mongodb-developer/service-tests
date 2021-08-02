@@ -145,7 +145,7 @@ Available at:
 | Aggregation | 980.14 | 295 | 76 | 0 | 219 | 0 |
 | Core | 575.93 | 991 | 358 | 0 | 634 | 0 |
 | Transactions | 83.99 | 52 | 22 | 0 | 30 | 0 |
-| TOTAL | 1835.75 | 1401 | 469 | 0 | 932 | 0 |
+| TOTAL | 1835.75 | 1400 | 469 | 0 | 932 | 0 |
 | PERCENTAGES | | 100% | 33.43% | 0% | 66.57% | 0% |
 
 ### Azure Cosmos DB v4.0 with MongoDB v5.0 Tests ─ July 2021
