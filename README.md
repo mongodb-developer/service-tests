@@ -161,6 +161,45 @@ Available at:
 | TOTAL | 10044.55 | 1400 | 400 | 0 | 1000 | 0 |
 | PERCENTAGES | | 100% | 28.57% | 0% | 71.43% | 0% |
 
+### AWS DocumentDB v4.0 with MongoDB v4.0 Tests ─ Nov 13, 2020
+
+| Tests Suite | Time execution (sec) | Number of tests | Succeeded | Skipped | Failed | Errored |
+| --- | :---: | :---: | :---: | :---: | :---: | :---: |
+| Decimal | 3.37 | 13 | 7 | 0 | 6 | 0 |
+| Json Schema | 6.67 | 24 | 0 | 0 | 24 | 0 |
+| Change Streams | 606.01 | 20 | 0 | 0 | 20 | 0 |
+| Aggregation | 899.83 | 166 | 76 | 0 | 90 | 0 |
+| Core | 1789.21 | 849 | 348 | 0 | 501 | 0 |
+| Transactions | 94.48 | 32 | 12 | 0| 20 | 0 |
+| TOTAL | 3399.57 | 1104 | 443 | 0 | 661 | 0 |
+| PERCENTAGES | | 100% | 40.13% | 0% | 59.87% | 0% |
+
+### AWS DocumentDB v4.0 with MongoDB v4.4 Tests ─ May 18, 2021
+
+| Tests Suite | Time execution (sec) | Number of tests | Succeeded | Skipped | Failed | Errored |
+| --- | :---: | :---: | :---: | :---: | :---: | :---: |
+| Decimal | 1.95 | 15 | 9 | 0 | 6 | 0 |
+| Json Schema | 4.39 | 26 | 2 | 0 | 24 | 0 |
+| Change Streams | 184.02 | 22 | 2 | 0 | 20 | 0 |
+| Aggregation | 811.16 | 236 | 82 | 0 | 154 | 0 |
+| Core | 1857.68 | 891 | 348 | 0 | 543 | 0 |
+| Transactions | 108.36 | 49 | 25 | 0 | 24 | 0 |
+| TOTAL | 2967.56 | 1239 | 468 | 0 | 771 | 0 |
+| PERCENTAGES | | 100% | 37.77% | 0% | 62.23% | 0% |
+
+### Azure CosmosDB v4.0 with MongoDB v4.4 Tests ─ Mar 4, 2021
+
+| Tests Suite | Time execution (sec) | Number of tests | Succeeded | Skipped | Failed | Errored |
+| --- | :---: | :---: | :---: | :---: | :---: | :---: |
+| Decimal | 19.83 | 15 | 10 | 0 | 5 | 0 |
+| Json Schema | 43.05 | 26 | 2 | 0 | 24 | 0 |
+| Change Streams | 38.00 | 22 | 2 | 0 | 20 | 0 |
+| Aggregation | 1625.44 | 236 | 88 | 0 | 148 | 0 |
+| Core | 8531.10 | 891 | 303 | 0 | 588 | 0 |
+| Transactions | 28.32 | 49 | 4 | 0 | 45 | 0 |
+| TOTAL | 10285.74 | 1239 | 409 | 0 | 830 | 0 |
+| PERCENTAGES | | 100% | 33.01% | 0% | 66.99% | 0% |
+
 ### MongoDB Atlas v5.0 with MongoDB v5.0 Tests ─ July 2021
 
 | Tests Suite | Time execution (sec) | Number of tests | Succeeded | Skipped | Failed | Errored |
