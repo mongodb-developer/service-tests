@@ -3,7 +3,7 @@ ARG branch
 ARG mongoshell_package
 ARG version
 RUN apt-get update && \
-    apt-get install -y git python3 python3-pip gcc libcurl4-openssl-dev libssl-dev wget && \
+    apt-get install -y git python3 python3-pip gcc libcurl4-openssl-dev libssl-dev libffi-dev python-dev wget && \
     git clone --depth 1 --branch $branch https://github.com/mongodb/mongo.git && \
     pip3 install --user -r /mongo/etc/pip/dev-requirements.txt && \
     pip3 install --user dnspython==1.16.0 && \
