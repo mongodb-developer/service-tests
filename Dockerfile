@@ -17,5 +17,5 @@ ENV command="resmoke.py run"
 ADD https://s3.amazonaws.com/rds-downloads/rds-ca-2019-root.pem /usr/local/share/ca-certificates/rds-ca-2019-root.crt
 RUN update-ca-certificates && \
     ln -sf /usr/bin/python3 /usr/bin/python && \
-    ln -s /usr/bin/pip3 /usr/bin/pip
+    ln -sf /usr/bin/pip3 /usr/bin/pip
 ENTRYPOINT ["/entrypoint.sh"]
