@@ -16,6 +16,6 @@ ENV m=/mongodb-linux-x86_64-$mongoshell_package/bin/mongo
 ENV command="resmoke.py run"
 ADD https://s3.amazonaws.com/rds-downloads/rds-ca-2019-root.pem /usr/local/share/ca-certificates/rds-ca-2019-root.crt
 RUN update-ca-certificates && \
-    ln -s /usr/bin/python3 /usr/bin/python && \
+    ln -sf /usr/bin/python3 /usr/bin/python && \
     ln -s /usr/bin/pip3 /usr/bin/pip
 ENTRYPOINT ["/entrypoint.sh"]
