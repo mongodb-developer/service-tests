@@ -75,9 +75,12 @@ Cluster configuration:
  * Set up a DocumentDB Cluster and an EC2 server using the instructions provided [here](https://docs.aws.amazon.com/documentdb/latest/developerguide/getting-started.html).
  * Step 1 will help you install the DocumentDB Cluster and setup the security aspect.
  * Step 2 will help you setup an EC2 server in the same VPC because it's currently not possible to connect to DocumentDB from the outside of the VPC and AWS.
- * The step 3 is optional as we are going to use the MongoDB Shell from our Docker image but you can still go through step 3 to validate your setup and that you are allowed to connect from this EC2 server.
+ * Step 3 is optional as we are going to use the MongoDB Shell from our Docker image but you can still go through step 3 to validate your setup and that you are allowed to connect from this EC2 server.
    - The cluster and EC2 client should be in the same Security Group.
    - The client should be able to communicate over TCP port 27017 with the cluster.
+ * _Note 1: If you are unable to connect, it could be that the security group is still not allowing inbound connections to port 27017. For help with that and other connecting troubleshooting, check out AWS' guide [here](https://docs.aws.amazon.com/documentdb/latest/developerguide/troubleshooting.connecting.html)._
+ * _Note 2: If you are running a cluster with more than one node (i.e. a 3 node replica set) you must assign subnets for each of the other nodes in your cluster._
+
  * Once you are sure that you can connect from this EC2 server to DocumentDB execute this script on the EC2 client:
 
 For the Amazon Linux image:
