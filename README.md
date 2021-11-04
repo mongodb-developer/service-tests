@@ -142,6 +142,19 @@ Available at:
 
 | Tests Suite | Time execution (sec) | Number of tests | Succeeded | Skipped | Failed | Errored |
 | --- | :---: | :---: | :---: | :---: | :---: | :---: |
+| Decimal | 3.30 | 15 | 9 | 0 | 6 | 0 |
+| JSON Schema | 6.58 | 25 | 2 | 0 | 23 | 0 |
+| Change Streams | 186.08 | 22 | 2 | 0 | 20 | 0 |
+| Aggregation | 746.21 | 300 | 84 | 0 | 216 | 0 |
+| Core | 640.10 | 1001 | 363 | 0 | 638 | 0 |
+| Transactions | 81.20 | 52 | 22 | 0 | 30 | 0 |
+| TOTAL | 1663.47 | 1415 | 482 | 0 | 933 | 0 |
+| PERCENTAGES | | 100% | 33.43% | 0% | 66.57% | 0% |
+
+### AWS DocumentDB v4.0 with MongoDB v5.0 Tests ─ July 2021
+
+| Tests Suite | Time execution (sec) | Number of tests | Succeeded | Skipped | Failed | Errored |
+| --- | :---: | :---: | :---: | :---: | :---: | :---: |
 | Decimal | 3.32 | 15 | 9 | 0 | 6 | 0 |
 | JSON Schema | 6.48 | 25 | 2 | 0 | 23 | 0 |
 | Change Streams | 185.89 | 22 | 2 | 0 | 20 | 0 |
