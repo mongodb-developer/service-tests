@@ -8,6 +8,7 @@ selector:
   # Excluding find_and_modify.js as it tests writability to the config collection, which is N/A for Atlas.
   - jstests/core/find_and_modify.js
  # Excluding tests requiring admin privs, sharding, a local deployment, or other non-relevance to Atlas
+  - jstests/core/add_skip_stage_before_fetch.js
   - jstests/core/json_schema/bsontype.js
   - jstests/core/geoc.js
   - jstests/core/hashed_index_queries.js
@@ -38,8 +39,6 @@ selector:
   - jstests/core/roles_info.js
   - jstests/core/timeseries/timeseries_idle_buckets.js
   - jstests/core/timeseries/timeseries_index_stats.js
-  - jstests/core/timeseries/timeseries_list_collections_invalid_view.js
-  - jstests/core/timeseries/timeseries_list_collections_missing_view.js
   - jstests/core/validate_db_metadata_command.js
   - jstests/core/version_api_list_commands_verification.js
   - jstests/core/version_api_v1_command_coverage.js

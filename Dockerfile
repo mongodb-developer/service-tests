@@ -3,7 +3,7 @@ ARG branch
 ARG mongoshell_package
 ARG version
 RUN apt-get update && \
-    apt-get install -y git python3 python3-pip gcc libcurl4-openssl-dev libssl-dev wget && \
+    apt-get install -y git python3 python3-pip gcc libcurl4-openssl-dev libssl-dev libffi-dev python-dev wget && \
     git clone --depth 1 --branch $branch https://github.com/mongodb/mongo.git && \
     pip3 install --user -r /mongo/etc/pip/dev-requirements.txt && \
     pip3 install --user dnspython==1.16.0 && \
@@ -16,6 +16,6 @@ ENV m=/mongodb-linux-x86_64-$mongoshell_package/bin/mongo
 ENV command="resmoke.py run"
 ADD https://s3.amazonaws.com/rds-downloads/rds-ca-2019-root.pem /usr/local/share/ca-certificates/rds-ca-2019-root.crt
 RUN update-ca-certificates && \
-    ln -s /usr/bin/python3 /usr/bin/python && \
-    ln -s /usr/bin/pip3 /usr/bin/pip
+    ln -sf /usr/bin/python3 /usr/bin/python && \
+    ln -sf /usr/bin/pip3 /usr/bin/pip
 ENTRYPOINT ["/entrypoint.sh"]
