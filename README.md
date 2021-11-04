@@ -149,7 +149,7 @@ Available at:
 | Core | 640.10 | 1001 | 363 | 0 | 638 | 0 |
 | Transactions | 81.20 | 52 | 22 | 0 | 30 | 0 |
 | TOTAL | 1663.47 | 1415 | 482 | 0 | 933 | 0 |
-| PERCENTAGES | | 100% | 33.43% | 0% | 66.57% | 0% |
+| PERCENTAGES | | 100% | 34.06% | 0% | 65.94% | 0% |
 
 ### AWS DocumentDB v4.0 with MongoDB v5.0 Tests ─ July 2021
 
