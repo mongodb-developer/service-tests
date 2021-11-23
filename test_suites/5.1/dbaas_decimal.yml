@@ -19,6 +19,7 @@ selector:
   - jstests/decimal/decimal128_test5.js
   - jstests/decimal/decimal128_test6.js
   - jstests/decimal/decimal128_test7.js
+  - jstests/decimal/decimal_constructors.js
 
 executor:
   config:
