@@ -14,6 +14,7 @@ selector:
   - jstests/change_streams/required_as_first_stage.js
   - jstests/change_streams/allowlist.js
   - jstests/change_streams/apply_ops.js
+  - jstests/change_streams/apply_ops_resumability.js
 
   exclude_with_any_tags:
   - requires_eval_command
