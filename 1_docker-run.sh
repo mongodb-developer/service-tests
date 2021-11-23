@@ -4,8 +4,8 @@ if [ "$#" -ne 2 ]; then
     echo "Usage : $0 [URI of MongoDB Atlas, AWS Document DB or Azure Cosmos DB] [Version to test, either 4.0, 4.2, 4.4, or 5.0]"
     exit 1
 fi
-if [[ $2 != "4.0" ]] && [[ $2 != "4.2" ]] && [[ $2 != "4.4" ]] && [[ $2 != "5.0" ]]; then
-    echo "Invalid version; must be 4.0, 4.2, 4.4, or 5.0"
+if [[ $2 != "4.0" ]] && [[ $2 != "4.2" ]] && [[ $2 != "4.4" ]] && [[ $2 != "5.0" ]] && [[ $2 != "5.1" ]]; then
+    echo "Invalid version; must be 4.0, 4.2, 4.4, 5.0, or 5.1"
 fi
 
 URI=$1
