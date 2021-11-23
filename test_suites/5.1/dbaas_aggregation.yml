@@ -23,6 +23,7 @@ selector:
   - jstests/aggregation/sources/unionWith/unionWith_invalid_usage.js
   - jstests/aggregation/view_resolution_namespace_collision.js
   - jstests/aggregation/accumulators/accumulator_js.js
+  - jstests/aggregation/accumulators/accumulator_js_size_limits.js
   # Must be able to turn off profiling before dropping system.profile
   - jstests/aggregation/optimize_away_pipeline.js
   - jstests/aggregation/sources/lookup/profile_lookup.js
