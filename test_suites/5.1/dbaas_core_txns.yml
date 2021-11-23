@@ -5,6 +5,7 @@ selector:
   - jstests/core/txns/**/*.js
   exclude_files:
  # Excluding tests requiring admin privs, sharding, a local deployment, or other non-relevance to Atlas
+  - jstests/core/txns/commands_banning_txnnumber_outside_transactions.js
   - jstests/core/txns/api_params_transaction.js
   - jstests/core/txns/basic_causal_consistency.js
   - jstests/core/txns/aggregation_in_transaction.js
