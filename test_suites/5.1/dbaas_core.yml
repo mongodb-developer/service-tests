@@ -8,6 +8,7 @@ selector:
   # Excluding find_and_modify.js as it tests writability to the config collection, which is N/A for Atlas.
   - jstests/core/find_and_modify.js
  # Excluding tests requiring admin privs, sharding, a local deployment, or other non-relevance to Atlas
+  - jstests/core/agg_hint.js
   - jstests/core/add_skip_stage_before_fetch.js
   - jstests/core/json_schema/bsontype.js
   - jstests/core/geoc.js
