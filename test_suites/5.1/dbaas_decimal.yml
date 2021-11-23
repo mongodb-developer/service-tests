@@ -10,6 +10,9 @@ selector:
   - requires_spawning_own_processes
   - uses_multiple_connections
   - uses_testing_only_commands
+  exclude_files:
+  # Excluding tests requiring admin privs, sharding, a local deployment, or other non-relevance to Atlas
+  - jstests/decimal/decimal128_test1.js
 
 executor:
   config:
