@@ -5,6 +5,7 @@ selector:
   - jstests/core/txns/**/*.js
   exclude_files:
  # Excluding tests requiring admin privs, sharding, a local deployment, or other non-relevance to Atlas
+  - jstests/core/txns/api_params_transaction.js
   - jstests/core/txns/aggregation_in_transaction.js
   - jstests/core/txns/commit_and_abort_large_unprepared_transactions.js
   - jstests/core/txns/create_indexes_parallel.js
