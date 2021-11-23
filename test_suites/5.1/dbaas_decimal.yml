@@ -13,6 +13,7 @@ selector:
   exclude_files:
   # Excluding tests requiring admin privs, sharding, a local deployment, or other non-relevance to Atlas
   - jstests/decimal/decimal128_test1.js
+  - jstests/decimal/decimal128_test2.js
 
 executor:
   config:
