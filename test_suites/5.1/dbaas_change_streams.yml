@@ -15,6 +15,7 @@ selector:
   - jstests/change_streams/allowlist.js
   - jstests/change_streams/apply_ops.js
   - jstests/change_streams/apply_ops_resumability.js
+  - jstests/change_streams/ban_from_lookup.js
 
   exclude_with_any_tags:
   - requires_eval_command
