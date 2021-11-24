@@ -17,6 +17,9 @@ selector:
   - jstests/change_streams/oplog_rewrite/change_stream_match_pushdown_fullDocument_rewrite.js
   - jstests/change_streams/oplog_rewrite/change_stream_match_pushdown_namespace_rewrite.js
   - jstests/change_streams/oplog_rewrite/change_stream_match_pushdown_operation_type_rewrite.js
+  - jstests/change_streams/oplog_rewrite/change_stream_match_pushdown_to_rewrite.js
+  - jstests/change_streams/oplog_rewrite/change_stream_match_pushdown_updateDescription_rewrite.js
+  - jstests/change_streams/write_pit_preimage.js
 
   exclude_with_any_tags:
   - requires_eval_command
