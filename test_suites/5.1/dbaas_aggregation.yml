@@ -23,6 +23,16 @@ selector:
   - jstests/aggregation/sources/unionWith/unionWith_invalid_usage.js
   - jstests/aggregation/view_resolution_namespace_collision.js
   - jstests/aggregation/bugs/match_swap_limit.js
+  - jstests/aggregation/bugs/upperlower.js
+  - jstests/aggregation/explain_limit.js
+  - jstests/aggregation/expressions/concat_arrays.js
+  - jstests/aggregation/sources/densify/generated_limit.js
+  - jstests/aggregation/sources/densify/internal_parse.js
+  - jstests/aggregation/sources/densify/memory_limit.js
+  - jstests/aggregation/sources/densify/partitions.js
+  - jstests/aggregation/sources/unionWith/unionWith_explain.js
+
+
   # Must be able to turn off profiling before dropping system.profile
   - jstests/aggregation/optimize_away_pipeline.js
   - jstests/aggregation/sources/lookup/profile_lookup.js
