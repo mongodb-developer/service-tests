@@ -45,6 +45,22 @@ selector:
   - jstests/core/views/view_with_invalid_dbname.js
   - jstests/core/wildcard_index_collation.js
   - jstests/core/nestedobj1.js
+  - jstests/core/collation.js
+  - jstests/core/computed_projections.js
+  - jstests/core/expr_index_use.js
+  - jstests/core/idhack.js
+  - jstests/core/index_filter_commands.js
+  - jstests/core/indexj.js
+  - jstests/core/objid5.js
+  - jstests/core/plan_cache_sbe.js
+  - jstests/core/projection_dotted_paths.js
+  - jstests/core/projection_expr_mod.js
+  - jstests/core/timeseries/bucket_granularity.js
+  - jstests/core/timeseries/timeseries_delete_concurrent.js
+  - jstests/core/timeseries/timeseries_delete_hint.js
+  - jstests/core/timeseries/timeseries_update_concurrent.js
+  - jstests/core/timeseries/timeseries_update_hint.js
+  - jstests/core/wildcard_index_cached_plans.js
 
   exclude_with_any_tags:
   - assumes_superuser_permissions
