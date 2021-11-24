@@ -10,19 +10,9 @@ selector:
   - requires_spawning_own_processes
   - uses_multiple_connections
   - uses_testing_only_commands
-  exclude_files:
-  # Excluding tests requiring --readMode==commands to be set
-  - jstests/decimal/decimal128_test1.js
-  - jstests/decimal/decimal128_test2.js
-  - jstests/decimal/decimal128_test3.js
-  - jstests/decimal/decimal128_test4.js
-  - jstests/decimal/decimal128_test5.js
-  - jstests/decimal/decimal128_test6.js
-  - jstests/decimal/decimal128_test7.js
-  - jstests/decimal/decimal_constructors.js
+
 
 executor:
   config:
     shell_options:
-      readMode: commands
       ssl: ''
