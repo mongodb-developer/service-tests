@@ -61,6 +61,8 @@ selector:
   - jstests/core/timeseries/timeseries_update_concurrent.js
   - jstests/core/timeseries/timeseries_update_hint.js
   - jstests/core/wildcard_index_cached_plans.js
+  - jstests/core/explain_execution_error.js
+  - jstests/core/explain_find.js
 
   exclude_with_any_tags:
   - assumes_superuser_permissions
