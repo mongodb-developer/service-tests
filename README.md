@@ -17,7 +17,7 @@ The Docker image in this repository can run API acceptance tests against a servi
 
 There are only 3 things you need to run this project:
 
- * [Docker](https://docs.docker.com/install/),
+ * [Docker](https://docs.docker.com/install/)
  * Git (or you can just download this repo as a zip file from Github),
  * A bash shell.
 
