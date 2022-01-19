@@ -23,7 +23,7 @@ There are only 3 things you need to run this project:
 
 The tests this harness runs are the subset of official MongoDB correctness tests that treat the system under test as a black box, without relying on fixtures or assumptions about the server's internal state.
 
-We built 6 test suites that make sense in this DBaaS context and validate most of the features of the MongoDB 4.0, 4.2, 4.4, or 5.0 API.
+We built 6 test suites that make sense in this DBaaS context and validate most of the features of the MongoDB 4.0, 4.2, 4.4, or 5.x API.
 
 ## Recommended infrastructure
 
@@ -52,13 +52,13 @@ Cluster configuration:
 
  * Clone this repo
  * Build the image - it's a bit long the first time (2-3 minutes) so go get some coffee, it's on us!
- * Version should either be 4.0, 4.2, 4.4, or 5.0 depending on the suite you plan on running.
+ * Version should either be 4.0, 4.2, 4.4, or 5.x depending on the suite you plan on running.
 
 ```sh
 ./0_docker-build.sh <version>
 ```
 
- * Create a MongoDB Atlas Cluster v4.0, 4.2, 4.4, or 5.0. Then create an admin user and whitelist your public IP address. Find some help [here](https://www.youtube.com/watch?v=SIiVjgEDI7M&list=PL4RCxklHWZ9smTpR3hUdq53Su601yCPLj).
+ * Create a MongoDB Atlas Cluster v4.0, 4.2, 4.4, or 5.x. Then create an admin user and whitelist your public IP address. Find some help [here](https://www.youtube.com/watch?v=SIiVjgEDI7M&list=PL4RCxklHWZ9smTpR3hUdq53Su601yCPLj).
  * Collect the MongoDB Atlas connection string for the next command.
  * Run the 5 test suites.
 
