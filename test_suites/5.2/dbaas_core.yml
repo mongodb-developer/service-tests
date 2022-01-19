@@ -52,7 +52,6 @@ selector:
   - jstests/core/queryoptimizera.js
   - jstests/core/read_after_optime.js
   - jstests/core/roles_info.js
-  - jstests/core/timeseries/timeseries_idle_buckets.js
   - jstests/core/timeseries/timeseries_index_stats.js
   - jstests/core/validate_db_metadata_command.js
   - jstests/core/version_api_list_commands_verification.js
