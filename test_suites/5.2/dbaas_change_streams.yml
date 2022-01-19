@@ -1,0 +1,43 @@
+test_kind: js_test
+
+selector:
+  roots:
+  - jstests/change_streams/**/*.js
+  exclude_files:
+  # Excluding tests requiring admin privs, sharding, a local deployment, or other non-relevance to Atlas
+  - jstests/change_streams/pipeline_style_updates_v2_oplog_entries.js
+  # Tests excluded pre-5.1
+  - jstests/change_streams/change_stream.js
+  - jstests/change_streams/shell_helper.js
+  - jstests/change_streams/whole_cluster.js
+  - jstests/change_streams/whole_cluster_metadata_notifications.js
+  - jstests/change_streams/whole_db_metadata_notifications.js
+  - jstests/change_streams/pipeline_style_updates.js
+  - jstests/change_streams/required_as_first_stage.js
+  - jstests/change_streams/oplog_rewrite/change_stream_basic_match_pushdown_rewrite.js
+  - jstests/change_streams/oplog_rewrite/change_stream_match_pushdown_documentKey_rewrite.js
+  - jstests/change_streams/oplog_rewrite/change_stream_match_pushdown_fullDocument_rewrite.js
+  - jstests/change_streams/oplog_rewrite/change_stream_match_pushdown_namespace_rewrite.js
+  - jstests/change_streams/oplog_rewrite/change_stream_match_pushdown_operation_type_rewrite.js
+  - jstests/change_streams/oplog_rewrite/change_stream_match_pushdown_to_rewrite.js
+  - jstests/change_streams/oplog_rewrite/change_stream_match_pushdown_updateDescription_rewrite.js
+  - jstests/change_streams/write_pit_preimage.js
+
+  exclude_with_any_tags:
+  - requires_eval_command
+  - assumes_superuser_permissions
+  - requires_spawning_own_processes
+  - uses_multiple_connections
+  - uses_testing_only_commands
+
+executor:
+  config:
+    shell_options:
+      global_vars:
+        TestData:
+          defaultReadConcernLevel: null
+          enableMajorityReadConcern: ''
+      eval: >-
+        var testingReplication = true;
+        load('jstests/libs/override_methods/set_read_and_write_concerns.js');
+      ssl: ''
