@@ -31,6 +31,8 @@ selector:
   - jstests/aggregation/sources/densify/memory_limit.js
   - jstests/aggregation/sources/densify/partitions.js
   - jstests/aggregation/sources/unionWith/unionWith_explain.js
+  - jstests/aggregation/sources/setWindowFields/n_accumulators.js
+  - jstests/aggregation/spill_to_disk.js
 
 
   # Must be able to turn off profiling before dropping system.profile
