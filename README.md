@@ -123,6 +123,9 @@ Notes:
  * Build your Docker image using `./0_docker-build.sh <version>`
  * Run the tests using `./1_docker-run.sh '<connection string>' <version>` (Note - the connection string can be found in the Cosmos DB portal under 'Settings' -> 'Connection String'. Please truncate the string after the port number. It should look something like: 'mongodb://accountname:passwordkey@accountname.mongo.cosmos.azure.com:10255/')
 
+* _Note : Running the comparison tests against Cosmos DB is significantly more costly than Atlas or DocumentDB. Please keep this in mind if you are budget constrained._
+
+
 <!--- Working on uploading latest results
 ## Test Results
 
