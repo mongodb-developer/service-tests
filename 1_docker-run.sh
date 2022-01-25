@@ -15,6 +15,12 @@ IMAGE="mongo/mongodb-tests:${VERSION}"
 rm -rf ${LOCAL_RESULTS_DIR}
 mkdir ${LOCAL_RESULTS_DIR}
 
+echo "Starting test suite - Decimal"
+docker run --name mongodb-tests-decimal-${VERSION} -e "URI=${URI}" -v ${LOCAL_RESULTS_DIR}:/results ${IMAGE} decimal > /dev/null
+docker logs mongodb-tests-decimal-${VERSION} > ${LOCAL_RESULTS_DIR}/stdout_decimal.log
+docker rm -v mongodb-tests-decimal-${VERSION}
+echo "Decimal tests complete"
+
 echo "Starting test suite - Core"
 docker run --name mongodb-tests-core-${VERSION} -e "URI=${URI}" -v ${LOCAL_RESULTS_DIR}:/results ${IMAGE} core > /dev/null
 docker logs mongodb-tests-core-${VERSION} > ${LOCAL_RESULTS_DIR}/stdout_core.log
@@ -26,12 +32,6 @@ docker run --name mongodb-tests-core-txns-${VERSION} -e "URI=${URI}" -v ${LOCAL_
 docker logs mongodb-tests-core-txns-${VERSION} > ${LOCAL_RESULTS_DIR}/stdout_core_txns.log
 docker rm -v mongodb-tests-core-txns-${VERSION}
 echo "Transactions tests complete"
-
-echo "Starting test suite - Decimal"
-docker run --name mongodb-tests-decimal-${VERSION} -e "URI=${URI}" -v ${LOCAL_RESULTS_DIR}:/results ${IMAGE} decimal > /dev/null
-docker logs mongodb-tests-decimal-${VERSION} > ${LOCAL_RESULTS_DIR}/stdout_decimal.log
-docker rm -v mongodb-tests-decimal-${VERSION}
-echo "Decimal tests complete"
 
 echo "Starting test suite - JSON Schema"
 docker run --name mongodb-tests-json-schema-${VERSION} -e "URI=${URI}" -v ${LOCAL_RESULTS_DIR}:/results ${IMAGE} json_schema > /dev/null
