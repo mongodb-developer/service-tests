@@ -139,7 +139,21 @@ Available at:
 * https://www.isdocumentdbreallymongodb.com/
 * https://www.iscosmosdbreallymongodb.com/
 
-### Results Breakdown
+### Results Breakdown from periodic test runs
+
+### Azure Cosmos DB v4.0 with MongoDB v5.2 Tests ─ January 2021
+
+| Tests Suite | Time execution (sec) | Number of tests | Succeeded | Skipped | Failed | Errored |
+| --- | :---: | :---: | :---: | :---: | :---: | :---: |
+| Decimal | 25.9 | 15 | 10 | 0 | 5 | 0 |
+| JSON Schema | 45.29 | 21 | 2 | 0 | 19 | 0 |
+| Change Streams | 45.46 | 25 | 3 | 0 | 22 | 0 |
+| Aggregation | 2946.35 | 316 | 100 | 0 | 216 | 0 |
+| Core | 6872.23 | 998 | 338 | 0 | 660 | 0 |
+| Transactions | 81.20 | 49 | 21 | 0 | 28 | 0 |
+| TOTAL | 9970.97 | 1424 | 474 | 0 | 950 | 0 |
+| PERCENTAGES | | 100% | 33.29% | 0% | 66.71% | 0% |
+
 
 ### AWS DocumentDB v4.0 with MongoDB v5.0 Tests ─ November 2021
 
@@ -306,8 +320,8 @@ Should you find anything glaringly problematic with the tests, please reach out 
 
 ## Test runner
 
- * Maxime BEUGNET <maxime@mongodb.com> - Senior Developer Advocate @ MongoDB
  * Craig Homa <craig.homa@mongodb.com> - Market Intelligence Analyst
+ * Maxime BEUGNET <maxime@mongodb.com> - Senior Developer Advocate @ MongoDB
  * Greg McKeon - Former MongoDB employee - Competitive Analyst
 
 ## Results analyzer
