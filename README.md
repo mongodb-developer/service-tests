@@ -29,12 +29,12 @@ We built 6 test suites that make sense in this DBaaS context and validate most o
 
 ### MongoDB Atlas
 
-Cluster configuration:
+Recommended cluster configuration (larger instances will run faster but not impact results):
  * Dedicated MongoDB Atlas M50 Cluster with 3000 IOPS, 16000 max connections, 32GB RAM, and 8 vCPUs.
 
 ### AWS DocumentDB
 
-Cluster configuration:
+Recommended cluster configuration (larger instances will run faster but not impact results):
  * DocumentDB db.r5.large or xlarge with 3 instances.
  * EC2 m5.large running AWS Cloud9 to easily connect to DocumentDB and manage the tests.
  * Be sure to properly set up your VPC and security groups to allow the testing service to connect.
@@ -43,7 +43,7 @@ Note: If you provision a server other than Amazon Linux or Ubuntu, you will have
 
 ### Cosmos DB
 
-Cluster configuration:
+Recommended cluster configuration:
  * Standard Cosmos DB deployment with their MongoDB Imitation API.
 
 ## Instructions to run the tests
@@ -140,6 +140,19 @@ Available at:
 * https://www.iscosmosdbreallymongodb.com/
 
 ### Results Breakdown from periodic test runs
+
+### Amazon DocumentDB v4.0 with MongoDB v5.2 Tests ─ January 2021
+
+| Tests Suite | Time execution (sec) | Number of tests | Succeeded | Skipped | Failed | Errored |
+| --- | :---: | :---: | :---: | :---: | :---: | :---: |
+| Decimal | 3.21 | 15 | 9 | 0 | 6 | 0 |
+| JSON Schema | 5.36 | 21 | 2 | 0 | 19 | 0 |
+| Change Streams | 186.63 | 25 | 3 | 0 | 22 | 0 |
+| Aggregation | 776.76 | 317 | 88 | 0 | 229 | 0 |
+| Core | 558.03 | 998 | 361 | 0 | 637 | 0 |
+| Transactions | 76.71 | 49 | 21 | 0 | 28 | 0 |
+| TOTAL | 1608.70 | 1425 | 484 | 0 | 941 | 0 |
+| PERCENTAGES | | 100% | 33.96% | 0% | 66.04% | 0% |
 
 ### Azure Cosmos DB v4.0 with MongoDB v5.2 Tests ─ January 2021
 
