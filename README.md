@@ -23,18 +23,18 @@ There are only 3 things you need to run this project:
 
 The tests this harness runs are the subset of official MongoDB correctness tests that treat the system under test as a black box, without relying on fixtures or assumptions about the server's internal state.
 
-We built 6 test suites that make sense in this DBaaS context and validate most of the features of the MongoDB 4.0, 4.2, 4.4, or 5.0 API.
+We built 6 test suites that make sense in this DBaaS context and validate most of the features of the MongoDB 4.0, 4.2, 4.4, or 5.x API.
 
 ## Recommended infrastructure
 
 ### MongoDB Atlas
 
-Cluster configuration:
+Recommended cluster configuration (larger instances will run faster but not impact results):
  * Dedicated MongoDB Atlas M50 Cluster with 3000 IOPS, 16000 max connections, 32GB RAM, and 8 vCPUs.
 
 ### AWS DocumentDB
 
-Cluster configuration:
+Recommended cluster configuration (larger instances will run faster but not impact results):
  * DocumentDB db.r5.large or xlarge with 3 instances.
  * EC2 m5.large running AWS Cloud9 to easily connect to DocumentDB and manage the tests.
  * Be sure to properly set up your VPC and security groups to allow the testing service to connect.
@@ -43,7 +43,7 @@ Note: If you provision a server other than Amazon Linux or Ubuntu, you will have
 
 ### Cosmos DB
 
-Cluster configuration:
+Recommended cluster configuration:
  * Standard Cosmos DB deployment with their MongoDB Imitation API.
 
 ## Instructions to run the tests
@@ -52,13 +52,13 @@ Cluster configuration:
 
  * Clone this repo
  * Build the image - it's a bit long the first time (2-3 minutes) so go get some coffee, it's on us!
- * Version should either be 4.0, 4.2, 4.4, or 5.0 depending on the suite you plan on running.
+ * Version should either be 4.0, 4.2, 4.4, or 5.x depending on the suite you plan on running.
 
 ```sh
 ./0_docker-build.sh <version>
 ```
 
- * Create a MongoDB Atlas Cluster v4.0, 4.2, 4.4, or 5.0. Then create an admin user and whitelist your public IP address. Find some help [here](https://www.youtube.com/watch?v=SIiVjgEDI7M&list=PL4RCxklHWZ9smTpR3hUdq53Su601yCPLj).
+ * Create a MongoDB Atlas Cluster v4.0, 4.2, 4.4, or 5.x. Then create an admin user and whitelist your public IP address. Find some help [here](https://www.youtube.com/watch?v=SIiVjgEDI7M&list=PL4RCxklHWZ9smTpR3hUdq53Su601yCPLj).
  * Collect the MongoDB Atlas connection string for the next command.
  * Run the 5 test suites.
 
@@ -123,6 +123,9 @@ Notes:
  * Build your Docker image using `./0_docker-build.sh <version>`
  * Run the tests using `./1_docker-run.sh '<connection string>' <version>` (Note - the connection string can be found in the Cosmos DB portal under 'Settings' -> 'Connection String'. Please truncate the string after the port number. It should look something like: 'mongodb://accountname:passwordkey@accountname.mongo.cosmos.azure.com:10255/')
 
+* _Note : Running the comparison tests against Cosmos DB is significantly more costly than Atlas or DocumentDB. Please keep this in mind if you are budget constrained._
+
+
 <!--- Working on uploading latest results
 ## Test Results
 
@@ -136,9 +139,36 @@ Available at:
 * https://www.isdocumentdbreallymongodb.com/
 * https://www.iscosmosdbreallymongodb.com/
 
-### Results Breakdown
+### Results Breakdown from periodic test runs
 
-### AWS DocumentDB v4.0 with MongoDB v5.0 Tests ─ July 2021
+### Amazon DocumentDB v4.0 with MongoDB v5.2 Tests ─ January 2022
+
+| Tests Suite | Time execution (sec) | Number of tests | Succeeded | Skipped | Failed | Errored |
+| --- | :---: | :---: | :---: | :---: | :---: | :---: |
+| Decimal | 3.21 | 15 | 9 | 0 | 6 | 0 |
+| JSON Schema | 5.36 | 21 | 2 | 0 | 19 | 0 |
+| Change Streams | 186.63 | 25 | 3 | 0 | 22 | 0 |
+| Aggregation | 776.76 | 317 | 88 | 0 | 229 | 0 |
+| Core | 558.03 | 998 | 361 | 0 | 637 | 0 |
+| Transactions | 76.71 | 49 | 21 | 0 | 28 | 0 |
+| TOTAL | 1608.70 | 1425 | 484 | 0 | 941 | 0 |
+| PERCENTAGES | | 100% | 33.96% | 0% | 66.04% | 0% |
+
+### Azure Cosmos DB v4.0 with MongoDB v5.2 Tests ─ January 2022
+
+| Tests Suite | Time execution (sec) | Number of tests | Succeeded | Skipped | Failed | Errored |
+| --- | :---: | :---: | :---: | :---: | :---: | :---: |
+| Decimal | 25.9 | 15 | 10 | 0 | 5 | 0 |
+| JSON Schema | 45.29 | 21 | 2 | 0 | 19 | 0 |
+| Change Streams | 45.46 | 25 | 3 | 0 | 22 | 0 |
+| Aggregation | 2946.35 | 316 | 100 | 0 | 216 | 0 |
+| Core | 6872.23 | 998 | 338 | 0 | 660 | 0 |
+| Transactions | 81.20 | 49 | 21 | 0 | 28 | 0 |
+| TOTAL | 9970.97 | 1424 | 474 | 0 | 950 | 0 |
+| PERCENTAGES | | 100% | 33.29% | 0% | 66.71% | 0% |
+
+
+### AWS DocumentDB v4.0 with MongoDB v5.0 Tests ─ November 2021
 
 | Tests Suite | Time execution (sec) | Number of tests | Succeeded | Skipped | Failed | Errored |
 | --- | :---: | :---: | :---: | :---: | :---: | :---: |
@@ -303,8 +333,8 @@ Should you find anything glaringly problematic with the tests, please reach out 
 
 ## Test runner
 
- * Maxime BEUGNET <maxime@mongodb.com> - Senior Developer Advocate @ MongoDB
  * Craig Homa <craig.homa@mongodb.com> - Market Intelligence Analyst
+ * Maxime BEUGNET <maxime@mongodb.com> - Senior Developer Advocate @ MongoDB
  * Greg McKeon - Former MongoDB employee - Competitive Analyst
 
 ## Results analyzer
