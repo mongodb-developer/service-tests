@@ -141,7 +141,7 @@ Available at:
 
 ### Results Breakdown from periodic test runs
 
-### Amazon DocumentDB v4.0 with MongoDB v5.2 Tests ─ January 2021
+### Amazon DocumentDB v4.0 with MongoDB v5.2 Tests ─ January 2022
 
 | Tests Suite | Time execution (sec) | Number of tests | Succeeded | Skipped | Failed | Errored |
 | --- | :---: | :---: | :---: | :---: | :---: | :---: |
@@ -154,7 +154,7 @@ Available at:
 | TOTAL | 1608.70 | 1425 | 484 | 0 | 941 | 0 |
 | PERCENTAGES | | 100% | 33.96% | 0% | 66.04% | 0% |
 
-### Azure Cosmos DB v4.0 with MongoDB v5.2 Tests ─ January 2021
+### Azure Cosmos DB v4.0 with MongoDB v5.2 Tests ─ January 2022
 
 | Tests Suite | Time execution (sec) | Number of tests | Succeeded | Skipped | Failed | Errored |
 | --- | :---: | :---: | :---: | :---: | :---: | :---: |
