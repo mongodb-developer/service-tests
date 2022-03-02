@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 if [ "$#" -ne 2 ]; then
     echo "Illegal number of parameters"
-    echo "Usage : $0 [URI of MongoDB Atlas, AWS Document DB or Azure Cosmos DB] [Version to test, either 4.0, 4.2, 4.4, 5.0, 5.1, or 5.2]"
+    echo "Usage : $0 [URI of MongoDB Atlas, AWS Document DB, or Azure Cosmos DB] [Version to test, either 4.0, 4.2, or 4.4]"
     exit 1
 fi
 if [[ $2 != "4.0" ]] && [[ $2 != "4.2" ]] && [[ $2 != "4.4" ]] ; then
