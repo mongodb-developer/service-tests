@@ -11,7 +11,7 @@ RUN apt-get update && \
     tar xzf mongodb-shell-linux-x86_64-$mongoshell_package.tgz && \
     rm -rf /var/lib/apt/lists/* /tmp/* /mongodb-shell-linux-x86_64-$mongoshell_package.tgz
 COPY entrypoint.sh /entrypoint.sh
-COPY test_suites/$version/* /mongo/buildscripts/resmokeconfig/suites/
+COPY test-suites/$version/* /mongo/buildscripts/resmokeconfig/suites/
 RUN rm -f /mongo/buildscripts/resmokelib/testing/testcases/jstest.py
 COPY jstest.py /mongo/buildscripts/resmokelib/testing/testcases/
 ENV m=/mongodb-linux-x86_64-$mongoshell_package/bin/mongo
