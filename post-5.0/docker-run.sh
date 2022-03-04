@@ -14,19 +14,19 @@ LOCAL_RESULTS_DIR="$(pwd)/results-${VERSION}"
 IMAGE="mongo/mongodb-tests:${VERSION}"
 rm -rf ${LOCAL_RESULTS_DIR}
 mkdir ${LOCAL_RESULTS_DIR}
-
+: '
 echo "Starting test suite - Decimal"
 docker run --name mongodb-tests-decimal-${VERSION} -e "URI=${URI}" -v ${LOCAL_RESULTS_DIR}:/results ${IMAGE} decimal > /dev/null
 docker logs mongodb-tests-decimal-${VERSION} > ${LOCAL_RESULTS_DIR}/stdout_decimal.log
 docker rm -v mongodb-tests-decimal-${VERSION}
 echo "Decimal tests complete"
-
+'
 echo "Starting test suite - Core"
 docker run --name mongodb-tests-core-${VERSION} -e "URI=${URI}" -v ${LOCAL_RESULTS_DIR}:/results ${IMAGE} core > /dev/null
 docker logs mongodb-tests-core-${VERSION} > ${LOCAL_RESULTS_DIR}/stdout_core.log
 docker rm -v mongodb-tests-core-${VERSION}
 echo "Core tests complete"
-
+: '
 echo "Starting test suite - Transactions"
 docker run --name mongodb-tests-core-txns-${VERSION} -e "URI=${URI}" -v ${LOCAL_RESULTS_DIR}:/results ${IMAGE} core_txns > /dev/null
 docker logs mongodb-tests-core-txns-${VERSION} > ${LOCAL_RESULTS_DIR}/stdout_core_txns.log
@@ -50,5 +50,5 @@ docker run --name mongodb-tests-aggregation-${VERSION} -e "URI=${URI}" -v ${LOCA
 docker logs mongodb-tests-aggregation-${VERSION} > ${LOCAL_RESULTS_DIR}/stdout_aggregation.log
 docker rm -v mongodb-tests-aggregation-${VERSION}
 echo "Aggregation tests complete"
-
+'
 echo "All tests complete"
