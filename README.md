@@ -70,7 +70,7 @@ Recommended cluster configuration:
  * Or you can `docker ps -a` and `docker logs -f <CONTAINER_NAME>` to check what is currently running.
  * All the results (JSON + STDOUT) are in the `results-<version>` folder.
 
-### On AWS DocumentDB
+### On Amazon DocumentDB
 
  * Set up a DocumentDB Cluster and an EC2 server using the instructions provided [here](https://docs.aws.amazon.com/documentdb/latest/developerguide/getting-started.html).
  * Step 1 will help you install the DocumentDB Cluster and setup the security aspect.
@@ -139,127 +139,149 @@ Available at:
 * https://www.isdocumentdbreallymongodb.com/
 * https://www.iscosmosdbreallymongodb.com/
 
-### Results Breakdown from periodic test runs
+# Results Breakdown from periodic test runs
+
+## Amazon DocumentDB Results Over Time
 
 ### Amazon DocumentDB v4.0 with MongoDB v5.2 Tests ─ January 2022
 
-| Tests Suite | Time execution (sec) | Number of tests | Succeeded | Skipped | Failed | Errored |
-| --- | :---: | :---: | :---: | :---: | :---: | :---: |
-| Decimal | 3.21 | 15 | 9 | 0 | 6 | 0 |
-| JSON Schema | 5.36 | 21 | 2 | 0 | 19 | 0 |
-| Change Streams | 186.63 | 25 | 3 | 0 | 22 | 0 |
-| Aggregation | 776.76 | 317 | 88 | 0 | 229 | 0 |
-| Core | 558.03 | 998 | 361 | 0 | 637 | 0 |
-| Transactions | 76.71 | 49 | 21 | 0 | 28 | 0 |
-| TOTAL | 1608.70 | 1425 | 484 | 0 | 941 | 0 |
-| PERCENTAGES | | 100% | 33.96% | 0% | 66.04% | 0% |
+| Tests Suite | Number of tests | Succeeded | Skipped | Failed | Errored |
+| --- | :---: | :---: | :---: | :---: | :---: |
+| Decimal | 15 | 9 | 0 | 6 | 0 |
+| JSON Schema | 21 | 2 | 0 | 19 | 0 |
+| Change Streams | 25 | 3 | 0 | 22 | 0 |
+| Aggregation | 317 | 88 | 0 | 229 | 0 |
+| Core | 998 | 361 | 0 | 637 | 0 |
+| Transactions | 49 | 21 | 0 | 28 | 0 |
+| TOTAL | 1425 | 484 | 0 | 941 | 0 |
+| PERCENTAGES | - | 33.96% | 0% | 66.04% | 0% |
 
-### Azure Cosmos DB v4.0 with MongoDB v5.2 Tests ─ January 2022
+### Amazon DocumentDB v4.0 with MongoDB v5.0 Tests ─ November 2021
 
-| Tests Suite | Time execution (sec) | Number of tests | Succeeded | Skipped | Failed | Errored |
-| --- | :---: | :---: | :---: | :---: | :---: | :---: |
-| Decimal | 25.9 | 15 | 10 | 0 | 5 | 0 |
-| JSON Schema | 45.29 | 21 | 2 | 0 | 19 | 0 |
-| Change Streams | 45.46 | 25 | 3 | 0 | 22 | 0 |
-| Aggregation | 2946.35 | 316 | 100 | 0 | 216 | 0 |
-| Core | 6872.23 | 998 | 338 | 0 | 660 | 0 |
-| Transactions | 81.20 | 49 | 21 | 0 | 28 | 0 |
-| TOTAL | 9970.97 | 1424 | 474 | 0 | 950 | 0 |
-| PERCENTAGES | | 100% | 33.29% | 0% | 66.71% | 0% |
-
-
-### AWS DocumentDB v4.0 with MongoDB v5.0 Tests ─ November 2021
-
-| Tests Suite | Time execution (sec) | Number of tests | Succeeded | Skipped | Failed | Errored |
-| --- | :---: | :---: | :---: | :---: | :---: | :---: |
-| Decimal | 3.30 | 15 | 9 | 0 | 6 | 0 |
-| JSON Schema | 6.58 | 25 | 2 | 0 | 23 | 0 |
-| Change Streams | 186.08 | 22 | 2 | 0 | 20 | 0 |
-| Aggregation | 746.21 | 300 | 84 | 0 | 216 | 0 |
-| Core | 640.10 | 1001 | 363 | 0 | 638 | 0 |
-| Transactions | 81.20 | 52 | 22 | 0 | 30 | 0 |
-| TOTAL | 1663.47 | 1415 | 482 | 0 | 933 | 0 |
-| PERCENTAGES | | 100% | 34.06% | 0% | 65.94% | 0% |
+| Tests Suite | Number of tests | Succeeded | Skipped | Failed | Errored |
+| --- | :---: | :---: | :---: | :---: | :---: |
+| Decimal | 15 | 9 | 0 | 6 | 0 |
+| JSON Schema | 25 | 2 | 0 | 23 | 0 |
+| Change Streams | 22 | 2 | 0 | 20 | 0 |
+| Aggregation | 300 | 84 | 0 | 216 | 0 |
+| Core | 1001 | 363 | 0 | 638 | 0 |
+| Transactions | 52 | 22 | 0 | 30 | 0 |
+| TOTAL | 1415 | 482 | 0 | 933 | 0 |
+| PERCENTAGES | - | 34.06% | 0% | 65.94% | 0% |
 
 ### AWS DocumentDB v4.0 with MongoDB v5.0 Tests ─ July 2021
 
-| Tests Suite | Time execution (sec) | Number of tests | Succeeded | Skipped | Failed | Errored |
-| --- | :---: | :---: | :---: | :---: | :---: | :---: |
-| Decimal | 3.32 | 15 | 9 | 0 | 6 | 0 |
-| JSON Schema | 6.48 | 25 | 2 | 0 | 23 | 0 |
-| Change Streams | 185.89 | 22 | 2 | 0 | 20 | 0 |
-| Aggregation | 980.14 | 295 | 76 | 0 | 219 | 0 |
-| Core | 575.93 | 991 | 358 | 0 | 634 | 0 |
-| Transactions | 83.99 | 52 | 22 | 0 | 30 | 0 |
-| TOTAL | 1835.75 | 1400 | 469 | 0 | 932 | 0 |
-| PERCENTAGES | | 100% | 33.43% | 0% | 66.57% | 0% |
-
-### Azure Cosmos DB v4.0 with MongoDB v5.0 Tests ─ July 2021
-
-| Tests Suite | Time execution (sec) | Number of tests | Succeeded | Skipped | Failed | Errored |
-| --- | :---: | :---: | :---: | :---: | :---: | :---: |
-| Decimal | 14.79| 15 | 10 | 0 | 5 | 0 |
-| JSON Schema | 40.30 | 25 | 2 | 0 | 23 | 0 |
-| Change Streams | 30.16 | 22 | 2 | 0 | 20 | 0 |
-| Aggregation | 961.91 | 295 | 35 | 0 | 260 | 0 |
-| Core | 8997.39 | 991 | 330 | 0 | 661 | 0 |
-| Transactions | 157.91 | 52 | 21 | 0 | 31 | 0 |
-| TOTAL | 10044.55 | 1400 | 400 | 0 | 1000 | 0 |
-| PERCENTAGES | | 100% | 28.57% | 0% | 71.43% | 0% |
-
-### AWS DocumentDB v4.0 with MongoDB v4.0 Tests ─ Nov 13, 2020
-
-| Tests Suite | Time execution (sec) | Number of tests | Succeeded | Skipped | Failed | Errored |
-| --- | :---: | :---: | :---: | :---: | :---: | :---: |
-| Decimal | 3.37 | 13 | 7 | 0 | 6 | 0 |
-| Json Schema | 6.67 | 24 | 0 | 0 | 24 | 0 |
-| Change Streams | 606.01 | 20 | 0 | 0 | 20 | 0 |
-| Aggregation | 899.83 | 166 | 76 | 0 | 90 | 0 |
-| Core | 1789.21 | 849 | 348 | 0 | 501 | 0 |
-| Transactions | 94.48 | 32 | 12 | 0| 20 | 0 |
-| TOTAL | 3399.57 | 1104 | 443 | 0 | 661 | 0 |
-| PERCENTAGES | | 100% | 40.13% | 0% | 59.87% | 0% |
+| Tests Suite | Number of tests | Succeeded | Skipped | Failed | Errored |
+| --- | :---: | :---: | :---: | :---: | :---: |
+| Decimal | 15 | 9 | 0 | 6 | 0 |
+| JSON Schema | 25 | 2 | 0 | 23 | 0 |
+| Change Streams | 22 | 2 | 0 | 20 | 0 |
+| Aggregation | 295 | 76 | 0 | 219 | 0 |
+| Core | 991 | 358 | 0 | 634 | 0 |
+| Transactions | 52 | 22 | 0 | 30 | 0 |
+| TOTAL | 1400 | 469 | 0 | 932 | 0 |
+| PERCENTAGES | - | 33.43% | 0% | 66.57% | 0% |
 
 ### AWS DocumentDB v4.0 with MongoDB v4.4 Tests ─ May 18, 2021
 
-| Tests Suite | Time execution (sec) | Number of tests | Succeeded | Skipped | Failed | Errored |
-| --- | :---: | :---: | :---: | :---: | :---: | :---: |
-| Decimal | 1.95 | 15 | 9 | 0 | 6 | 0 |
-| Json Schema | 4.39 | 26 | 2 | 0 | 24 | 0 |
-| Change Streams | 184.02 | 22 | 2 | 0 | 20 | 0 |
-| Aggregation | 811.16 | 236 | 82 | 0 | 154 | 0 |
-| Core | 1857.68 | 891 | 348 | 0 | 543 | 0 |
-| Transactions | 108.36 | 49 | 25 | 0 | 24 | 0 |
-| TOTAL | 2967.56 | 1239 | 468 | 0 | 771 | 0 |
-| PERCENTAGES | | 100% | 37.77% | 0% | 62.23% | 0% |
+| Tests Suite | Number of tests | Succeeded | Skipped | Failed | Errored |
+| --- | :---: | :---: | :---: | :---: | :---: |
+| Decimal | 15 | 9 | 0 | 6 | 0 |
+| Json Schema | 26 | 2 | 0 | 24 | 0 |
+| Change Streams | 22 | 2 | 0 | 20 | 0 |
+| Aggregation | 236 | 82 | 0 | 154 | 0 |
+| Core | 891 | 348 | 0 | 543 | 0 |
+| Transactions | 49 | 25 | 0 | 24 | 0 |
+| TOTAL | 1239 | 468 | 0 | 771 | 0 |
+| PERCENTAGES | - | 37.77% | 0% | 62.23% | 0% |
+
+### AWS DocumentDB v4.0 with MongoDB v4.0 Tests ─ Nov 13, 2020
+
+| Tests Suite | Number of tests | Succeeded | Skipped | Failed | Errored |
+| --- | :---: | :---: | :---: | :---: | :---: |
+| Decimal | 13 | 7 | 0 | 6 | 0 |
+| Json Schema | 24 | 0 | 0 | 24 | 0 |
+| Change Streams | 20 | 0 | 0 | 20 | 0 |
+| Aggregation | 166 | 76 | 0 | 90 | 0 |
+| Core | 849 | 348 | 0 | 501 | 0 |
+| Transactions | 32 | 12 | 0| 20 | 0 |
+| TOTAL | 1104 | 443 | 0 | 661 | 0 |
+| PERCENTAGES | - | 40.13% | 0% | 59.87% | 0% |
+
+
+## Azure Cosmos DB Results Over Time
+
+### Azure Cosmos DB v4.2 with MongoDB v5.2 Tests ─ March 2022
+
+| Tests Suite | Number of tests | Succeeded | Skipped | Failed | Errored |
+| --- | :---: | :---: | :---: | :---: | :---: |
+| Decimal | 15 | 10 | 0 | 5 | 0 |
+| JSON Schema | 21 | 2 | 0 | 19 | 0 |
+| Change Streams | 25 | 3 | 0 | 22 | 0 |
+| Aggregation | 317 | 95 | 0 | 222 | 0 |
+| Core | 998 | 338 | 0 | 660 | 0 |
+| Transactions | 49 | 21 | 0 | 28 | 0 |
+| TOTAL | 1425 | 474 | 0 | 950 | 0 |
+| PERCENTAGES | - | 33.29% | 0% | 66.71% | 0% |
+
+
+### Azure Cosmos DB v4.2 with MongoDB v4.2 Tests ─ March 2022
+
+| Tests Suite | Number of tests | Succeeded | Skipped | Failed | Errored |
+| --- | :---: | :---: | :---: | :---: | :---: |
+| Decimal | 15 | 10 | 0 | 5 | 0 |
+| JSON Schema | 26 | 2 | 0 | 24 | 0 |
+| Change Streams | 24 | 2 | 0 | 22 | 0 |
+| Aggregation | 209 | 83 | 0 | 126 | 0 |
+| Core | 885 | 335 | 0 | 550 | 0 |
+| Transactions | 39 | 20 | 0 | 19 | 0 |
+| TOTAL | 1198 | 452 | 0 | 746 | 0 |
+| PERCENTAGES | - | 37.73% | 0% | 62.27% | 0% |
+
+
+### Azure Cosmos DB v4.0 with MongoDB v5.2 Tests ─ January 2022
+
+| Tests Suite | Number of tests | Succeeded | Skipped | Failed | Errored |
+| --- | :---: | :---: | :---: | :---: | :---: |
+| Decimal | 15 | 10 | 0 | 5 | 0 |
+| JSON Schema | 21 | 2 | 0 | 19 | 0 |
+| Change Streams | 25 | 3 | 0 | 22 | 0 |
+| Aggregation | 316 | 100 | 0 | 216 | 0 |
+| Core | 998 | 338 | 0 | 660 | 0 |
+| Transactions | 49 | 21 | 0 | 28 | 0 |
+| TOTAL | 1424 | 474 | 0 | 950 | 0 |
+| PERCENTAGES | - | 33.29% | 0% | 66.71% | 0% |
+
+
+### Azure Cosmos DB v4.0 with MongoDB v5.0 Tests ─ July 2021
+
+| Tests Suite | Number of tests | Succeeded | Skipped | Failed | Errored |
+| --- | :---: | :---: | :---: | :---: | :---: |
+| Decimal | 15 | 10 | 0 | 5 | 0 |
+| JSON Schema | 25 | 2 | 0 | 23 | 0 |
+| Change Streams | 22 | 2 | 0 | 20 | 0 |
+| Aggregation | 295 | 35 | 0 | 260 | 0 |
+| Core | 991 | 330 | 0 | 661 | 0 |
+| Transactions | 52 | 21 | 0 | 31 | 0 |
+| TOTAL | 1400 | 400 | 0 | 1000 | 0 |
+| PERCENTAGES | - | 28.57% | 0% | 71.43% | 0% |
+
 
 ### Azure CosmosDB v4.0 with MongoDB v4.4 Tests ─ Mar 4, 2021
 
-| Tests Suite | Time execution (sec) | Number of tests | Succeeded | Skipped | Failed | Errored |
-| --- | :---: | :---: | :---: | :---: | :---: | :---: |
-| Decimal | 19.83 | 15 | 10 | 0 | 5 | 0 |
-| Json Schema | 43.05 | 26 | 2 | 0 | 24 | 0 |
-| Change Streams | 38.00 | 22 | 2 | 0 | 20 | 0 |
-| Aggregation | 1625.44 | 236 | 88 | 0 | 148 | 0 |
-| Core | 8531.10 | 891 | 303 | 0 | 588 | 0 |
-| Transactions | 28.32 | 49 | 4 | 0 | 45 | 0 |
-| TOTAL | 10285.74 | 1239 | 409 | 0 | 830 | 0 |
-| PERCENTAGES | | 100% | 33.01% | 0% | 66.99% | 0% |
+| Tests Suite | Number of tests | Succeeded | Skipped | Failed | Errored |
+| --- | :---: | :---: | :---: | :---: | :---: |
+| Decimal | 15 | 10 | 0 | 5 | 0 |
+| Json Schema | 26 | 2 | 0 | 24 | 0 |
+| Change Streams | 22 | 2 | 0 | 20 | 0 |
+| Aggregation | 236 | 88 | 0 | 148 | 0 |
+| Core | 891 | 303 | 0 | 588 | 0 |
+| Transactions | 49 | 4 | 0 | 45 | 0 |
+| TOTAL | 1239 | 409 | 0 | 830 | 0 |
+| PERCENTAGES | - | 33.01% | 0% | 66.99% | 0% |
 
-### MongoDB Atlas v5.0 with MongoDB v5.0 Tests ─ July 2021
 
-| Tests Suite | Time execution (sec) | Number of tests | Succeeded | Skipped | Failed | Errored |
-| --- | :---: | :---: | :---: | :---: | :---: | :---: |
-| Decimal | 8.66 | 15 | 13 | 0 | 0 | 0 |
-| JSON Schema | 106.19  | 25 | 24 | 0 | 0 | 0 |
-| Change Streams | 86.42 | 22 | 20 | 0 | 0 | 0 |
-| Aggregation | 1313.92 | 295 | 166 | 0 | 0 | 0 |
-| Core | 4152.09 | 991| 991 | 0 | 0 | 0 |
-| Transactions | 152.65 | 52 | 32 | 0 | 0 | 0 |
-| TOTAL | 5819.93 | 1104 | 1400 | 0 | 0 | 0 |
-| PERCENTAGES | | 100% | 100% | 0% | 0% | 0% |
-
-## Pro tips
+# Pro tips
 
  * You just need to build the image once then you can run the tests as much as you want.
  * If you re-run the tests with the script `1_docker-run.sh`, the `results` folder is reset so please save it before if you want to keep the previous results.
