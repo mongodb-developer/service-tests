@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 if [ "$#" -ne 2 ]; then
     echo "Illegal number of parameters"
-    echo "Usage : $0 [URI of MongoDB Atlas, AWS Document DB or Azure Cosmos DB] [Version to test, either 4.0, 4.2, 4.4, 5.0, 5.1, or 5.2]"
+    echo "Usage : $0 [URI of MongoDB Atlas, AWS Document DB, or Azure Cosmos DB] [Version to test, either 5.0, 5.1, or 5.2]"
     exit 1
 fi
-if [[ $2 != "4.0" ]] && [[ $2 != "4.2" ]] && [[ $2 != "4.4" ]] && [[ $2 != "5.0" ]] && [[ $2 != "5.1" ]] && [[ $2 != "5.2" ]]; then
-    echo "Invalid version; must be 4.0, 4.2, 4.4, 5.0, 5.1, or 5.2"
+if [[ $2 != "5.0" ]] && [[ $2 != "5.1" ]] && [[ $2 != "5.2" ]]; then
+    echo "Invalid version; must be 5.0, 5.1, or 5.2. Please use the pre-5.0 directory for running older versions."
 fi
 
 URI=$1
@@ -14,19 +14,19 @@ LOCAL_RESULTS_DIR="$(pwd)/results-${VERSION}"
 IMAGE="mongo/mongodb-tests:${VERSION}"
 rm -rf ${LOCAL_RESULTS_DIR}
 mkdir ${LOCAL_RESULTS_DIR}
-
+: '
 echo "Starting test suite - Decimal"
 docker run --name mongodb-tests-decimal-${VERSION} -e "URI=${URI}" -v ${LOCAL_RESULTS_DIR}:/results ${IMAGE} decimal > /dev/null
 docker logs mongodb-tests-decimal-${VERSION} > ${LOCAL_RESULTS_DIR}/stdout_decimal.log
 docker rm -v mongodb-tests-decimal-${VERSION}
 echo "Decimal tests complete"
-
+'
 echo "Starting test suite - Core"
 docker run --name mongodb-tests-core-${VERSION} -e "URI=${URI}" -v ${LOCAL_RESULTS_DIR}:/results ${IMAGE} core > /dev/null
 docker logs mongodb-tests-core-${VERSION} > ${LOCAL_RESULTS_DIR}/stdout_core.log
 docker rm -v mongodb-tests-core-${VERSION}
 echo "Core tests complete"
-
+: '
 echo "Starting test suite - Transactions"
 docker run --name mongodb-tests-core-txns-${VERSION} -e "URI=${URI}" -v ${LOCAL_RESULTS_DIR}:/results ${IMAGE} core_txns > /dev/null
 docker logs mongodb-tests-core-txns-${VERSION} > ${LOCAL_RESULTS_DIR}/stdout_core_txns.log
@@ -50,6 +50,5 @@ docker run --name mongodb-tests-aggregation-${VERSION} -e "URI=${URI}" -v ${LOCA
 docker logs mongodb-tests-aggregation-${VERSION} > ${LOCAL_RESULTS_DIR}/stdout_aggregation.log
 docker rm -v mongodb-tests-aggregation-${VERSION}
 echo "Aggregation tests complete"
-
+'
 echo "All tests complete"
-
