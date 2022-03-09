@@ -48,10 +48,14 @@ Recommended cluster configuration:
 
 ## Instructions to run the tests
 
+_**Note:** Changes were introducted in MongoDB 5.0 that are incompatible with older versions of the testing harness. Please use the pre-5.0 directory for running tests against MongoDB Atlas v3.6, v4.0, v4.2, and v4.4. The post-5.0 directory can be used for running tests against MongoDB Atlas v5.0 and later._
+
 ### On MongoDB Atlas
 
  * Clone this repo
  * Build the image - it's a bit long the first time (2-3 minutes) so go get some coffee, it's on us!
+ * Use the pre-5.0 directory for running the 3.6, 4.0, 4.2, and 4.4 test suites.
+ * Use the post-5.0 directory for running the 5.0 test suite and beyond.
  * Version should either be 4.0, 4.2, 4.4, or 5.x depending on the suite you plan on running.
 
 ```sh
@@ -60,7 +64,7 @@ Recommended cluster configuration:
 
  * Create a MongoDB Atlas Cluster v4.0, 4.2, 4.4, or 5.x. Then create an admin user and whitelist your public IP address. Find some help [here](https://www.youtube.com/watch?v=SIiVjgEDI7M&list=PL4RCxklHWZ9smTpR3hUdq53Su601yCPLj).
  * Collect the MongoDB Atlas connection string for the next command.
- * Run the 5 test suites.
+ * Run the 6 test suites.
 
 ```sh
 ./1_docker-run.sh 'mongodb+srv://<USER>:<PASSWORD>@<DEPLOYMENT NAME>.tsnei.mongodb.net' <version>
