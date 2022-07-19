@@ -1,0 +1,53 @@
+test_kind: js_test
+
+selector:
+  roots:
+  - jstests/aggregation/**/*.js
+  exclude_files:
+  - jstests/aggregation/extras/*.js
+  - jstests/aggregation/data/*.js
+  # Excluding tests requiring admin privs, sharding, a local deployment, or other non-relevance to Atlas
+  - jstests/aggregation/api_version_stage_allowance_checks.js
+  - jstests/aggregation/bugs/server21632.js
+  - jstests/aggregation/bugs/server5932.js
+  - jstests/aggregation/expressions/filter.js
+  - jstests/aggregation/expressions/regex_error_cases.js
+  - jstests/aggregation/no_output_to_system.js
+  - jstests/aggregation/sources/graphLookup/error.js
+  - jstests/aggregation/sources/indexStats/verify_index_stats_output.js
+  - jstests/aggregation/sources/lookup/lookup_query_stats.js
+  - jstests/aggregation/sources/setWindowFields/memory_limit.js
+  - jstests/aggregation/sources/setWindowFields/spill_to_disk.js
+  - jstests/aggregation/sources/sort/explain_sort.js
+  - jstests/aggregation/sources/unionWith/unionWith.js
+  - jstests/aggregation/sources/unionWith/unionWith_invalid_usage.js
+  - jstests/aggregation/view_resolution_namespace_collision.js
+  - jstests/aggregation/bugs/match_swap_limit.js
+  - jstests/aggregation/bugs/upperlower.js
+  - jstests/aggregation/explain_limit.js
+  - jstests/aggregation/expressions/concat_arrays.js
+  - jstests/aggregation/sources/densify/generated_limit.js
+  - jstests/aggregation/sources/densify/internal_parse.js
+  - jstests/aggregation/sources/densify/memory_limit.js
+  - jstests/aggregation/sources/densify/partitions.js
+  - jstests/aggregation/sources/unionWith/unionWith_explain.js
+  - jstests/aggregation/sources/setWindowFields/n_accumulators.js
+  - jstests/aggregation/spill_to_disk.js
+
+
+  # Must be able to turn off profiling before dropping system.profile
+  - jstests/aggregation/optimize_away_pipeline.js
+  - jstests/aggregation/sources/lookup/profile_lookup.js
+
+  exclude_with_any_tags:
+  - assumes_superuser_permissions
+  - requires_eval_command
+  - requires_spawning_own_processes
+  - uses_multiple_connections
+  - uses_testing_only_commands
+  - requires_sharding
+
+executor:
+  config:
+    shell_options:
+      ssl: ''
