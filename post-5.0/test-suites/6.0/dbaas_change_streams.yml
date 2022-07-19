@@ -21,7 +21,6 @@ selector:
   - jstests/change_streams/oplog_rewrite/change_stream_match_pushdown_operation_type_rewrite.js
   - jstests/change_streams/oplog_rewrite/change_stream_match_pushdown_to_rewrite.js
   - jstests/change_streams/oplog_rewrite/change_stream_match_pushdown_updateDescription_rewrite.js
-  - jstests/change_streams/write_pit_preimage.js
   - jstests/change_streams/change_streams_lookup_preimage_with_chunk_migration.js
 
   exclude_with_any_tags:
