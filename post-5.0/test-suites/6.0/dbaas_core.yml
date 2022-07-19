@@ -45,9 +45,7 @@ selector:
   - jstests/core/index_id_options.js
   - jstests/core/internal_rename_if_options_and_indexes_match.js
   - jstests/core/latch_analyzer.js
-  - jstests/core/list_all_local_sessions.js
   - jstests/core/list_indexes.js
-  - jstests/core/list_local_sessions.js
   - jstests/core/profile_hide_index.js
   - jstests/core/queryoptimizera.js
   - jstests/core/read_after_optime.js
