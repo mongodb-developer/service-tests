@@ -13,6 +13,10 @@ elif [[ $1 = "5.2" ]]; then
   branch=v5.2
   mongoshell_package=debian10-5.2.0-rc6
   docker build -f Dockerfile --build-arg version=$1 --build-arg branch=$branch --build-arg mongoshell_package=$mongoshell_package -t mongo/mongodb-tests:$1 .  
+elif [[ $1 = "6.0" ]]; then
+  branch=v6.0
+  mongoshell_package=debian10-v6.0-latest
+  docker build -f Dockerfile --build-arg version=$1 --build-arg branch=$branch --build-arg mongoshell_package=$mongoshell_package -t mongo/mongodb-tests:$1 .  
 else
-  echo "Please specify either version 5.0, 5.1, or 5.2. Please use the pre-5.0 directory for running older versions."
+  echo "Please specify either version 5.0, 5.1, 5.2, or 6.0. Please use the pre-5.0 directory for running older versions."
 fi
