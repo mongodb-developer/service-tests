@@ -20,6 +20,7 @@ docker run --name mongodb-tests-decimal-${VERSION} -e "URI=${URI}" -v ${LOCAL_RE
 docker logs mongodb-tests-decimal-${VERSION} > ${LOCAL_RESULTS_DIR}/stdout_decimal.log
 docker rm -v mongodb-tests-decimal-${VERSION}
 echo "Decimal tests complete"
+
 :'
 echo "Starting test suite - Core"
 docker run --name mongodb-tests-core-${VERSION} -e "URI=${URI}" -v ${LOCAL_RESULTS_DIR}:/results ${IMAGE} core > /dev/null
@@ -51,4 +52,5 @@ docker logs mongodb-tests-aggregation-${VERSION} > ${LOCAL_RESULTS_DIR}/stdout_a
 docker rm -v mongodb-tests-aggregation-${VERSION}
 echo "Aggregation tests complete"
 '
+
 echo "All tests complete"
