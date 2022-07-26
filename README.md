@@ -3,8 +3,8 @@ This repository is used to perform correctness testing against a MongoDB API end
 
 ## Performance Testing
 
-* Use [these intructions to run YCSB](https://github.com/mongodb-developer/service-tests/blob/master/ycsb.md)
-* Use [these instructions to run Socialite](https://github.com/mongodb-developer/service-tests/blob/master/socialite.md)
+* Use [these intructions to run YCSB](https://github.com/mongodb-developer/service-tests/blob/master/performance-benchmarks/ycsb.md)
+* Use [these instructions to run Socialite](https://github.com/mongodb-developer/service-tests/blob/master/performance-benchmarks/socialite.md)
 
 ## Correctness Testing
 There are two main components to the correctness tests:
