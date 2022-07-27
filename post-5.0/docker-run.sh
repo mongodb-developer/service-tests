@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+#TODO - Remove dead branches
 if [ "$#" -ne 2 ]; then
     echo "Illegal number of parameters"
     echo "Usage : $0 [URI of MongoDB Atlas, AWS Document DB, or Azure Cosmos DB] [Version to test, either 5.0, 5.1, 5.2, or 6.0]"
