@@ -7,7 +7,7 @@ RUN apt-get update && \
     git clone --branch $branch https://github.com/mongodb/mongo.git && \
     pip3 install --user -r /mongo/etc/pip/dev-requirements.txt && \
     pip3 install --user dnspython==1.16.0 && \
-    wget https://downloads.mongodb.org/linux/mongodb-shell-linux-x86_64-$mongoshell_package.tgz && \
+    wget https://downloads.mongodb.org/linux/mongodb-linux-x86_64-$mongoshell_package.tgz && \
     tar xzf mongodb-shell-linux-x86_64-$mongoshell_package.tgz && \
     rm -rf /var/lib/apt/lists/* /tmp/* /mongodb-shell-linux-x86_64-$mongoshell_package.tgz
 COPY entrypoint.sh /entrypoint.sh
@@ -23,3 +23,4 @@ RUN update-ca-certificates && \
 ENTRYPOINT ["/entrypoint.sh"]
 
 # removed --depth 1 as it was causing issues with resolving test tags in the 5.1 branch
+# updated wget https://downloads.mongodb.org/linux/mongodb-shell-linux-x86_64-$mongoshell_package.tgz to https://downloads.mongodb.org/linux/mongodb-linux-x86_64-$mongoshell_package.tgz..
