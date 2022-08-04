@@ -33,6 +33,14 @@ selector:
   - jstests/aggregation/sources/unionWith/unionWith_explain.js
   - jstests/aggregation/sources/setWindowFields/n_accumulators.js
   - jstests/aggregation/spill_to_disk.js
+  - jstests/aggregation/expressions/collation_expressions.js
+  - jstests/aggregation/lookup_let_optimization.js
+  - jstests/aggregation/match_no_swap_rand.js
+  - jstests/aggregation/sources/densify/densify_sort_opt_comparison.js
+  - jstests/aggregation/sources/geonear/requires_geo_index.js
+  - jstests/aggregation/sources/lookup/lookup_equijoin_semantics_inlj.js
+  - jstests/aggregation/sources/lookup/lookup_non_correlated_prefix.js
+  - jstests/aggregation/sources/project/remove_redundant_projects.js
 
 
   # Must be able to turn off profiling before dropping system.profile
