@@ -76,6 +76,19 @@ selector:
   - jstests/core/explain_execution_error.js
   - jstests/core/explain_find.js
   - jstests/core/sortj.js
+  # Post 6.0
+  - jstests/core/batched_multi_deletes.js
+  - jstests/core/clustered_collection_creation.js
+  - jstests/core/collection_uuid_drop.js
+  - jstests/core/collection_uuid_write_commands.js
+  - jstests/core/index_stats.js
+  - jstests/core/list_all_local_sessions.js
+  - jstests/core/timeseries/timeseries_lookup.js
+  - jstests/core/write_change_stream_pit_preimage.js
+  - jstests/core/operation_latency_histogram.js
+  - jstests/core/profile_findandmodify.js
+
+
 
   exclude_with_any_tags:
   - assumes_superuser_permissions
