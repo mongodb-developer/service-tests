@@ -10,6 +10,8 @@ selector:
   - requires_spawning_own_processes
   - uses_multiple_connections
   - uses_testing_only_commands
+  - uses_multiple_connections
+  - uses_testing_only_commands
 
 
 executor:
