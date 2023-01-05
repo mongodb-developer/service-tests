@@ -215,6 +215,19 @@ Available at:
 
 ## Azure Cosmos DB Results Over Time
 
+### Azure Cosmos DB v4.2 with MongoDB v6.0 Tests ─ August 2022
+
+| Tests Suite | Number of tests | Succeeded | Skipped | Failed | Errored |
+| --- | :---: | :---: | :---: | :---: | :---: |
+| Decimal | 15 | 10 | 0 | 5 | 0 |
+| JSON Schema | 21 | 2 | 0 | 19 | 0 |
+| Change Streams | 38 | 8 | 0 | 30 | 0 |
+| Aggregation | 328 | 109 | 0 | 219 | 0 |
+| Core | 1030 | 346 | 0 | 684 | 0 |
+| Transactions | 49 | 21 | 0 | 28 | 0 |
+| TOTAL | 1480 | 496 | 0 | 984 | 0 |
+| PERCENTAGES | - | 33.51% | 0% | 66.49% | 0% |
+
 ### Azure Cosmos DB v4.2 with MongoDB v5.2 Tests ─ March 2022
 
 | Tests Suite | Number of tests | Succeeded | Skipped | Failed | Errored |
