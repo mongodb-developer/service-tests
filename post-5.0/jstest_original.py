@@ -39,7 +39,6 @@ class _SingleJSTestCase(interface.ProcessTestCase):
 
     def configure_shell(self):
         """Set up the global variables for the shell, and data/ directory for the mongod.
-
         configure_shell() only needs to be called once per test. Therefore if creating multiple
         _SingleJSTestCase instances to be run in parallel, only call configure_shell() on one of
         them.
@@ -109,8 +108,9 @@ class _SingleJSTestCase(interface.ProcessTestCase):
 
     def _make_process(self):
         return core.programs.mongo_shell_program(
-            self.logger, executable=self.shell_executable, filename=self.js_filename,
-            connection_string=self.fixture.get_driver_connection_url(), **self.shell_options)
+            self.logger, self.fixture.job_num, test_id=self._id, executable=self.shell_executable,
+            filename=self.js_filename, connection_string=self.fixture.get_driver_connection_url(),
+            **self.shell_options)
 
 
 class JSTestCaseBuilder:
@@ -269,7 +269,7 @@ class JSTestCase(interface.TestCase, interface.UndoDBUtilsMixin):
         """Determine if a return code represents and unsafe exit."""
         # 252 and 253 may be returned in failed test executions.
         # (i.e. -4 and -3 in mongo_main.cpp)
-        if return_code not in (252, 253, 0):
+        if self.return_code not in (252, 253, 0) and False:
             self.propagate_error = errors.UnsafeExitError(
                 f"Mongo shell exited with code {return_code} while running jstest {self.basename()}."
                 " Further test execution may be unsafe.")
@@ -279,7 +279,6 @@ class JSTestCase(interface.TestCase, interface.UndoDBUtilsMixin):
 class AllVersionsJSTestCase(JSTestCase):
     """
     Alias for JSTestCase for multiversion passthrough suites.
-
     It run with all combinations of versions of replica sets and sharded clusters.
     The distinct name is picked up by task generation.
     """

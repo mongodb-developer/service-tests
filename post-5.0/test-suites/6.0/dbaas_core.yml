@@ -1,0 +1,104 @@
+test_kind: js_test
+
+selector:
+  roots:
+  - jstests/core/**/*.js
+  exclude_files:
+  - jstests/core/txns/**/*.js
+  # Excluding find_and_modify.js as it tests writability to the config collection, which is N/A for Atlas.
+  - jstests/core/find_and_modify.js
+ # Excluding tests requiring admin privs, sharding, a local deployment, or other non-relevance to Atlas
+  - jstests/core/apitest_db.js
+  - jstests/core/apitest_dbcollection.js
+  - jstests/core/basic6.js
+  - jstests/core/batch_write_command_w0.js
+  - jstests/core/check_shard_index.js
+  - jstests/core/collmod_convert_to_ttl.js
+  - jstests/core/count2.js
+  - jstests/core/crud_api.js
+  - jstests/core/datasize2.js
+  - jstests/core/exhaust.js
+  - jstests/core/jssymbol.js
+  - jstests/core/match_numeric_components.js
+  - jstests/core/positional_projection.js
+  - jstests/core/rename_collection_capped.js
+ # Tests excluded pre-5.1
+  - jstests/core/add_skip_stage_before_fetch.js
+  - jstests/core/json_schema/bsontype.js
+  - jstests/core/geoc.js
+  - jstests/core/hashed_index_queries.js
+  - jstests/core/index_arr2.js
+  - jstests/core/api_version_parameters.js
+  - jstests/core/api_version_test_expression.js
+  - jstests/core/commands_with_uuid.js
+  - jstests/core/comment_field.js
+  - jstests/core/crud_ops_do_not_throw_locktimeout.js
+  - jstests/core/currentop_cursors.js
+  - jstests/core/currentop_shell.js
+  - jstests/core/currentop_waiting_for_latch.js
+  - jstests/core/disallow_system_views_user_writes.js
+  - jstests/core/failcommand_failpoint.js
+  - jstests/core/fsync.js
+  - jstests/core/hash.js
+  - jstests/core/hidden_index.js
+  - jstests/core/index9.js
+  - jstests/core/index_id_options.js
+  - jstests/core/internal_rename_if_options_and_indexes_match.js
+  - jstests/core/latch_analyzer.js
+  - jstests/core/list_indexes.js
+  - jstests/core/profile_hide_index.js
+  - jstests/core/queryoptimizera.js
+  - jstests/core/read_after_optime.js
+  - jstests/core/roles_info.js
+  - jstests/core/timeseries/timeseries_index_stats.js
+  - jstests/core/validate_db_metadata_command.js
+  - jstests/core/version_api_list_commands_verification.js
+  - jstests/core/version_api_v1_command_coverage.js
+  - jstests/core/views/view_with_invalid_dbname.js
+  - jstests/core/wildcard_index_collation.js
+  - jstests/core/nestedobj1.js
+  - jstests/core/collation.js
+  - jstests/core/computed_projections.js
+  - jstests/core/expr_index_use.js
+  - jstests/core/idhack.js
+  - jstests/core/index_filter_commands.js
+  - jstests/core/indexj.js
+  - jstests/core/objid5.js
+  - jstests/core/plan_cache_sbe.js
+  - jstests/core/projection_dotted_paths.js
+  - jstests/core/projection_expr_mod.js
+  - jstests/core/timeseries/bucket_granularity.js
+  - jstests/core/timeseries/timeseries_delete_concurrent.js
+  - jstests/core/timeseries/timeseries_delete_hint.js
+  - jstests/core/timeseries/timeseries_update_concurrent.js
+  - jstests/core/timeseries/timeseries_update_hint.js
+  - jstests/core/wildcard_index_cached_plans.js
+  - jstests/core/explain_execution_error.js
+  - jstests/core/explain_find.js
+  - jstests/core/sortj.js
+  # Post 6.0
+  - jstests/core/batched_multi_deletes.js
+  - jstests/core/clustered_collection_creation.js
+  - jstests/core/collection_uuid_drop.js
+  - jstests/core/collection_uuid_write_commands.js
+  - jstests/core/index_stats.js
+  - jstests/core/list_all_local_sessions.js
+  - jstests/core/timeseries/timeseries_lookup.js
+  - jstests/core/write_change_stream_pit_preimage.js
+  - jstests/core/operation_latency_histogram.js
+  - jstests/core/profile_findandmodify.js
+
+
+
+  exclude_with_any_tags:
+  - assumes_superuser_permissions
+  - requires_eval_command
+  - requires_spawning_own_processes
+  - uses_multiple_connections
+  - uses_testing_only_commands
+
+executor:
+  config:
+    shell_options:
+      eval: var testingReplication = true;
+      ssl: ''
