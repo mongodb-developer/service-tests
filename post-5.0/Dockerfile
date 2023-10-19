@@ -23,4 +23,4 @@ RUN update-ca-certificates && \
 ENTRYPOINT ["/entrypoint.sh"]
 RUN ["chmod", "+x", "/entrypoint.sh"]
 
-# removed --depth 1 as it was causing issues with resolving test tags in the 5.1 branch
+
