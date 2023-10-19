@@ -5,8 +5,8 @@ if [ "$#" -ne 2 ]; then
     echo "Usage : $0 [URI of MongoDB Atlas, AWS Document DB, or Azure Cosmos DB] [Version to test, either 5.0, 5.1, 5.2, or 6.0]"
     exit 1
 fi
-if [[ $2 != "5.0" ]] && [[ $2 != "5.1" ]] && [[ $2 != "5.2" ]] && [[ $2 != "6.0" ]]; then
-    echo "Invalid version; must be 5.0, 5.1, 5.2, or 6.0. Please use the pre-5.0 directory for running older versions."
+if [[ $2 != "5.0" ]] && [[ $2 != "6.0" ]] && [[ $2 != "7.0" ]]; then
+    echo "Invalid version; must be 5.0, 6.0, or 7.0. Please use the pre-5.0 directory for running older versions."
 fi
 
 URI=$1
