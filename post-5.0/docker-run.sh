@@ -2,7 +2,7 @@
 #TODO - Remove dead branches
 if [ "$#" -ne 2 ]; then
     echo "Illegal number of parameters"
-    echo "Usage : $0 [URI of MongoDB Atlas, AWS Document DB, or Azure Cosmos DB] [Version to test, either 5.0, 5.1, 5.2, or 6.0]"
+    echo "Usage : $0 [URI of MongoDB Atlas, AWS Document DB, or Azure Cosmos DB] [Version to test, either 5.0, 6.0, or 7.0]"
     exit 1
 fi
 if [[ $2 != "5.0" ]] && [[ $2 != "6.0" ]] && [[ $2 != "7.0" ]]; then
@@ -16,17 +16,12 @@ IMAGE="mongo/mongodb-tests:${VERSION}"
 rm -rf ${LOCAL_RESULTS_DIR}
 mkdir ${LOCAL_RESULTS_DIR}
 
+
 echo "Starting test suite - Decimal"
 docker run --name mongodb-tests-decimal-${VERSION} -e "URI=${URI}" -v ${LOCAL_RESULTS_DIR}:/results ${IMAGE} decimal > /dev/null
 docker logs mongodb-tests-decimal-${VERSION} > ${LOCAL_RESULTS_DIR}/stdout_decimal.log
 docker rm -v mongodb-tests-decimal-${VERSION}
 echo "Decimal tests complete"
-
-echo "Starting test suite - Core"
-docker run --name mongodb-tests-core-${VERSION} -e "URI=${URI}" -v ${LOCAL_RESULTS_DIR}:/results ${IMAGE} core > /dev/null
-docker logs mongodb-tests-core-${VERSION} > ${LOCAL_RESULTS_DIR}/stdout_core.log
-docker rm -v mongodb-tests-core-${VERSION}
-echo "Core tests complete"
 
 echo "Starting test suite - Transactions"
 docker run --name mongodb-tests-core-txns-${VERSION} -e "URI=${URI}" -v ${LOCAL_RESULTS_DIR}:/results ${IMAGE} core_txns > /dev/null
@@ -51,5 +46,12 @@ docker run --name mongodb-tests-aggregation-${VERSION} -e "URI=${URI}" -v ${LOCA
 docker logs mongodb-tests-aggregation-${VERSION} > ${LOCAL_RESULTS_DIR}/stdout_aggregation.log
 docker rm -v mongodb-tests-aggregation-${VERSION}
 echo "Aggregation tests complete"
+
+echo "Starting test suite - Core"
+docker run --name mongodb-tests-core-${VERSION} -e "URI=${URI}" -v ${LOCAL_RESULTS_DIR}:/results ${IMAGE} core > /dev/null
+docker logs mongodb-tests-core-${VERSION} > ${LOCAL_RESULTS_DIR}/stdout_core.log
+docker rm -v mongodb-tests-core-${VERSION}
+echo "Core tests complete"
+
 
 echo "All tests complete"
