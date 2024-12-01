@@ -1,7 +1,7 @@
 # tests/test_transactions.py
 
 import unittest
-from datetime import datetime
+from datetime import datetime, timezone
 from pymongo import WriteConcern
 from pymongo.errors import PyMongoError, OperationFailure, ConfigurationError
 import logging
@@ -18,19 +18,39 @@ class TestACIDTransactions(BaseTest):
     def setUpClass(cls):
         super().setUpClass()
         cls.collection_name = 'test_acid_transactions'
-        cls.results_collection_name = 'test_transactions_results'
+        cls.transactions_collection_name = 'transactions'
 
         # DocumentDB collections
         cls.docdb_accounts = cls.docdb_db[cls.collection_name]
-        cls.docdb_transactions = cls.docdb_db['transactions']
+        cls.docdb_transactions = cls.docdb_db[cls.transactions_collection_name]
 
         # Configure logging
         cls.logger = logging.getLogger('TestACIDTransactions')
         cls.logger.setLevel(logging.DEBUG)
-        handler = logging.FileHandler('test_transactions.log')
+        
+        # File Handler for logging to 'test_transactions.log'
+        file_handler = logging.FileHandler('test_transactions.log')
         formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-        handler.setFormatter(formatter)
-        cls.logger.addHandler(handler)
+        file_handler.setFormatter(formatter)
+        cls.logger.addHandler(file_handler)
+
+        # In-Memory Log Capture List
+        cls.log_capture_list = []
+
+        # Custom Handler to capture logs in memory
+        class ListHandler(logging.Handler):
+            def __init__(self, log_list):
+                super().__init__()
+                self.log_list = log_list
+
+            def emit(self, record):
+                log_entry = self.format(record)
+                self.log_list.append(log_entry)
+
+        # Initialize and add the custom ListHandler
+        list_handler = ListHandler(cls.log_capture_list)
+        list_handler.setFormatter(formatter)
+        cls.logger.addHandler(list_handler)
 
         # Clean up previous data
         try:
@@ -51,8 +71,16 @@ class TestACIDTransactions(BaseTest):
             insert_result = cls.docdb_accounts.insert_many(cls.initial_accounts)
             cls.logger.info(f"Inserted documents IDs: {insert_result.inserted_ids}")
             cls.logger.info('Initial accounts data inserted successfully.')
+
+            # Verify insertion
+            count = cls.docdb_accounts.count_documents({})
+            cls.logger.info(f"Number of documents in '{cls.collection_name}': {count}")
+            if count != len(cls.initial_accounts):
+                cls.logger.error(f"Expected {len(cls.initial_accounts)} documents, found {count}")
+                raise Exception("Initial data insertion verification failed.")
         except Exception as e:
             cls.logger.error(f"Error inserting initial accounts data: {e}")
+            raise e  # Re-raise to prevent tests from running without initial data
 
     def execute_transaction(self, collection, transactions_collection, session, from_account, to_account, amount):
         """Perform a transaction with a debit and credit operation."""
@@ -83,7 +111,7 @@ class TestACIDTransactions(BaseTest):
             'platform': 'documentdb',
             'exit_code': 1,
             'elapsed': None,
-            'start': datetime.utcfromtimestamp(start_time).isoformat(),
+            'start': datetime.fromtimestamp(start_time, timezone.utc).isoformat(),
             'end': None,
             'suite': 'test_transactions',
             'version': 'unknown',
@@ -153,6 +181,7 @@ class TestACIDTransactions(BaseTest):
                 result_document['exit_code'] = 0
                 result_document['reason'] = 'PASSED'
                 result_document['log_lines'].append('Transaction rolled back successfully.')
+                self.logger.debug("Transaction rolled back successfully.")
             else:
                 error_msg = "Rollback did not restore initial balances."
                 result_document['description'].append(error_msg)
@@ -162,16 +191,26 @@ class TestACIDTransactions(BaseTest):
 
             end_time = time.time()
             result_document['elapsed'] = end_time - start_time
-            result_document['end'] = datetime.utcfromtimestamp(end_time).isoformat()
+            result_document['end'] = datetime.fromtimestamp(end_time, timezone.utc).isoformat()
 
             try:
                 server_info = self.docdb_client.server_info()
                 result_document['version'] = server_info.get('version', 'unknown')
+                self.logger.debug(f"Server version retrieved: {result_document['version']}")
             except Exception as ve:
                 self.logger.error(f"Error retrieving server version: {ve}")
                 result_document['version'] = 'unknown'
 
+            # Assign captured log lines to the result document
+            result_document['log_lines'] = list(self.log_capture_list)
+
+            # Ensure all fields in result_document are JSON serializable
             result_document = json.loads(json.dumps(result_document, default=str))
+
+            # Print the result_document for debugging
+            print(json.dumps(result_document, indent=4))
+
+            # Accumulate result for later storage
             self.test_results.append(result_document)
 
     @classmethod
@@ -191,5 +230,5 @@ class TestACIDTransactions(BaseTest):
 
         super().tearDownClass()
 
-if __name__ == '__main__':
-    unittest.main()
+    if __name__ == '__main__':
+        unittest.main()

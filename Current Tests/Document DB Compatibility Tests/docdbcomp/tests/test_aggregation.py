@@ -56,10 +56,30 @@ class TestAggregation(BaseTest):
         # Configure logging
         cls.logger = logging.getLogger('TestAggregation')
         cls.logger.setLevel(logging.DEBUG)
-        handler = logging.FileHandler('test_aggregation.log')
+        
+        # File Handler for logging to 'test_aggregation.log'
+        file_handler = logging.FileHandler('test_aggregation.log')
         formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-        handler.setFormatter(formatter)
-        cls.logger.addHandler(handler)
+        file_handler.setFormatter(formatter)
+        cls.logger.addHandler(file_handler)
+
+        # In-Memory Log Capture List
+        cls.log_capture_list = []
+
+        # Custom Handler to capture logs in memory
+        class ListHandler(logging.Handler):
+            def __init__(self, log_list):
+                super().__init__()
+                self.log_list = log_list
+
+            def emit(self, record):
+                log_entry = self.format(record)
+                self.log_list.append(log_entry)
+
+        # Initialize and add the custom ListHandler
+        list_handler = ListHandler(cls.log_capture_list)
+        list_handler.setFormatter(formatter)
+        cls.logger.addHandler(list_handler)
 
     def setUp(self):
         # Assign class variables to instance variables for easy access
@@ -67,6 +87,9 @@ class TestAggregation(BaseTest):
         self.lookup_collection = self.__class__.docdb_lookup_coll
         self.output_collection = self.__class__.docdb_output_coll
         self.logger = self.__class__.logger
+
+        # Clear the in-memory log capture list before each test
+        self.__class__.log_capture_list.clear()
 
     def execute_aggregation_test(self, pipeline, description):
         """
@@ -98,12 +121,11 @@ class TestAggregation(BaseTest):
                 try:
                     aggregation_result = list(self.collection.aggregate(pipeline, allowDiskUse=True))
                     result_document['aggregation_result'] = aggregation_result
-                    result_document['log_lines'].append('Aggregation executed successfully.')
+                    self.logger.debug('Aggregation executed successfully.')
                 except PyMongoError as e:
                     error_msg = f'Aggregation Error: {e}'
                     self.logger.error(error_msg)
                     result_document['description'].append(error_msg)
-                    result_document['log_lines'].append(error_msg)
                     raise  # Re-raise exception to be caught by outer except
 
             # Determine success status
@@ -133,6 +155,9 @@ class TestAggregation(BaseTest):
             except Exception as ve:
                 self.logger.error(f"Error retrieving server version: {ve}")
                 result_document['version'] = 'unknown'
+
+            # Assign captured log lines to the result document
+            result_document['log_lines'] = list(self.log_capture_list)
 
             # Ensure all fields are JSON serializable
             result_document = json.loads(json.dumps(result_document, default=str))

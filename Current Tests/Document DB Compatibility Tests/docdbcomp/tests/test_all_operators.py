@@ -40,15 +40,38 @@ class TestAllOperators(BaseTest):
         # Configure logging
         cls.logger = logging.getLogger('TestAllOperators')
         cls.logger.setLevel(logging.DEBUG)
-        handler = logging.FileHandler('test_all_operators.log')
+        
+        # File Handler for logging to 'test_all_operators.log'
+        file_handler = logging.FileHandler('test_all_operators.log')
         formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-        handler.setFormatter(formatter)
-        cls.logger.addHandler(handler)
+        file_handler.setFormatter(formatter)
+        cls.logger.addHandler(file_handler)
+
+        # In-Memory Log Capture List
+        cls.log_capture_list = []
+
+        # Custom Handler to capture logs in memory
+        class ListHandler(logging.Handler):
+            def __init__(self, log_list):
+                super().__init__()
+                self.log_list = log_list
+
+            def emit(self, record):
+                log_entry = self.format(record)
+                self.log_list.append(log_entry)
+
+        # Initialize and add the custom ListHandler
+        list_handler = ListHandler(cls.log_capture_list)
+        list_handler.setFormatter(formatter)
+        cls.logger.addHandler(list_handler)
 
     def setUp(self):
         # Assign class variables to instance variables
         self.docdb_coll = self.__class__.docdb_coll
         self.logger = self.__class__.logger
+
+        # Clear the in-memory log capture list before each test
+        self.__class__.log_capture_list.clear()
 
     def execute_and_store_query(self, query, operator_name, is_aggregation=False, is_update=False, update_operation=None, **kwargs):
         collection = self.docdb_coll
@@ -78,22 +101,26 @@ class TestAllOperators(BaseTest):
                     'matched_count': result.matched_count,
                     'modified_count': result.modified_count
                 }
+                self.logger.debug(f"Update operation '{operator_name}' executed successfully.")
             elif is_aggregation:
                 result = list(collection.aggregate(query))
                 result_document['query_result'] = result
+                self.logger.debug(f"Aggregation operator '{operator_name}' executed successfully.")
             else:
                 result = list(collection.find(query))
                 result_document['query_result'] = result
+                self.logger.debug(f"Find operation with operator '{operator_name}' executed successfully.")
 
             result_document['status'] = 'pass'
             result_document['exit_code'] = 0
             result_document['reason'] = 'PASSED'
             result_document['log_lines'].append(f"Operator '{operator_name}' executed successfully.")
         except Exception as e:
+            error_trace = traceback.format_exc()
             error_msg = f"Error executing operator '{operator_name}': {str(e)}"
             result_document['description'].append(error_msg)
             result_document['reason'] = 'FAILED'
-            self.logger.error(error_msg)
+            self.logger.error(f"Error executing operator '{operator_name}': {e}\n{error_trace}")
         finally:
             # Capture elapsed time and end time
             end_time = time.time()
@@ -108,6 +135,9 @@ class TestAllOperators(BaseTest):
             except Exception as ve:
                 self.logger.error(f"Error retrieving server version: {ve}")
                 result_document['version'] = 'unknown'
+
+            # Assign captured log lines to the result document
+            result_document['log_lines'] = list(self.log_capture_list)
 
             # Ensure all fields in result_document are JSON serializable
             result_document = json.loads(json.dumps(result_document, default=str))
@@ -186,11 +216,12 @@ class TestAllOperators(BaseTest):
         query = {"stringField": {"$regex": "test"}}
         self.execute_and_store_query(query, operator_name)
 
-    @unittest.skip("Text search not supported in DocumentDB")
+    
     def test_text_operator(self):
         operator_name = '$text'
         query = {"$text": {"$search": "tag1"}}
-        # Skipped due to lack of support in DocumentDB
+        self.execute_and_store_query(query, operator_name)
+       
 
     def test_geoIntersects_operator(self):
         operator_name = '$geoIntersects'
@@ -482,6 +513,7 @@ class TestAllOperators(BaseTest):
     @classmethod
     def tearDownClass(cls):
         cls.docdb_coll.drop()
+        cls.logger.debug("Dropped collection during teardown.")
         super().tearDownClass()
 
 if __name__ == '__main__':

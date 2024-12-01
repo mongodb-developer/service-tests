@@ -28,14 +28,35 @@ class TestIndexing(BaseTest):
         # Configure logging
         cls.logger = logging.getLogger('TestIndexing')
         cls.logger.setLevel(logging.DEBUG)
-        handler = logging.FileHandler('test_indexing.log')
+        
+        # File Handler for logging to 'test_indexing.log'
+        file_handler = logging.FileHandler('test_indexing.log')
         formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-        handler.setFormatter(formatter)
-        cls.logger.addHandler(handler)
+        file_handler.setFormatter(formatter)
+        cls.logger.addHandler(file_handler)
+
+        # In-Memory Log Capture List
+        cls.log_capture_list = []
+
+        # Custom Handler to capture logs in memory
+        class ListHandler(logging.Handler):
+            def __init__(self, log_list):
+                super().__init__()
+                self.log_list = log_list
+
+            def emit(self, record):
+                log_entry = self.format(record)
+                self.log_list.append(log_entry)
+
+        # Initialize and add the custom ListHandler
+        list_handler = ListHandler(cls.log_capture_list)
+        list_handler.setFormatter(formatter)
+        cls.logger.addHandler(list_handler)
 
     def setUp(self):
         """Reset collection before each test"""
         self.docdb_coll.drop()
+        self.logger.debug("Dropped existing collection before test.")
 
     def get_test_data(self, test_iteration: int):
         """Generate comprehensive test data for all index types"""
@@ -300,6 +321,7 @@ class TestIndexing(BaseTest):
                     collection.drop_indexes()
                     collection.create_index(keys, name=index_name, **options)
                     result_document['log_lines'].append(f"Index '{index_name}' created successfully.")
+                    self.logger.debug(f"Index '{index_name}' created successfully.")
                 except PyMongoError as e_create:
                     raise Exception(f"Failed to create index '{index_name}': {str(e_create)}")
 
@@ -311,6 +333,7 @@ class TestIndexing(BaseTest):
                 )
                 if created_index:
                     result_document['log_lines'].append(f"Index '{index_name}' verified.")
+                    self.logger.debug(f"Index '{index_name}' verified.")
                 else:
                     raise Exception(f"Index '{index_name}' not found after creation")
 
@@ -318,10 +341,13 @@ class TestIndexing(BaseTest):
                 collection.drop()
                 collection.insert_many(test_data)
                 result_document['log_lines'].append("Test data inserted successfully.")
+                self.logger.debug("Test data inserted successfully.")
 
                 # Step 4: Test Query with Explain
                 explain_result = collection.find(test_query).explain()
                 result_document['log_lines'].append("Explain plan obtained.")
+                self.logger.debug("Explain plan obtained.")
+
                 # Convert all Timestamps in explain_result to strings
                 explain_result_serializable = json.loads(json.dumps(explain_result, default=str))
                 result_document['explain_plan'] = explain_result_serializable
@@ -334,6 +360,7 @@ class TestIndexing(BaseTest):
                 stages = explain_result_serializable.get('queryPlanner', {}).get('winningPlan', {})
                 if self._check_index_usage(stages, index_name):
                     result_document['log_lines'].append(f"Index '{index_name}' used in query plan.")
+                    self.logger.debug(f"Index '{index_name}' used in query plan.")
                     result_document['status'] = 'pass'
                     result_document['exit_code'] = 0
                     result_document['reason'] = 'PASSED'
@@ -343,6 +370,7 @@ class TestIndexing(BaseTest):
                     result_document['exit_code'] = 0
                     result_document['reason'] = 'FAILED'
                     result_document['description'].append('Index might not be used optimally')
+                    self.logger.warning(f"Index '{index_name}' might not be used optimally in query plan.")
 
             except Exception as e:
                 error_message = str(e)
@@ -365,9 +393,13 @@ class TestIndexing(BaseTest):
                     server_info = collection.database.client.server_info()
                     server_version = server_info.get('version', 'unknown')
                     result_document['version'] = server_version
+                    self.logger.debug(f"Server version retrieved: {server_version}")
                 except Exception as ve:
                     self.logger.error(f"Error retrieving server version: {ve}")
                     result_document['version'] = 'unknown'
+
+                # Assign captured log lines to the result document
+                result_document['log_lines'] = list(self.log_capture_list)
 
                 # Ensure all fields in result_document are JSON serializable
                 result_document = json.loads(json.dumps(result_document, default=str))
@@ -385,6 +417,7 @@ class TestIndexing(BaseTest):
 
                 # Clean up
                 collection.drop()
+                self.logger.debug(f"Indexing test for '{index_name}' cleaned up.")
 
     def _check_index_usage(self, stages, index_name):
         """Recursively check if the index is used in the query plan"""
@@ -410,6 +443,7 @@ class TestIndexing(BaseTest):
         """Clean up after all tests"""
         try:
             cls.docdb_coll.drop()
+            cls.logger.debug("Dropped collection during teardown.")
         except Exception as e:
             cls.logger.error(f"Error in teardown: {str(e)}")
         finally:

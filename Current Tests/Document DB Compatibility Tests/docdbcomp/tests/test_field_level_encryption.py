@@ -29,13 +29,40 @@ class TestFieldLevelEncryption(BaseTest):
         # Configure logging
         cls.logger = logging.getLogger('TestFieldLevelEncryption')
         cls.logger.setLevel(logging.DEBUG)
-        handler = logging.FileHandler('test_field_level_encryption.log')
+        
+        # File Handler for logging to 'test_field_level_encryption.log'
+        file_handler = logging.FileHandler('test_field_level_encryption.log')
         formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-        handler.setFormatter(formatter)
-        cls.logger.addHandler(handler)
+        file_handler.setFormatter(formatter)
+        cls.logger.addHandler(file_handler)
+
+        # In-Memory Log Capture List
+        cls.log_capture_list = []
+
+        # Custom Handler to capture logs in memory
+        class ListHandler(logging.Handler):
+            def __init__(self, log_list):
+                super().__init__()
+                self.log_list = log_list
+
+            def emit(self, record):
+                log_entry = self.format(record)
+                self.log_list.append(log_entry)
+
+        # Initialize and add the custom ListHandler
+        list_handler = ListHandler(cls.log_capture_list)
+        list_handler.setFormatter(formatter)
+        cls.logger.addHandler(list_handler)
 
         cls.docdb_coll = cls.docdb_db[cls.collection_name]
         cls.docdb_coll.drop()
+
+    def setUp(self):
+        self.docdb_coll = self.__class__.docdb_coll
+        self.logger = self.__class__.logger
+
+        # Clear the in-memory log capture list before each test
+        self.__class__.log_capture_list.clear()
 
     def test_field_level_encryption(self):
         """
@@ -64,6 +91,7 @@ class TestFieldLevelEncryption(BaseTest):
         try:
             # Generate a local master key
             local_master_key = os.urandom(96)
+            self.logger.debug("Generated local master key.")
 
             # Set up KMS providers
             kms_providers = {
@@ -71,6 +99,7 @@ class TestFieldLevelEncryption(BaseTest):
                     'key': local_master_key
                 }
             }
+            self.logger.debug("Configured KMS providers.")
 
             key_vault_namespace = 'encryption.__keyVault'
 
@@ -84,6 +113,7 @@ class TestFieldLevelEncryption(BaseTest):
                 key_vault_client,
                 CodecOptions(uuid_representation=STANDARD)
             )
+            self.logger.debug("ClientEncryption object created.")
 
             # Create a data encryption key
             data_key_id = client_encryption.create_data_key('local')
@@ -95,6 +125,7 @@ class TestFieldLevelEncryption(BaseTest):
                 Algorithm.AEAD_AES_256_CBC_HMAC_SHA_512_Deterministic,
                 key_id=data_key_id
             )
+            self.logger.debug("Encrypted SSN successfully.")
 
             # Insert the document with the encrypted field
             collection.insert_one({
@@ -103,6 +134,11 @@ class TestFieldLevelEncryption(BaseTest):
                 'ssn': encrypted_ssn
             })
             self.logger.info('Document inserted with encrypted field.')
+            result_document['details']['inserted_document'] = {
+                'firstName': 'John',
+                'lastName': 'Doe',
+                'ssn': str(encrypted_ssn)
+            }
 
             # Retrieve the document
             result = collection.find_one({'firstName': 'John'})
@@ -112,7 +148,11 @@ class TestFieldLevelEncryption(BaseTest):
                 result_document['exit_code'] = 0
                 result_document['reason'] = 'PASSED'
                 result_document['log_lines'].append('Field-level encryption executed successfully.')
-                result_document['details']['retrieved_document'] = result
+                result_document['details']['retrieved_document'] = {
+                    'firstName': result.get('firstName'),
+                    'lastName': result.get('lastName'),
+                    'ssn': str(result.get('ssn'))
+                }
             else:
                 error_msg = 'Failed to retrieve document with encrypted field.'
                 result_document['description'].append(error_msg)
@@ -142,9 +182,13 @@ class TestFieldLevelEncryption(BaseTest):
                 server_info = collection.database.client.server_info()
                 server_version = server_info.get('version', 'unknown')
                 result_document['version'] = server_version
+                self.logger.debug(f"Server version retrieved: {server_version}")
             except Exception as ve:
                 self.logger.error(f"Error retrieving server version: {ve}")
                 result_document['version'] = 'unknown'
+
+            # Assign captured log lines to the result document
+            result_document['log_lines'] = list(self.log_capture_list)
 
             # Ensure all fields in result_document are JSON serializable
             result_document = json.loads(json.dumps(result_document, default=str))
@@ -182,6 +226,7 @@ class TestFieldLevelEncryption(BaseTest):
         try:
             # Generate a local master key
             local_master_key = os.urandom(96)
+            self.logger.debug("Generated local master key for queryable encryption.")
 
             # Set up KMS providers
             kms_providers = {
@@ -189,6 +234,7 @@ class TestFieldLevelEncryption(BaseTest):
                     'key': local_master_key
                 }
             }
+            self.logger.debug("Configured KMS providers for queryable encryption.")
 
             key_vault_namespace = 'encryption.__keyVault'
 
@@ -202,6 +248,7 @@ class TestFieldLevelEncryption(BaseTest):
                 key_vault_client,
                 CodecOptions(uuid_representation=STANDARD)
             )
+            self.logger.debug("ClientEncryption object created for queryable encryption.")
 
             # Create a data encryption key
             data_key_id = client_encryption.create_data_key('local')
@@ -232,17 +279,20 @@ class TestFieldLevelEncryption(BaseTest):
                 key_vault_namespace=key_vault_namespace,
                 encrypted_fields_map=encrypted_fields_map
             )
+            self.logger.debug("AutoEncryptionOpts configured for queryable encryption.")
 
             # Create encrypted client
             encrypted_client = MongoClient(
                 config.DOCDB_URI,
                 auto_encryption_opts=auto_encryption_opts
             )
+            self.logger.debug("Encrypted MongoClient created for queryable encryption.")
 
             db = encrypted_client[self.docdb_db.name]
 
             # Drop the collection if it exists
             db.drop_collection(collection_name)
+            self.logger.debug(f"Dropped existing collection '{collection_name}' if it existed.")
 
             # Create the collection with encryptedFields
             try:
@@ -275,6 +325,12 @@ class TestFieldLevelEncryption(BaseTest):
                 'medicalRecords': ['Record1', 'Record2']
             })
             self.logger.info(f'Document inserted with _id: {insert_result.inserted_id}')
+            result_document['details']['inserted_document'] = {
+                'firstName': 'John',
+                'lastName': 'Doe',
+                'ssn': '123-45-6789',
+                'medicalRecords': ['Record1', 'Record2']
+            }
 
             # Query the document
             result = coll.find_one({'ssn': '123-45-6789'})
@@ -284,7 +340,12 @@ class TestFieldLevelEncryption(BaseTest):
                 result_document['exit_code'] = 0
                 result_document['reason'] = 'PASSED'
                 result_document['log_lines'].append('Queryable encryption executed successfully.')
-                result_document['details']['queried_document'] = result
+                result_document['details']['queried_document'] = {
+                    'firstName': result.get('firstName'),
+                    'lastName': result.get('lastName'),
+                    'ssn': result.get('ssn'),
+                    'medicalRecords': result.get('medicalRecords')
+                }
             else:
                 error_msg = 'Failed to query encrypted document.'
                 result_document['description'].append(error_msg)
@@ -319,6 +380,7 @@ class TestFieldLevelEncryption(BaseTest):
                     self.logger.error(f"Error dropping key vault collection: {e}")
 
                 encrypted_client.close()
+                self.logger.debug('Encrypted MongoClient closed.')
 
             # Capture elapsed time and end time
             end_time = time.time()
@@ -329,9 +391,13 @@ class TestFieldLevelEncryption(BaseTest):
             try:
                 server_info = self.docdb_client.server_info()
                 result_document['version'] = server_info.get('version', 'unknown')
+                self.logger.debug(f"Server version retrieved: {result_document['version']}")
             except Exception as ve:
                 self.logger.error(f"Error retrieving server version: {ve}")
                 result_document['version'] = 'unknown'
+
+            # Assign captured log lines to the result document
+            result_document['log_lines'] = list(self.log_capture_list)
 
             # Ensure all fields in result_document are JSON serializable
             result_document = json.loads(json.dumps(result_document, default=str))
@@ -346,6 +412,7 @@ class TestFieldLevelEncryption(BaseTest):
     @classmethod
     def tearDownClass(cls):
         cls.docdb_coll.drop()
+        cls.logger.debug("Dropped collection during teardown.")
         super().tearDownClass()
 
 if __name__ == '__main__':

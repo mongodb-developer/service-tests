@@ -25,14 +25,37 @@ class TestDataTypes(BaseTest):
         # Configure logging
         cls.logger = logging.getLogger('TestDataTypes')
         cls.logger.setLevel(logging.DEBUG)
-        handler = logging.FileHandler('test_data_types.log')
+        
+        # File Handler for logging to 'test_data_types.log'
+        file_handler = logging.FileHandler('test_data_types.log')
         formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-        handler.setFormatter(formatter)
-        cls.logger.addHandler(handler)
+        file_handler.setFormatter(formatter)
+        cls.logger.addHandler(file_handler)
+
+        # In-Memory Log Capture List
+        cls.log_capture_list = []
+
+        # Custom Handler to capture logs in memory
+        class ListHandler(logging.Handler):
+            def __init__(self, log_list):
+                super().__init__()
+                self.log_list = log_list
+
+            def emit(self, record):
+                log_entry = self.format(record)
+                self.log_list.append(log_entry)
+
+        # Initialize and add the custom ListHandler
+        list_handler = ListHandler(cls.log_capture_list)
+        list_handler.setFormatter(formatter)
+        cls.logger.addHandler(list_handler)
 
     def setUp(self):
         self.docdb_coll = self.__class__.docdb_coll
         self.logger = self.__class__.logger
+
+        # Clear the in-memory log capture list before each test
+        self.__class__.log_capture_list.clear()
 
     def insert_and_store_result(self, data, data_type_name):
         collection = self.docdb_coll
@@ -61,6 +84,7 @@ class TestDataTypes(BaseTest):
             result_document['exit_code'] = 0
             result_document['reason'] = 'PASSED'
             result_document['insert_result'] = {'inserted_id': str(data['_id'])}
+            self.logger.debug(f"Data type '{data_type_name}' inserted successfully.")
             result_document['log_lines'].append(f"Data type '{data_type_name}' inserted successfully.")
         except Exception as e:
             error_msg = f"Error inserting data type '{data_type_name}': {str(e)}"
@@ -82,12 +106,16 @@ class TestDataTypes(BaseTest):
                 self.logger.error(f"Error retrieving server version: {ve}")
                 result_document['version'] = 'unknown'
 
+            # Assign captured log lines to the result document
+            result_document['log_lines'] = list(self.log_capture_list)
+
             # Ensure all fields in result_document are JSON serializable
             result_document = json.loads(json.dumps(result_document, default=str))
 
             # Accumulate result for later storage
             self.test_results.append(result_document)
 
+    # Define test methods for each data type
     def test_string(self):
         self.insert_and_store_result({'_id': ObjectId(), 'string': 'text'}, 'string')
 
@@ -159,6 +187,7 @@ class TestDataTypes(BaseTest):
     @classmethod
     def tearDownClass(cls):
         cls.docdb_coll.drop()
+        cls.logger.debug("Dropped collection during teardown.")
         super().tearDownClass()
 
 if __name__ == '__main__':

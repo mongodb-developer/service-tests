@@ -153,8 +153,7 @@ class TestSessionsCommands(BaseTest):
             result_document = json.loads(json.dumps(result_document, default=str))
             self.test_results.append(result_document)
 
-    #def test_startSession(self):
-        #self.execute_and_store_command('startSession')
+
 
     def test_abortTransaction(self):
         self.execute_and_store_command('abortTransaction')

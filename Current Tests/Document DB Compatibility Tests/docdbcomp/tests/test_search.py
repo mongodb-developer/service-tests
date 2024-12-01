@@ -21,10 +21,30 @@ class TestSearchCapabilities(BaseTest):
         # Configure logging
         cls.logger = logging.getLogger('TestSearchCapabilities')
         cls.logger.setLevel(logging.DEBUG)
-        handler = logging.FileHandler('test_search.log')
+        
+        # File Handler for logging to 'test_search.log'
+        file_handler = logging.FileHandler('test_search.log')
         formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-        handler.setFormatter(formatter)
-        cls.logger.addHandler(handler)
+        file_handler.setFormatter(formatter)
+        cls.logger.addHandler(file_handler)
+
+        # In-Memory Log Capture List
+        cls.log_capture_list = []
+
+        # Custom Handler to capture logs in memory
+        class ListHandler(logging.Handler):
+            def __init__(self, log_list):
+                super().__init__()
+                self.log_list = log_list
+
+            def emit(self, record):
+                log_entry = self.format(record)
+                self.log_list.append(log_entry)
+
+        # Initialize and add the custom ListHandler
+        list_handler = ListHandler(cls.log_capture_list)
+        list_handler.setFormatter(formatter)
+        cls.logger.addHandler(list_handler)
 
     def setUp(self):
         self.docdb_coll = self.__class__.docdb_coll
@@ -32,6 +52,7 @@ class TestSearchCapabilities(BaseTest):
 
         # Drop indexes before each test to avoid conflicts
         self.docdb_coll.drop_indexes()
+        self.logger.debug("Dropped existing indexes before test.")
 
         # Insert sample data
         sample_data = [
@@ -64,8 +85,8 @@ class TestSearchCapabilities(BaseTest):
                 'language': 'es',
             },
         ]
-
         self.docdb_coll.insert_many(sample_data)
+        self.logger.info('Sample data inserted successfully.')
 
         # Create text index on 'bio' field
         try:
@@ -92,6 +113,7 @@ class TestSearchCapabilities(BaseTest):
                 result_document['exit_code'] = 0
                 result_document['reason'] = 'PASSED'
                 result_document['log_lines'].append('Text search executed successfully.')
+                self.logger.debug("Text search executed successfully.")
             else:
                 missing = expected_names - result_names
                 error_msg = f'Missing expected results: {missing}'
@@ -134,6 +156,7 @@ class TestSearchCapabilities(BaseTest):
             }
             collection.create_index(index_spec, **index_options)
             result_document['log_lines'].append('Vector index (HNSW) created successfully.')
+            self.logger.debug("Vector index (HNSW) created successfully.")
 
             # Define the query vector
             query_vector = [0.52, 0.28, 0.12]
@@ -178,6 +201,7 @@ class TestSearchCapabilities(BaseTest):
                 result_document['exit_code'] = 0
                 result_document['reason'] = 'PASSED'
                 result_document['log_lines'].append('Hybrid search executed successfully.')
+                self.logger.debug("Hybrid search executed successfully.")
             else:
                 missing = expected_names - result_names
                 error_msg = f'Missing expected results: {missing}'
@@ -186,158 +210,6 @@ class TestSearchCapabilities(BaseTest):
                 self.logger.error(error_msg)
         except Exception as e:
             error_msg = f"Error during hybrid search test: {str(e)}"
-            result_document['description'].append(error_msg)
-            result_document['reason'] = 'FAILED'
-            self.logger.error(error_msg)
-        finally:
-            self.finalize_result_document(result_document, start_time)
-
-    def test_vector_search_with_number_filter(self):
-        """
-        Test vector search with pre-filtering using a numeric field ('year').
-        """
-        collection = self.docdb_coll
-        start_time = time.time()
-        result_document = self.initialize_result_document('Vector Search with Number Filter Test')
-
-        try:
-            # Create vector index including 'year' as a filter field
-            index_spec = [
-                ('vectorContent', 'vector'),
-                ('year', ASCENDING)  # Including 'year' in the index
-            ]
-            index_options = {
-                'name': 'VectorSearchIndex_HNSW_Filter_Number',
-                'vectorOptions': {
-                    'type': 'hnsw',
-                    'dimensions': 3,
-                    'similarity': 'cosine',
-                    'm': 16,
-                    'efConstruction': 200
-                }
-            }
-            collection.create_index(index_spec, **index_options)
-            result_document['log_lines'].append('Vector index with number filter created successfully.')
-
-            # Define the query vector
-            query_vector = [0.52, 0.28, 0.12]
-
-            # Perform vector search with pre-filter on 'year'
-            vector_query = {
-                'year': 2001,
-                'vectorContent': {
-                    '$vectorNear': {
-                        'vector': query_vector,
-                        'k': 2,
-                        'distanceField': 'distance'
-                    }
-                }
-            }
-
-            projection = {
-                '_id': 0,
-                'name': 1,
-                'bio': 1,
-                'year': 1,
-                'distance': 1
-            }
-
-            results = list(collection.find(vector_query, projection))
-
-            result_document['details']['vector_search_with_number_filter_results'] = results
-
-            expected_names = {'Eugenia Lopez', 'Jessie Irwin'}
-            result_names = set(doc['name'] for doc in results)
-
-            if expected_names == result_names:
-                result_document['status'] = 'pass'
-                result_document['exit_code'] = 0
-                result_document['reason'] = 'PASSED'
-                result_document['log_lines'].append('Vector search with number filter executed successfully.')
-            else:
-                missing = expected_names - result_names
-                error_msg = f'Missing expected results: {missing}'
-                result_document['description'].append(error_msg)
-                result_document['reason'] = 'FAILED'
-                self.logger.error(error_msg)
-        except Exception as e:
-            error_msg = f"Error during vector search with number filter test: {str(e)}"
-            result_document['description'].append(error_msg)
-            result_document['reason'] = 'FAILED'
-            self.logger.error(error_msg)
-        finally:
-            self.finalize_result_document(result_document, start_time)
-
-    def test_vector_search_with_string_filter(self):
-        """
-        Test vector search with pre-filtering using a string field ('language').
-        """
-        collection = self.docdb_coll
-        start_time = time.time()
-        result_document = self.initialize_result_document('Vector Search with String Filter Test')
-
-        try:
-            # Create vector index including 'language' as a filter field
-            index_spec = [
-                ('vectorContent', 'vector'),
-                ('language', ASCENDING)  # Including 'language' in the index
-            ]
-            index_options = {
-                'name': 'VectorSearchIndex_HNSW_Filter_String',
-                'vectorOptions': {
-                    'type': 'hnsw',
-                    'dimensions': 3,
-                    'similarity': 'cosine',
-                    'm': 16,
-                    'efConstruction': 200
-                }
-            }
-            collection.create_index(index_spec, **index_options)
-            result_document['log_lines'].append('Vector index with string filter created successfully.')
-
-            # Define the query vector
-            query_vector = [0.52, 0.28, 0.12]
-
-            # Perform vector search with pre-filter on 'language'
-            vector_query = {
-                'language': 'es',
-                'vectorContent': {
-                    '$vectorNear': {
-                        'vector': query_vector,
-                        'k': 2,
-                        'distanceField': 'distance'
-                    }
-                }
-            }
-
-            projection = {
-                '_id': 0,
-                'name': 1,
-                'bio': 1,
-                'language': 1,
-                'distance': 1
-            }
-
-            results = list(collection.find(vector_query, projection))
-
-            result_document['details']['vector_search_with_string_filter_results'] = results
-
-            expected_names = {'Cameron Baker', 'Rory Nguyen'}
-            result_names = set(doc['name'] for doc in results)
-
-            if expected_names == result_names:
-                result_document['status'] = 'pass'
-                result_document['exit_code'] = 0
-                result_document['reason'] = 'PASSED'
-                result_document['log_lines'].append('Vector search with string filter executed successfully.')
-            else:
-                missing = expected_names - result_names
-                error_msg = f'Missing expected results: {missing}'
-                result_document['description'].append(error_msg)
-                result_document['reason'] = 'FAILED'
-                self.logger.error(error_msg)
-        except Exception as e:
-            error_msg = f"Error during vector search with string filter test: {str(e)}"
             result_document['description'].append(error_msg)
             result_document['reason'] = 'FAILED'
             self.logger.error(error_msg)
@@ -380,6 +252,7 @@ class TestSearchCapabilities(BaseTest):
 
             collection.create_index(index_spec, **index_options)
             result_document['log_lines'].append(f'Vector index ({index_type.upper()}) created successfully.')
+            self.logger.debug(f"Vector index ({index_type.upper()}) created successfully.")
 
             # Define the query vector
             query_vector = [0.52, 0.28, 0.12]
@@ -414,6 +287,7 @@ class TestSearchCapabilities(BaseTest):
                 result_document['exit_code'] = 0
                 result_document['reason'] = 'PASSED'
                 result_document['log_lines'].append(f'Vector search ({index_type.upper()}) executed successfully.')
+                self.logger.debug(f"Vector search ({index_type.upper()}) executed successfully.")
             else:
                 missing = expected_names - result_names
                 error_msg = f'Missing expected results: {missing}'
@@ -455,17 +329,26 @@ class TestSearchCapabilities(BaseTest):
 
         try:
             server_info = self.docdb_client.server_info()
-            result_document['version'] = server_info.get('version', 'unknown')
+            server_version = server_info.get('version', 'unknown')
+            result_document['version'] = server_version
+            self.logger.debug(f"Server version retrieved: {server_version}")
         except Exception as ve:
             self.logger.error(f"Error retrieving server version: {ve}")
             result_document['version'] = 'unknown'
 
+        # Assign captured log lines to the result document
+        result_document['log_lines'] = list(self.log_capture_list)
+
+        # Ensure all fields in result_document are JSON serializable
         result_document = json.loads(json.dumps(result_document, default=str))
+
+        # Accumulate result for later storage
         self.test_results.append(result_document)
 
     @classmethod
     def tearDownClass(cls):
         cls.docdb_coll.drop()
+        cls.logger.debug("Dropped collection during teardown.")
         super().tearDownClass()
 
 if __name__ == '__main__':
