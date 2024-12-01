@@ -116,7 +116,7 @@ def create_summary_document():
     failing_percentage = (failing_tests / total_tests) * 100
 
     timestamp = time.time()
-    version = 'v7.0'
+    version = 'v8.0'
     platform = 'DocumentDB'
 
     try:
