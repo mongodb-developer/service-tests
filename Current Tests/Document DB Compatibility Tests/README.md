@@ -1,4 +1,4 @@
-# Test Suite for Database Compatibility Testing for MongoDB API
+# Competitive Intelligence Test Suite for Database Compatibility for MongoDB API
 
 
 # Reuired Scsipts
