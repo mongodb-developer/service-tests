@@ -1,6 +1,5 @@
 # Test Suite for Database Compatibility Testing for MongoDB API
 
-This repository contains Python scripts for testing database performance. Follow the steps below to set up and run the test suite.
 
 # Reuired Scsipts
 
