@@ -2,11 +2,14 @@
 
 This repository contains Python scripts for testing database performance. Follow the steps below to set up and run the test suite.
 
-# Folder Structure
+# Reuired Scsipts
 
 - `tests/`**: Contains individual Python test scripts.
 - `config.py`**: Configuration file for setting up database connections.
 - `requirements.txt`**: Lists all the required Python libraries.
+- `run_test.py`**: Executes the test suite
+- `compatibility_score.py`**: Executed as a part of the test suite which calculates the Pass/Total % or the compatibility score.
+- `base_test.py`**: Required for the test setup.
 
 # Setup Instructions
 
