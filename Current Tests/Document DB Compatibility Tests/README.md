@@ -1,4 +1,4 @@
-# Test Suite for Database Performance Evaluation
+# Test Suite for Database Compatibility Testing
 
 This repository contains Python scripts for testing database performance. Follow the steps below to set up and run the test suite.
 
