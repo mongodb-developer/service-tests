@@ -121,7 +121,7 @@ def create_summary_document():
 
     try:
         web_client = MongoClient(config.RESULT_DB_URI)
-        web_db = web_client['docdb_web_prod']
+        web_db = web_client[config.RESULT_DB_NAME]
         summary_collection = web_db['summary']
     except Exception as e:
         print(f"Error connecting to the docdb_web_prod database: {e}")
