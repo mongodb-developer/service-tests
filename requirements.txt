@@ -1,0 +1,10 @@
+pymongo>=4.0
+dnspython>=2.0.0
+pymongocrypt>=1.1.0
+openpyxl>=3.0.0
+parameterized>=0.8.1
+mock>=4.0.0
+
+
+# Run all tests: python -m unittest discover -s tests
+# Run a specific test: python -m unittest tests.test_indexing
