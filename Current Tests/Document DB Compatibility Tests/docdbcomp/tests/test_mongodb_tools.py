@@ -122,7 +122,7 @@ class TestMongoDBTools(BaseTest):
                     '--nsInclude', f'{config.DOCDB_DB_NAME}.{self.collection_name}',
                     self.dump_directory,
                     '--ssl',
-                    '--sslCAFile', config.DOCUMENTDB_SSL_CA_FILE
+                    '--sslCAFile', config.DOCDB_SSL_CA_FILE
                 ]
                 self.logger.debug(f"Executing mongorestore command: {' '.join(restore_cmd)}")
                 restore_result = subprocess.run(restore_cmd, capture_output=True, text=True)
