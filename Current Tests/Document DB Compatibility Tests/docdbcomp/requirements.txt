@@ -9,5 +9,5 @@ pandas>=2.2.0
 
 # Run the command in the terminal to ensure that the very latest versions are installed
 # pip install --upgrade -r requirements.txt
-# Run all tests: python -m unittest discover -s tests
+# Run all tests: python -m unittest discover -s tests or python run_test.py
 # Run a specific test: python -m unittest tests.test_indexing
