@@ -1,3 +1,4 @@
+
 pymongo>=4.0
 dnspython>=2.0.0
 pymongocrypt>=1.1.0
@@ -7,5 +8,7 @@ mock>=4.0.0
 tabulate
 pandas
 
+# Run the command in the terminal to ensure that the very latest versions are installed
+# pip install --upgrade -r requirements.txt
 # Run all tests: python -m unittest discover -s tests
 # Run a specific test: python -m unittest tests.test_indexing
