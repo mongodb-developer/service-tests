@@ -5,8 +5,8 @@ pymongocrypt>=1.1.0
 openpyxl>=3.0.0
 parameterized>=0.8.1
 mock>=4.0.0
-tabulate
-pandas
+tabulate>=0.9.0
+pandas>=2.2.0
 
 # Run the command in the terminal to ensure that the very latest versions are installed
 # pip install --upgrade -r requirements.txt
