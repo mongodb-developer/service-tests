@@ -118,8 +118,8 @@ class TestMongoDBTools(BaseTest):
             try:
                 restore_cmd = [
                     config.MONGORESTORE_PATH,
-                    '--uri', config.DOCUMENTDB_URI,
-                    '--nsInclude', f'{config.DOCUMENTDB_DB_NAME}.{self.collection_name}',
+                    '--uri', config.DOCDB_URI,
+                    '--nsInclude', f'{config.DOCDB_DB_NAME}.{self.collection_name}',
                     self.dump_directory,
                     '--ssl',
                     '--sslCAFile', config.DOCUMENTDB_SSL_CA_FILE
