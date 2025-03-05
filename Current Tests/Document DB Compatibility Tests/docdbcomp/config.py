@@ -3,9 +3,9 @@
 
 
 # Amazon DocumentDB connection
-DOCDB_URI = 'enter your Document DB connection string here'
-DOCDB_DB_NAME = 'testdb_documentdb'
-DOCDB_SSL_CA_FILE ='enter the path to the SSL_CA_File'
+DOCDB_URI = '' # enter your Document DB connection string here
+DOCDB_DB_NAME = 'testdb_documentdb' 
+DOCDB_SSL_CA_FILE ='' # enter the path to the SSL_CA_File
 
 # MongoDB Atlas cluster for storing results
 RESULT_DB_URI = 'enter your Atlas connection string where the results will be stored'
