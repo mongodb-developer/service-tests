@@ -92,12 +92,12 @@ class TestMongoDBTools(BaseTest):
             try:
                 dump_cmd = [
                     config.MONGODUMP_PATH,
-                    '--uri', config.DOCUMENTDB_URI,
+                    '--uri', config.DOCDB_URI,
                     '--collection', self.collection_name,
-                    '--db', config.DOCUMENTDB_DB_NAME,
+                    '--db', config.DOCDB_DB_NAME,
                     '--out', self.dump_directory,
                     '--ssl',
-                    '--sslCAFile', config.DOCUMENTDB_SSL_CA_FILE
+                    '--sslCAFile', config.DOCDB_SSL_CA_FILE
                 ]
                 self.logger.debug(f"Executing mongodump command: {' '.join(dump_cmd)}")
                 dump_result = subprocess.run(dump_cmd, capture_output=True, text=True)
