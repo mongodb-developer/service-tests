@@ -25,7 +25,7 @@
      ```
 
 
-2. Executing the above command will install all the required libraries from **requirements.txt** file present in the root folder.
+2. Executing the above command will install all the required libraries from **requirements.txt** file present in the root folder first before proceeding to execute the test suite and generate results with logs.
 
 
 # Output Details:
