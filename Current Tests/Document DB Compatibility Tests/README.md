@@ -16,12 +16,6 @@
    - Set the connection string for the database to be tested.
    - Specify the Atlas cluster where the test results will be stored.
 
-2. Install Dependencies:**
-   - Run the following command to install the required libraries:
-     ```bash
-     pip install -r requirements.txt
-     ```
-
 # Running the Test Suite
 
 1. Execute the Test Suite:**
@@ -30,12 +24,22 @@
      python run_test.py
      ```
 
-2. Output Details:
-   - The results will include:
-     - Two collections created in your Atlas cluster:
+2. Executing the above command will install all the required libraries from requirements.txt file present in the root folder.
+
+# Output Details:
+
+1. Results stored in Atlas cluster
+
+Two collections created in your Atlas cluster:
        - **Individual Test Results:** Stores detailed outcomes for each test.
        - **Summary Results:** Provides an overall summary with the pass percentage.
-     - An Excel file generated with the following details:
+     
+2. Results Folder
+
+An Excel file generated with the following details:
        - Test names.
        - Pass or fail status.
 
+3. Logs Folder
+
+All the log files for each of the test stored in folder with the date and time of the current execution.
