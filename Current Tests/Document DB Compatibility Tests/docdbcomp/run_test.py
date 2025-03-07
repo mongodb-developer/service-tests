@@ -7,6 +7,9 @@ import pandas as pd
 import time
 from bson import ObjectId
 from datetime import datetime
+import os
+import glob
+import shutil
 
 # Import the generate_compatibility_report function
 from compatibility_score import generate_compatibility_report
@@ -117,7 +120,7 @@ def create_summary_document():
 
     timestamp = time.time()
     version = 'v8.0'
-    platform = 'DocumentDB'
+    platform = config.PLATFORM
 
     try:
         web_client = MongoClient(config.RESULT_DB_URI)
@@ -205,3 +208,22 @@ if __name__ == "__main__":
     # Apply changes to the correctness collection
     apply_changes_to_correctness_collection()
     print("All changes to the correctness collection have been applied.")
+
+    # === Log file post-processing ===
+    # Create (if not exists) a Logs directory and a subfolder named with the current date and time
+    logs_dir = "Logs"
+    current_time_folder = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    destination_folder = os.path.join(logs_dir, current_time_folder)
+    os.makedirs(destination_folder, exist_ok=True)
+    print(f"Log files will be moved to: {destination_folder}")
+
+    # Find all .log files in the current (parent) folder
+    log_files = glob.glob("*.log")
+    for log_file in log_files:
+        shutil.move(log_file, destination_folder)
+        print(f"Moved log file: {log_file}")
+
+    # Delete any remaining .log files in the parent folder (if any)
+    for log_file in glob.glob("*.log"):
+        os.remove(log_file)
+        print(f"Deleted leftover log file: {log_file}")
