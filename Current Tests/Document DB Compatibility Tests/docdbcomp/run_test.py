@@ -1,3 +1,6 @@
+# All log files are now stored in the Logs folder with date and time of the run at the end of the test.
+# The .xlsx report generated is now stroed in the Results folder with the date and time of the run at the end of the test.
+
 import unittest
 import sys
 from pymongo import MongoClient
@@ -42,9 +45,10 @@ def run_tests():
     result = runner.run(suite)
     return result
 
-def save_report_to_excel():
+def save_report_to_excel(run_timestamp):
     """
-    Connect to the results database, retrieve test results, and save the report to an Excel file.
+    Connect to the results database, retrieve test results, and save the report to an Excel file
+    in the Results folder with a subfolder named after the current date and time.
     """
     try:
         client = MongoClient(config.RESULT_DB_URI)
@@ -71,7 +75,11 @@ def save_report_to_excel():
     df['Errors'] = df['description'].apply(lambda x: '; '.join(x) if isinstance(x, list) else str(x))
     display_df = df[['Test Name', 'reason', 'Errors']].rename(columns={'reason': 'Status'})
 
-    output_filename = 'compatibility_report.xlsx'
+    # Create the Results folder and subfolder with current timestamp
+    results_dir = "Results"
+    destination_folder = os.path.join(results_dir, run_timestamp)
+    os.makedirs(destination_folder, exist_ok=True)
+    output_filename = os.path.join(destination_folder, 'compatibility_report.xlsx')
     display_df.to_excel(output_filename, index=False)
     print(f"\nCompatibility report saved to {output_filename}")
 
@@ -193,14 +201,17 @@ def apply_changes_to_correctness_collection():
         correctness_collection.replace_one({"_id": doc["_id"]}, updated_doc)
 
 if __name__ == "__main__":
+    # Create a single timestamp for the run to be used for both Results and Logs folders
+    run_timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    
     # Run the tests
     run_tests()
 
     # Generate the compatibility report
     generate_compatibility_report()
 
-    # Save the report to an Excel file
-    save_report_to_excel()
+    # Save the report to an Excel file in the Results folder with the date and time of the run
+    save_report_to_excel(run_timestamp)
 
     # Create the summary document
     create_summary_document()
@@ -212,12 +223,11 @@ if __name__ == "__main__":
     # === Log file post-processing ===
     # Create (if not exists) a Logs directory and a subfolder named with the current date and time
     logs_dir = "Logs"
-    current_time_folder = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    destination_folder = os.path.join(logs_dir, current_time_folder)
+    destination_folder = os.path.join(logs_dir, run_timestamp)
     os.makedirs(destination_folder, exist_ok=True)
     print(f"Log files will be moved to: {destination_folder}")
 
-    # Find all .log files in the current (parent) folder
+    # Find all .log files in the current (parent) folder and move them to the destination folder
     log_files = glob.glob("*.log")
     for log_file in log_files:
         shutil.move(log_file, destination_folder)
