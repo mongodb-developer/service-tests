@@ -1,6 +1,3 @@
-# All log files are now stored in the Logs folder with date and time of the run at the end of the test.
-# The .xlsx report generated is now stroed in the Results folder with the date and time of the run at the end of the test.
-
 import unittest
 import sys
 from pymongo import MongoClient
@@ -13,6 +10,7 @@ from datetime import datetime
 import os
 import glob
 import shutil
+import subprocess
 
 # Import the generate_compatibility_report function
 from compatibility_score import generate_compatibility_report
@@ -201,6 +199,15 @@ def apply_changes_to_correctness_collection():
         correctness_collection.replace_one({"_id": doc["_id"]}, updated_doc)
 
 if __name__ == "__main__":
+    # Install dependencies from requirements.txt before running tests
+    try:
+        print("Installing dependencies from requirements.txt...")
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "-r", "requirements.txt"])
+        print("Dependencies installed successfully.\n")
+    except subprocess.CalledProcessError as e:
+        print(f"Failed to install dependencies: {e}")
+        sys.exit(1)
+    
     # Create a single timestamp for the run to be used for both Results and Logs folders
     run_timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     
