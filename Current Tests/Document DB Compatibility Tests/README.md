@@ -1,7 +1,7 @@
 # Competitive Intelligence Test Suite for Database Compatibility with MongoDB API
 
 
-# Reuired Scsipts
+# Required Scripts
 
 - `tests/`**: Contains individual Python test scripts.
 - `config.py`**: Configuration file for setting up database connections.
