@@ -4,10 +4,14 @@ import unittest
 from pymongo.errors import PyMongoError
 from bson import Decimal128, ObjectId, Binary, Regex, Code, Timestamp, MinKey, MaxKey, DBRef
 from datetime import datetime
-import logging
-import json
-import time
+import traceback
+import warnings
+import contextlib
 from base_test import BaseTest
+import config
+import logging
+import time
+import json
 
 class TestDataTypes(BaseTest):
 
@@ -63,7 +67,7 @@ class TestDataTypes(BaseTest):
         result_document = {
             'status': 'fail',
             'test_name': f"Data Type Test - {data_type_name}",
-            'platform': 'documentdb',
+            'platform': config.PLATFORM,
             'exit_code': 1,
             'elapsed': None,
             'start': datetime.utcfromtimestamp(start_time).isoformat(),
@@ -73,7 +77,7 @@ class TestDataTypes(BaseTest):
             'run': 1,
             'processed': True,
             'log_lines': [],
-            'reason': '',
+            'reason': 'FAILED',
             'description': [],
             'insert_result': {},
         }
@@ -115,7 +119,6 @@ class TestDataTypes(BaseTest):
             # Accumulate result for later storage
             self.test_results.append(result_document)
 
-    # Define test methods for each data type
     def test_string(self):
         self.insert_and_store_result({'_id': ObjectId(), 'string': 'text'}, 'string')
 
@@ -155,7 +158,6 @@ class TestDataTypes(BaseTest):
     def test_code(self):
         self.insert_and_store_result({'_id': ObjectId(), 'javascript': Code('function() { return true; }')}, 'code')
 
-    @unittest.skip("Code with scope not supported in DocumentDB")
     def test_code_with_scope(self):
         code_with_scope = Code('function() { return x; }', {'x': 42})
         self.insert_and_store_result({'_id': ObjectId(), 'javascript_with_scope': code_with_scope}, 'code_with_scope')
@@ -163,15 +165,12 @@ class TestDataTypes(BaseTest):
     def test_timestamp(self):
         self.insert_and_store_result({'_id': ObjectId(), 'timestamp': Timestamp(1628791594, 1)}, 'timestamp')
 
-    @unittest.skip("MinKey not fully supported in DocumentDB")
     def test_minkey(self):
         self.insert_and_store_result({'_id': ObjectId(), 'min_key': MinKey()}, 'min_key')
 
-    @unittest.skip("MaxKey not fully supported in DocumentDB")
     def test_maxkey(self):
         self.insert_and_store_result({'_id': ObjectId(), 'max_key': MaxKey()}, 'max_key')
 
-    @unittest.skip("DBRef not fully supported in DocumentDB")
     def test_dbref(self):
         self.insert_and_store_result({'_id': ObjectId(), 'dbref': DBRef('collection', ObjectId(), 'database')}, 'dbref')
 
