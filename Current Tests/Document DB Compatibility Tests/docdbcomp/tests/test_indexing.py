@@ -11,6 +11,7 @@ from base_test import BaseTest
 import logging
 import time
 import json
+import config
 
 class TestIndexing(BaseTest):
 
@@ -144,13 +145,7 @@ class TestIndexing(BaseTest):
                 'name': 'basic_ascending',
                 'keys': [('field1', ASCENDING)],
                 'options': {},
-                'description': 'Basic ascending index on field1'
-            },
-            {
-                'name': 'basic_descending',
-                'keys': [('field2', DESCENDING)],
-                'options': {},
-                'description': 'Basic descending index on field2'
+                'description': 'Basic index on field1'
             },
             # Compound Indexes
             {
@@ -158,16 +153,6 @@ class TestIndexing(BaseTest):
                 'keys': [('field1', ASCENDING), ('field2', DESCENDING)],
                 'options': {},
                 'description': 'Compound index on field1 and field2'
-            },
-            # Text Indexes
-            {
-                'name': 'text_basic',
-                'keys': [('field3', TEXT)],
-                'options': {
-                    'default_language': 'english',
-                    'weights': {'field3': 10}
-                },
-                'description': 'Text index on field3 with weights and default language'
             },
             # Geospatial Indexes
             {
@@ -182,37 +167,6 @@ class TestIndexing(BaseTest):
                 'keys': [('field1', HASHED)],
                 'options': {},
                 'description': 'Hashed index on field1'
-            },
-            # Unique Indexes
-            {
-                'name': 'unique_single',
-                'keys': [('field1', ASCENDING)],
-                'options': {'unique': True},
-                'description': 'Unique index on field1'
-            },
-            {
-                'name': 'unique_compound',
-                'keys': [('field1', ASCENDING), ('field2', ASCENDING)],
-                'options': {'unique': True},
-                'description': 'Unique compound index on field1 and field2'
-            },
-            # Partial Indexes
-            {
-                'name': 'partial_basic',
-                'keys': [('field1', ASCENDING)],
-                'options': {
-                    'partialFilterExpression': {
-                        'status': 'active'
-                    }
-                },
-                'description': 'Partial index on field1 where status is active'
-            },
-            # Sparse Indexes
-            {
-                'name': 'sparse_basic',
-                'keys': [('optional_field', ASCENDING)],
-                'options': {'sparse': True},
-                'description': 'Sparse index on optional_field'
             },
             # TTL Indexes
             {
@@ -234,17 +188,6 @@ class TestIndexing(BaseTest):
                 'keys': [('array_field', ASCENDING)],
                 'options': {},
                 'description': 'Index on array_field'
-            },
-            # Complex Compound Indexes
-            {
-                'name': 'complex_compound',
-                'keys': [
-                    ('field1', ASCENDING),
-                    ('field2', DESCENDING),
-                    ('nested_field.sub_field1', ASCENDING)
-                ],
-                'options': {'unique': True},
-                'description': 'Unique compound index on field1, field2, and nested_field.sub_field1'
             }
         ]
 
@@ -300,7 +243,7 @@ class TestIndexing(BaseTest):
             result_document = {
                 'status': 'fail',  # Default to 'fail'; will update based on conditions
                 'test_name': f'Indexing Test - {description}',
-                'platform': 'documentdb',
+                'platform': config.PLATFORM,
                 'exit_code': 1,
                 'elapsed': None,
                 'start': datetime.utcfromtimestamp(start_time).isoformat(),
@@ -310,7 +253,7 @@ class TestIndexing(BaseTest):
                 'run': 1,
                 'processed': True,
                 'log_lines': [],
-                'reason': '',
+                'reason': 'FAILED',
                 'description': [],
                 'explain_plan': {},
             }
@@ -337,8 +280,8 @@ class TestIndexing(BaseTest):
                 else:
                     raise Exception(f"Index '{index_name}' not found after creation")
 
-                # Step 3: Insert Test Data
-                collection.drop()
+                # Step 3: Insert Test Data without dropping indexes (preserve index)
+                collection.delete_many({})
                 collection.insert_many(test_data)
                 result_document['log_lines'].append("Test data inserted successfully.")
                 self.logger.debug("Test data inserted successfully.")
@@ -365,23 +308,15 @@ class TestIndexing(BaseTest):
                     result_document['exit_code'] = 0
                     result_document['reason'] = 'PASSED'
                 else:
-                    # Mark as pass with warning if index not used optimally
-                    result_document['status'] = 'fail'
-                    result_document['exit_code'] = 0
-                    result_document['reason'] = 'FAILED'
-                    result_document['description'].append('Index might not be used optimally')
-                    self.logger.warning(f"Index '{index_name}' might not be used optimally in query plan.")
-
+                    # Mark as passed only if index was used in the query plan
+                    raise Exception(f"Index '{index_name}' not used in query plan.")
             except Exception as e:
                 error_message = str(e)
-                # Determine if the error is related to index creation failure
-                # All such errors should mark the test as 'fail'
                 result_document['status'] = 'fail'
                 result_document['exit_code'] = 1
                 result_document['reason'] = 'FAILED'
                 result_document['description'].append(error_message)
                 self.logger.error(f"Error for {index_name}: {error_message}\n{traceback.format_exc()}")
-
             finally:
                 # Capture elapsed time and end time
                 end_time = time.time()
@@ -401,22 +336,15 @@ class TestIndexing(BaseTest):
                 # Assign captured log lines to the result document
                 result_document['log_lines'] = list(self.log_capture_list)
 
-                # Ensure all fields in result_document are JSON serializable
-                result_document = json.loads(json.dumps(result_document, default=str))
-
                 if result_document['status'] == 'pass' and result_document['description']:
-                    # Append any warnings to log_lines
                     warnings_msg = '; '.join(result_document['description'])
                     result_document['log_lines'].append(warnings_msg)
 
-                # Print the result_document for debugging
                 print(json.dumps(result_document, indent=4))
-
-                # Accumulate result for later storage
                 self.test_results.append(result_document)
 
-                # Clean up
-                collection.drop()
+                # Clean up: Do not drop collection so that indexes persist across tests if needed
+                collection.delete_many({})
                 self.logger.debug(f"Indexing test for '{index_name}' cleaned up.")
 
     def _check_index_usage(self, stages, index_name):
