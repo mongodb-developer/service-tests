@@ -2,7 +2,7 @@ from pymongo import MongoClient
 import os
 
 # MongoDB connection URI (replace <db_password> with your actual password)
-MONGO_URI = "mongodb+srv://rahulverma:09Ph2007@competitive36.tsnei.mongodb.net/?retryWrites=true&w=majority&appName=Competitive36"
+MONGO_URI = "Enter your atlas connection string with the results saved"
 
 # Connect to MongoDB Atlas
 client = MongoClient(MONGO_URI)
