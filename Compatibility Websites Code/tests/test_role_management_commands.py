@@ -1,0 +1,178 @@
+import unittest
+from datetime import datetime
+import traceback
+import contextlib
+from base_test import BaseTest
+import logging
+import time
+import json
+import io
+import config
+
+class TestRoleManagementCommands(BaseTest):
+
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.collection_name = 'test_role_management_commands'
+        cls.role_name = 'testRole'
+        cls.test_user = 'testUser'
+
+        # Configure logging
+        cls.logger = logging.getLogger('TestRoleManagementCommands')
+        cls.logger.setLevel(logging.DEBUG)
+        file_handler = logging.FileHandler('test_role_management_commands.log')
+        formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+        file_handler.setFormatter(formatter)
+        cls.logger.addHandler(file_handler)
+
+        # In-memory log capture list and custom log handler
+        cls.log_capture_list = []
+        class ListHandler(logging.Handler):
+            def __init__(self, log_list):
+                super().__init__()
+                self.log_list = log_list
+            def emit(self, record):
+                log_entry = self.format(record)
+                self.log_list.append(log_entry)
+        list_handler = ListHandler(cls.log_capture_list)
+        list_handler.setFormatter(formatter)
+        cls.logger.addHandler(list_handler)
+
+        # Initialize streams and warnings list
+        cls.stdout_stream = io.StringIO()
+        cls.stderr_stream = io.StringIO()
+        cls.log_stream = io.StringIO()
+        cls.warnings_list = []
+
+        # Initialize test results accumulator
+        cls.test_results = []
+
+    def setUp(self):
+        self.logger = self.__class__.logger
+        self.__class__.log_capture_list.clear()
+        for stream in (self.__class__.stdout_stream, self.__class__.stderr_stream, self.__class__.log_stream):
+            stream.truncate(0)
+            stream.seek(0)
+        self.__class__.warnings_list.clear()
+
+    def run_role_command_test(self, command_name, command_body):
+        """Helper method to run an administrative command test."""
+        start_time = time.time()
+        result_document = {
+            'status': 'fail',
+            'test_name': f"Role Management Commands Test - {command_name}",
+            'platform': config.PLATFORM,
+            'exit_code': 1,
+            'elapsed': None,
+            'start': datetime.utcfromtimestamp(start_time).isoformat(),
+            'end': None,
+            'suite': self.collection_name,
+            'version': 'unknown',
+            'run': 1,
+            'processed': True,
+            'log_lines': [],
+            'reason': 'FAILED',
+            'description': [],
+            'command_result': {},
+        }
+
+        try:
+            # Execute the command
+            command_result = self.docdb_db.command(command_body)
+            result_document['status'] = 'pass'
+            result_document['exit_code'] = 0
+            result_document['reason'] = 'PASSED'
+            result_document['command_result'] = command_result
+            self.logger.debug(f"Command '{command_name}' executed successfully.")
+        except Exception as e:
+            error_trace = traceback.format_exc()
+            error_msg = f"Exception executing command '{command_name}': {str(e)}"
+            result_document['description'].append(error_msg)
+            result_document['reason'] = 'FAILED'
+            self.logger.error(f"Error executing command '{command_name}': {e}\n{error_trace}")
+        finally:
+            # Capture elapsed time and end time
+            end_time = time.time()
+            result_document['elapsed'] = end_time - start_time
+            result_document['end'] = datetime.utcfromtimestamp(end_time).isoformat()
+
+            # Retrieve server version dynamically
+            try:
+                server_info = self.docdb_db.client.server_info()
+                server_version = server_info.get('version', 'unknown')
+                result_document['version'] = server_version
+            except Exception as ve:
+                self.logger.error(f"Error retrieving server version: {ve}")
+                result_document['version'] = 'unknown'
+
+            # Assign captured log lines to the result document
+            result_document['log_lines'] = list(self.__class__.log_capture_list)
+
+            # Ensure all fields in result_document are JSON serializable
+            result_document = json.loads(json.dumps(result_document, default=str))
+
+            # Accumulate result for later storage
+            self.__class__.test_results.append(result_document)
+
+    def test_role_management_commands(self):
+        commands = {
+            'createRole': {
+                'createRole': self.role_name,
+                'privileges': [{
+                    'resource': {'db': 'test', 'collection': ''},
+                    'actions': ['find', 'insert', 'update', 'remove']
+                }],
+                'roles': []
+            },
+            'dropRole': {'dropRole': self.role_name},
+            'dropAllRolesFromDatabase': {'dropAllRolesFromDatabase': 1},
+            'grantPrivilegesToRole': {
+                'grantPrivilegesToRole': self.role_name,
+                'privileges': [{
+                    'resource': {'db': 'test', 'collection': ''},
+                    'actions': ['createIndex']
+                }]
+            },
+            'grantRolesToRole': {
+                'grantRolesToRole': self.role_name,
+                'roles': [{'role': 'readWrite', 'db': 'test'}]
+            },
+            'invalidateUserCache': {'invalidateUserCache': 1},
+            'revokePrivilegesFromRole': {
+                'revokePrivilegesFromRole': self.role_name,
+                'privileges': [{
+                    'resource': {'db': 'test', 'collection': ''},
+                    'actions': ['remove']
+                }]
+            },
+            'revokeRolesFromRole': {
+                'revokeRolesFromRole': self.role_name,
+                'roles': [{'role': 'readWrite', 'db': 'test'}]
+            },
+            'rolesInfo': {'rolesInfo': self.role_name},
+            'updateRole': {
+                'updateRole': self.role_name,
+                'privileges': [{
+                    'resource': {'db': 'test', 'collection': ''},
+                    'actions': ['find']
+                }],
+                'roles': []
+            }
+        }
+
+        for command_name, command_body in commands.items():
+            self.run_role_command_test(command_name, command_body)
+
+    @classmethod
+    def tearDownClass(cls):
+        # Attempt to drop the test role
+        try:
+            cls.docdb_db.command({'dropRole': cls.role_name})
+        except Exception:
+            pass
+        cls.logger.debug("Tear down completed for TestRoleManagementCommands.")
+        super().tearDownClass()
+
+if __name__ == '__main__':
+    unittest.main()
