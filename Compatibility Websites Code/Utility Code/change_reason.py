@@ -3,8 +3,7 @@ from pymongo import MongoClient
 
 def update_description_prefix():
     connection_str = (
-        "mongodb+srv://rahulverma:09Ph2007@competitive36.tsnei.mongodb.net/"
-        "?retryWrites=true&w=majority&appName=Competitive36"
+       "Enter your connection string here"
     )
     client = MongoClient(connection_str)
     db = client["cosmos_web_prod"]
