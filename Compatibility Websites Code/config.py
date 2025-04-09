@@ -1,11 +1,13 @@
 # config.py
 
-# Amazon DocumentDB connection
-DOCDB_URI = 'mongodb+srv://rahulverma:09Ph2007@vcorecomp40.global.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000'
+# Test database connection string
+DOCDB_URI = 'ENTER YOUR CONNECTION STRING HERE'
 DOCDB_DB_NAME = 'testdb_vcore_new'
-DOCDB_SSL_CA_FILE = '/Users/rahul.verma/Desktop/Updated\ Compatibility\ Test\ Suite/docdbcompnew.pem'
+DOCDB_SSL_CA_FILE = 'ENTER THE PATH TO THE CA FILE IF APPLICABLE'
+
+
 # MongoDB Atlas cluster for storing results
-RESULT_DB_URI = 'mongodb+srv://rahulverma:09Ph2007@comp-web-prod.n0kts.mongodb.net/?retryWrites=true&w=majority&appName=comp-web-prod'
+RESULT_DB_URI = 'ENTER YOUR ATLAS CLUSTER CONNECTING STRING HERE TO RECORD RESULTS'
 RESULT_DB_NAME = 'cosmos_new_test'
 RESULT_COLLECTION_NAME = 'correctness'
 PLATFORM = "CosmosDB"  # e.g., "CosmosDB" or "MongoDB" or another descriptor
