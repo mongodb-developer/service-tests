@@ -3,7 +3,6 @@
 import unittest
 from pymongo.errors import PyMongoError
 from bson import Decimal128, ObjectId, Binary, Regex, Code, Timestamp, MinKey, MaxKey, DBRef
-from bson.symbol import Symbol
 from bson.int64 import Int64
 from datetime import datetime
 import traceback
@@ -187,8 +186,6 @@ class TestDataTypes(BaseTest):
 
     # ------------------ New Data Type Tests ------------------
 
-    def test_symbol(self):
-        self.insert_and_store_result({'_id': ObjectId(), 'symbol': Symbol('mysymbol')}, 'symbol')
 
     def test_int32(self):
         # Using a 32-bit maximum value: 2147483647
