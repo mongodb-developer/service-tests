@@ -3,6 +3,8 @@
 import unittest
 from pymongo.errors import PyMongoError
 from bson import Decimal128, ObjectId, Binary, Regex, Code, Timestamp, MinKey, MaxKey, DBRef
+from bson.symbol import Symbol
+from bson.int64 import Int64
 from datetime import datetime
 import traceback
 import warnings
@@ -182,6 +184,19 @@ class TestDataTypes(BaseTest):
 
     def test_boolean_false(self):
         self.insert_and_store_result({'_id': ObjectId(), 'bool_false': False}, 'boolean_false')
+
+    # ------------------ New Data Type Tests ------------------
+
+    def test_symbol(self):
+        self.insert_and_store_result({'_id': ObjectId(), 'symbol': Symbol('mysymbol')}, 'symbol')
+
+    def test_int32(self):
+        # Using a 32-bit maximum value: 2147483647
+        self.insert_and_store_result({'_id': ObjectId(), 'int32': 2147483647}, 'int32')
+
+    def test_int64(self):
+        # Using a 64-bit maximum value via bson.int64.Int64: 9223372036854775807
+        self.insert_and_store_result({'_id': ObjectId(), 'int64': Int64(9223372036854775807)}, 'int64')
 
     @classmethod
     def tearDownClass(cls):
