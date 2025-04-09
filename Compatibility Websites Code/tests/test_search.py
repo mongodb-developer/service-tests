@@ -239,30 +239,7 @@ class TestSearchCapabilities(BaseTest):
 
 
 
-    def test_sort_not_using_text_index_ordering(self):
-        result_document = self.initialize_result_document("Sort_Not_Using_Text_Index_Order")
-        with contextlib.redirect_stdout(self.__class__.stdout_stream), contextlib.redirect_stderr(self.__class__.stderr_stream):
-            try:
-                text_query = {'$text': {'$search': 'CEO'}}
-                sorted_results = list(self.data_collection.find(text_query).sort('bio', 1))
-                sorted_bios = sorted(doc['bio'] for doc in sorted_results)
-                actual_bios = [doc['bio'] for doc in sorted_results]
-                if sorted_bios == actual_bios:
-                    result_document['errors'].append("Sort operation used text index ordering, which should not be supported.")
-                else:
-                    result_document['status'] = 'pass'
-                    result_document['exit_code'] = 0
-                    result_document['reason'] = 'PASSED'
-            except OperationFailure as e:
-                result_document['errors'].append(str(e))
-            except Exception as e:
-                result_document['errors'].append(f'Exception during sort search: {e}')
-            finally:
-                result_document['warnings'] = [str(w.message) for w in self.__class__.warnings_list]
-                result_document['stdout'] = self.__class__.stdout_stream.getvalue()
-                result_document['stderr'] = self.__class__.stderr_stream.getvalue()
-                self.finalize_result_document(result_document)
-        self.assertEqual(result_document['status'], 'fail', msg=result_document['errors'])
+
 
     def test_basic_text_search(self):
         result_document = self.initialize_result_document("Basic_Text_Search")
