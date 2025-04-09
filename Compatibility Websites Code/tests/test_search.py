@@ -22,10 +22,10 @@ class TestSearchCapabilities(BaseTest):
         cls.collection_name = 'test_search'
         cls.results_collection_name = 'test_search_results'
         
-        # Define the data collection using the generic document DB reference
-        cls.data_collection = cls.docdb_db['exampleCollection']
+        # Define the data collection using the generic document DB reference.
+        cls.data_collection = cls.docdb_db[cls.collection_name]
 
-        # Configure logging
+        # Configure logging.
         cls.logger = logging.getLogger('TestSearchCapabilities')
         cls.logger.setLevel(logging.DEBUG)
         file_handler = logging.FileHandler('test_search.log')
@@ -33,7 +33,7 @@ class TestSearchCapabilities(BaseTest):
         file_handler.setFormatter(formatter)
         cls.logger.addHandler(file_handler)
 
-        # In-memory log capture list and custom log handler
+        # In-memory log capture list and custom log handler.
         cls.log_capture_list = []
         class ListHandler(logging.Handler):
             def __init__(self, log_list):
@@ -46,21 +46,21 @@ class TestSearchCapabilities(BaseTest):
         list_handler.setFormatter(formatter)
         cls.logger.addHandler(list_handler)
 
-        # Initialize streams and warnings list
+        # Initialize streams and warnings list.
         cls.stdout_stream = io.StringIO()
         cls.stderr_stream = io.StringIO()
         cls.log_stream = io.StringIO()
         cls.warnings_list = []
 
-        # Initialize test results accumulator
+        # Initialize test results accumulator.
         cls.test_results = []
 
     def setUp(self):
-        # Clean the collection before each test
+        # Clean the collection before each test.
         try:
             self.data_collection.drop()
-            # Recreate the collection if needed.
-            self.docdb_db.create_collection('exampleCollection')
+            # Recreate the collection with the intended name.
+            self.docdb_db.create_collection(self.collection_name)
         except Exception:
             pass
         try:
@@ -68,7 +68,7 @@ class TestSearchCapabilities(BaseTest):
         except Exception:
             pass
 
-        # Insert sample data for testing
+        # Insert sample data for testing.
         sample_data = [
             {
                 'name': 'Eugenia Lopez',
@@ -100,7 +100,7 @@ class TestSearchCapabilities(BaseTest):
         except Exception as e:
             self.logger.error(f"Unexpected exception during setUp: {e}")
 
-        # Clear streams and warnings before each test
+        # Clear streams and warnings before each test.
         self.__class__.log_capture_list.clear()
         for stream in (self.__class__.stdout_stream, self.__class__.stderr_stream, self.__class__.log_stream):
             stream.truncate(0)
@@ -146,7 +146,7 @@ class TestSearchCapabilities(BaseTest):
             result_document['version'] = 'unknown'
         result_document['log_lines'] = list(self.__class__.log_capture_list)
         del result_document['_start_time']
-        # Ensure JSON serializability
+        # Ensure JSON serializability.
         result_document = json.loads(json.dumps(result_document, default=str))
         self.__class__.test_results.append(result_document)
     # ------------------------------------------------
@@ -235,12 +235,6 @@ class TestSearchCapabilities(BaseTest):
                 result_document['stderr'] = self.__class__.stderr_stream.getvalue()
                 self.finalize_result_document(result_document)
 
-
-
-
-
-
-
     def test_basic_text_search(self):
         result_document = self.initialize_result_document("Basic_Text_Search")
         with contextlib.redirect_stdout(io.StringIO()) as stdout, contextlib.redirect_stderr(io.StringIO()) as stderr:
@@ -321,15 +315,14 @@ class TestSearchCapabilities(BaseTest):
                 result_document['stderr'] = stderr.getvalue()
                 self.finalize_result_document(result_document)
 
-
-
     @classmethod
     def tearDownClass(cls):
         try:
+            # Drop the test data collection used in the search tests.
             cls.data_collection.drop()
-            cls.logger.debug("Dropped exampleCollection collection during teardown.")
+            cls.logger.debug("Dropped test_search collection during teardown.")
         except Exception as e:
-            cls.logger.error(f"Error dropping exampleCollection collection: {e}")
+            cls.logger.error(f"Error dropping test_search collection: {e}")
         super().tearDownClass()
 
 if __name__ == '__main__':
