@@ -146,7 +146,8 @@ class TestAllOperators(BaseTest):
             # Accumulate result for later storage
             self.test_results.append(result_document)
 
-    # Define test methods for each operator
+    # ----------------- Existing Operator Tests -----------------
+
     def test_eq_operator(self):
         operator_name = '$eq'
         query = {"value": {"$eq": 20}}
@@ -217,13 +218,11 @@ class TestAllOperators(BaseTest):
         query = {"stringField": {"$regex": "test"}}
         self.execute_and_store_query(query, operator_name)
 
-    
     def test_text_operator(self):
         operator_name = '$text'
         query = {"$text": {"$search": "tag1"}}
         self.execute_and_store_query(query, operator_name)
        
-
     def test_geoIntersects_operator(self):
         operator_name = '$geoIntersects'
         query = {"location": {"$geoIntersects": {"$geometry": {"type": "Point", "coordinates": [40, 5]}}}}
@@ -509,6 +508,154 @@ class TestAllOperators(BaseTest):
     def test_convert_expression(self):
         operator_name = '$convert'
         pipeline = [{"$project": {"convertedValue": {"$convert": {"input": "$stringField", "to": "int", "onError": 0}}}}]
+        self.execute_and_store_query(pipeline, operator_name, is_aggregation=True)
+
+    # ----------------- New Operator Tests (Missing Operators) -----------------
+
+    def test_literal_expression(self):
+        operator_name = '$literal'
+        pipeline = [{"$project": {"literalValue": {"$literal": "constant"}}}]
+        self.execute_and_store_query(pipeline, operator_name, is_aggregation=True)
+
+    def test_toUpper_expression(self):
+        operator_name = '$toUpper'
+        pipeline = [{"$project": {"upperCase": {"$toUpper": "$stringField"}}}]
+        self.execute_and_store_query(pipeline, operator_name, is_aggregation=True)
+
+    def test_trim_expression(self):
+        operator_name = '$trim'
+        pipeline = [{"$project": {"trimmed": {"$trim": {"input": "   hello world   ", "chars": " "}}}}]
+        self.execute_and_store_query(pipeline, operator_name, is_aggregation=True)
+
+    def test_ltrim_expression(self):
+        operator_name = '$ltrim'
+        pipeline = [{"$project": {"ltrimmed": {"$ltrim": {"input": "   hello world   ", "chars": " "}}}}]
+        self.execute_and_store_query(pipeline, operator_name, is_aggregation=True)
+
+    def test_rtrim_expression(self):
+        operator_name = '$rtrim'
+        pipeline = [{"$project": {"rtrimmed": {"$rtrim": {"input": "   hello world   ", "chars": " "}}}}]
+        self.execute_and_store_query(pipeline, operator_name, is_aggregation=True)
+
+    def test_substrBytes_expression(self):
+        operator_name = '$substrBytes'
+        pipeline = [{"$project": {"substring": {"$substrBytes": ["$stringField", 0, 5]}}}]
+        self.execute_and_store_query(pipeline, operator_name, is_aggregation=True)
+
+    def test_dateFromString_expression(self):
+        operator_name = '$dateFromString'
+        pipeline = [{"$project": {"dateFromString": {"$dateFromString": {"dateString": "2023-01-01T00:00:00Z"}}}}]
+        self.execute_and_store_query(pipeline, operator_name, is_aggregation=True)
+
+    def test_dateFromParts_expression(self):
+        operator_name = '$dateFromParts'
+        pipeline = [{"$project": {"dateFromParts": {"$dateFromParts": {"year": 2023, "month": 1, "day": 1}}}}]
+        self.execute_and_store_query(pipeline, operator_name, is_aggregation=True)
+
+    def test_dateToParts_expression(self):
+        operator_name = '$dateToParts'
+        pipeline = [{"$project": {"dateToParts": {"$dateToParts": {"date": "$dateField"}}}}]
+        self.execute_and_store_query(pipeline, operator_name, is_aggregation=True)
+
+    def test_getField_expression(self):
+        operator_name = '$getField'
+        pipeline = [{"$project": {"fieldValue": {"$getField": {"field": "key", "input": {"key": "value"}}}}}]
+        self.execute_and_store_query(pipeline, operator_name, is_aggregation=True)
+
+    def test_setField_expression(self):
+        operator_name = '$setField'
+        pipeline = [{"$project": {"modifiedObject": {"$setField": {"field": "newField", "input": {"existing": "data"}, "value": "newValue"}}}}]
+        self.execute_and_store_query(pipeline, operator_name, is_aggregation=True)
+
+    def test_mergeObjects_expression(self):
+        operator_name = '$mergeObjects'
+        pipeline = [{"$project": {"merged": {"$mergeObjects": [{"a": 1}, {"b": 2}]}}}]
+        self.execute_and_store_query(pipeline, operator_name, is_aggregation=True)
+
+    def test_arrayToObject_expression(self):
+        operator_name = '$arrayToObject'
+        pipeline = [{"$project": {"objectConverted": {"$arrayToObject": [{"k": "key", "v": "value"}]}}}]
+        self.execute_and_store_query(pipeline, operator_name, is_aggregation=True)
+
+    def test_objectToArray_expression(self):
+        operator_name = '$objectToArray'
+        pipeline = [{"$project": {"arrayConverted": {"$objectToArray": {"a": 1, "b": 2}}}}]
+        self.execute_and_store_query(pipeline, operator_name, is_aggregation=True)
+
+    def test_indexOfArray_expression(self):
+        operator_name = '$indexOfArray'
+        pipeline = [{"$project": {"index": {"$indexOfArray": ["$numericArray", 8]}}}]
+        self.execute_and_store_query(pipeline, operator_name, is_aggregation=True)
+
+    def test_reverseArray_expression(self):
+        operator_name = '$reverseArray'
+        pipeline = [{"$project": {"reversed": {"$reverseArray": "$numericArray"}}}]
+        self.execute_and_store_query(pipeline, operator_name, is_aggregation=True)
+
+    def test_zip_expression(self):
+        operator_name = '$zip'
+        pipeline = [{"$project": {"zipped": {"$zip": {"inputs": ["$numericArray", [100, 200, 300]]}}}}]
+        self.execute_and_store_query(pipeline, operator_name, is_aggregation=True)
+
+    def test_setDifference_expression(self):
+        operator_name = '$setDifference'
+        pipeline = [{"$project": {"diff": {"$setDifference": ["$numericArray", [1, 2]]}}}]
+        self.execute_and_store_query(pipeline, operator_name, is_aggregation=True)
+
+    def test_setEquals_expression(self):
+        operator_name = '$setEquals'
+        pipeline = [{"$project": {"equals": {"$setEquals": ["$numericArray", [1, 2, 3]]}}}]
+        self.execute_and_store_query(pipeline, operator_name, is_aggregation=True)
+
+    def test_setIntersection_expression(self):
+        operator_name = '$setIntersection'
+        pipeline = [{"$project": {"intersection": {"$setIntersection": ["$numericArray", [2, 3, 4]]}}}]
+        self.execute_and_store_query(pipeline, operator_name, is_aggregation=True)
+
+    def test_setUnion_expression(self):
+        operator_name = '$setUnion'
+        pipeline = [{"$project": {"union": {"$setUnion": ["$numericArray", [3, 4, 5]]}}}]
+        self.execute_and_store_query(pipeline, operator_name, is_aggregation=True)
+
+    def test_toDouble_expression(self):
+        operator_name = '$toDouble'
+        pipeline = [{"$project": {"doubleValue": {"$toDouble": "$value"}}}]
+        self.execute_and_store_query(pipeline, operator_name, is_aggregation=True)
+
+    def test_toLong_expression(self):
+        operator_name = '$toLong'
+        pipeline = [{"$project": {"longValue": {"$toLong": "$value"}}}]
+        self.execute_and_store_query(pipeline, operator_name, is_aggregation=True)
+
+    def test_toBool_expression(self):
+        operator_name = '$toBool'
+        pipeline = [{"$project": {"boolValue": {"$toBool": "$value"}}}]
+        self.execute_and_store_query(pipeline, operator_name, is_aggregation=True)
+
+    def test_toDecimal_expression(self):
+        operator_name = '$toDecimal'
+        pipeline = [{"$project": {"decimalValue": {"$toDecimal": "$value"}}}]
+        self.execute_and_store_query(pipeline, operator_name, is_aggregation=True)
+
+    def test_toString_expression(self):
+        operator_name = '$toString'
+        pipeline = [{"$project": {"stringConversion": {"$toString": "$value"}}}]
+        self.execute_and_store_query(pipeline, operator_name, is_aggregation=True)
+
+    def test_setWindowFields_stage(self):
+        operator_name = '$setWindowFields'
+        pipeline = [
+            {"$setWindowFields": {
+                "partitionBy": "$category",
+                "sortBy": {"value": 1},
+                "output": {
+                    "cumulativeSum": {
+                        "$sum": "$value",
+                        "window": {"documents": ["unbounded", "current"]}
+                    }
+                }
+            }}
+        ]
         self.execute_and_store_query(pipeline, operator_name, is_aggregation=True)
 
     @classmethod
