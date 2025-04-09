@@ -3,7 +3,7 @@ from pymongo import MongoClient
 
 def main():
     # Connection string for the Atlas cluster
-    connection_str = "mongodb+srv://rahulverma:09Ph2007@competitive36.tsnei.mongodb.net/?retryWrites=true&w=majority&appName=Competitive36"
+    connection_str = "Enter your atlas connection string here"
     
     # Connect to the cluster
     client = MongoClient(connection_str)
