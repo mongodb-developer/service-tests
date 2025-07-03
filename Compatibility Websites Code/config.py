@@ -28,5 +28,5 @@ KMS_PROVIDERS = {
 KEY_VAULT_NAMESPACE = 'encryption.__keyVault'
 
 # Paths to mongodump and mongorestore tools
-MONGODUMP_PATH = '/Users/rahul.verma/Desktop/vCore Compatibility Test Suite/mongodb-database-tools-macos-arm64-100.10.0/bin/mongodump'        # Update with the path to your mongodump tool
-MONGORESTORE_PATH = '/Users/rahul.verma/Desktop/vCore Compatibility Test Suite/mongodb-database-tools-macos-arm64-100.10.0/bin/mongorestore'  # Update with the path to your mongorestore tool
+MONGODUMP_PATH = ''        # Update with the path to your mongodump tool
+MONGORESTORE_PATH = ''  # Update with the path to your mongorestore tool
