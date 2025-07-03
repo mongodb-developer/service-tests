@@ -23,7 +23,7 @@ DOCDB_DB_NAME = 'testdb_documentdb_main3'      # Ensuring consistency with DB_NA
 # ------------------------------------------------------------------------------
 # MongoDB Atlas cluster for storing results (unchanged)
 # ------------------------------------------------------------------------------
-RESULT_DB_URI = "mongodb+srv://rahulverma:09Ph2007@vcompatibilitytest.n0kts.mongodb.net/?retryWrites=true&w=majority&appName=vcompatibilitytest"
+RESULT_DB_URI = "
 RESULT_DB_NAME = "docdb_web_prod_new"
 RESULT_COLLECTION_NAME = "correctness_new"
 
