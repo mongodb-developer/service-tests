@@ -206,9 +206,6 @@ class TestAdministrativeCommands(BaseTest):
         self.run_admin_command_test(command_name, command_body)
 
 
-
-
-
     def test_currentOp(self):
         command_name = 'currentOp'
         command_body = {
@@ -301,22 +298,7 @@ class TestAdministrativeCommands(BaseTest):
         }
         self.run_admin_command_test(command_name, command_body)
 
-    #def test_compactStructuredEncryptionData(self):
-        #command_name = 'compactStructuredEncryptionData'
-        #command_body = {
-            #'compactStructuredEncryptionData': self.collection_name,
-            #'compactionTokens': []  # required extra field
-        #}
-        #self.run_admin_command_test(command_name, command_body)
-
-    #def test_dropConnections(self):
-        #command_name = 'dropConnections'
-        # Supply the required 'hostAndPort' field using the client’s address.
-        #host, port = self.docdb_client.address
-        #command_body = {
-            #'dropConnections': [{'hostAndPort': f"{host}:{port}"}]
-        #}
-        #self.run_admin_command_test(command_name, command_body)
+ 
 
     def test_filemd5(self):
         # Note: 'filemd5' operates on GridFS files. For testing purposes, we assume an example file ID.
@@ -327,19 +309,6 @@ class TestAdministrativeCommands(BaseTest):
         }
         self.run_admin_command_test(command_name, command_body)
 
-    #def test_fsync(self):
-        #command_name = 'fsync'
-        #command_body = {
-            #'fsync': 1
-        #}
-        #self.run_admin_command_test(command_name, command_body)
-
-    #(self):
-        #command_name = 'fsyncUnlock'
-        #command_body = {
-            #'fsyncUnlock': 1
-        #}
-        #self.run_admin_command_test(command_name, command_body)
 
     def test_getDefaultRWConcern(self):
         command_name = 'getDefaultRWConcern'
@@ -370,34 +339,7 @@ class TestAdministrativeCommands(BaseTest):
         }
         self.run_admin_command_test(command_name, command_body)
 
-    #def test_killOp(self):
-        #command_name = 'killOp'
-        #command_body = {
-            #'killOp': 1,
-            #'op': 1234567890  # placeholder operation ID
-        #}
-        #self.run_admin_command_test(command_name, command_body)
-
-    #def test_logRotate(self):
-        #command_name = 'logRotate'
-        #command_body = {
-            #'logRotate': 1
-        #}
-        #self.run_admin_command_test(command_name, command_body)
-
-    #def test_rotateCertificates(self):
-        #command_name = 'rotateCertificates'
-        #command_body = {
-            #'rotateCertificates': 1
-        #}
-        #self.run_admin_command_test(command_name, command_body)
-
-    #def test_setFeatureCompatibilityVersion(self):
-        #command_name = 'setFeatureCompatibilityVersion'
-        #command_body = {
-            #'setFeatureCompatibilityVersion': '4.0'  # adjust version as appropriate for your environment
-        #}
-        #self.run_admin_command_test(command_name, command_body)
+ 
 
     def test_setIndexCommitQuorum(self):
         command_name = 'setIndexCommitQuorum'
@@ -408,29 +350,7 @@ class TestAdministrativeCommands(BaseTest):
         }
         self.run_admin_command_test(command_name, command_body)
 
-    #def test_setClusterParameter(self):
-        #command_name = 'setClusterParameter'
-        #command_body = {
-            #'setClusterParameter': {'changeStreamOptions': {'preAndPostImages': {'enabled': True}}}
-        #}
-        #self.run_admin_command_test(command_name, command_body)
-
-    #def test_setParameter(self):
-        #command_name = 'setParameter'
-        #command_body = {
-            #'setParameter': 1,
-            #'notablescan': True
-        #}
-        #self.run_admin_command_test(command_name, command_body)
-
-    #def test_setDefaultRWConcern(self):
-        #command_name = 'setDefaultRWConcern'
-        #command_body = {
-            #'setDefaultRWConcern': 1,
-            #'defaultReadConcern': {'level': 'majority'},
-            #'defaultWriteConcern': {'w': 'majority'}
-        #}
-        #self.run_admin_command_test(command_name, command_body)
+ 
 
     def test_setUserWriteBlockMode(self):
         command_name = 'setUserWriteBlockMode'
@@ -447,13 +367,6 @@ class TestAdministrativeCommands(BaseTest):
             print(f"Error resetting user write block mode in CosmosDB: {e}")
 
 
-    #def test_validateDBMetadata(self):
-        #command_name = 'validateDBMetadata'
-        #command_body = {
-            #'validateDBMetadata': 1,
-            #'apiParameters': {}  # required extra field
-        #}
-        #self.run_admin_command_test(command_name, command_body)
 
     @classmethod
     def tearDownClass(cls):
