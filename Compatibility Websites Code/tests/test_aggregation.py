@@ -217,6 +217,30 @@ class TestAggregation(BaseTest):
         ]
         self.execute_aggregation_test(pipeline, '$bucketAuto Stage Test')
 
+    def test_changeStream_stage(self):
+        """
+        Test $changeStream stage.
+        """
+        pipeline = [
+            {
+                '$changeStream': {
+                    'fullDocument': 'updateLookup'
+                }
+            }
+        ]
+        self.execute_aggregation_test(pipeline, '$changeStream Stage Test')
+
+    def test_changeStreamSplitLargeEvent_stage(self):
+        """
+        Test $changeStreamSplitLargeEvent stage.
+        """
+        pipeline = [
+            {
+                '$changeStreamSplitLargeEvent': {}
+            }
+        ]
+        self.execute_aggregation_test(pipeline, '$changeStreamSplitLargeEvent Stage Test')
+
     def test_collStats_stage(self):
         """
         Test $collStats stage.
@@ -244,6 +268,20 @@ class TestAggregation(BaseTest):
         ]
         self.execute_aggregation_test(pipeline, '$count Stage Test')
 
+    def test_currentOp_stage(self):
+        """
+        Test $currentOp stage.
+        """
+        pipeline = [
+            {
+                '$currentOp': {
+                    'allUsers': False,
+                    'idleConnections': False
+                }
+            }
+        ]
+        self.execute_aggregation_test(pipeline, '$currentOp Stage Test')
+
     def test_densify_stage(self):
         """
         Test $densify stage.
@@ -262,6 +300,21 @@ class TestAggregation(BaseTest):
             }
         ]
         self.execute_aggregation_test(pipeline, '$densify Stage Test')
+
+    def test_documents_stage(self):
+        """
+        Test $documents stage.
+        """
+        pipeline = [
+            {
+                '$documents': [
+                    {'x': 10, 'y': 20},
+                    {'x': 15, 'y': 25},
+                    {'x': 20, 'y': 30}
+                ]
+            }
+        ]
+        self.execute_aggregation_test(pipeline, '$documents Stage Test')
 
     def test_facet_stage(self):
         """
@@ -354,6 +407,17 @@ class TestAggregation(BaseTest):
         ]
         self.execute_aggregation_test(pipeline, '$group Stage Test')
 
+    def test_indexStats_stage(self):
+        """
+        Test $indexStats stage.
+        """
+        pipeline = [
+            {
+                '$indexStats': {}
+            }
+        ]
+        self.execute_aggregation_test(pipeline, '$indexStats Stage Test')
+
     def test_limit_stage(self):
         """
         Test $limit stage.
@@ -364,6 +428,65 @@ class TestAggregation(BaseTest):
             }
         ]
         self.execute_aggregation_test(pipeline, '$limit Stage Test')
+
+    def test_listClusterCatalog_stage(self):
+        """
+        Test $listClusterCatalog stage.
+        """
+        pipeline = [
+            {
+                '$listClusterCatalog': {}
+            }
+        ]
+        self.execute_aggregation_test(pipeline, '$listClusterCatalog Stage Test')
+
+    def test_listLocalSessions_stage(self):
+        """
+        Test $listLocalSessions stage.
+        """
+        pipeline = [
+            {
+                '$listLocalSessions': {
+                    'allUsers': False
+                }
+            }
+        ]
+        self.execute_aggregation_test(pipeline, '$listLocalSessions Stage Test')
+
+    def test_listSampledQueries_stage(self):
+        """
+        Test $listSampledQueries stage.
+        """
+        pipeline = [
+            {
+                '$listSampledQueries': {}
+            }
+        ]
+        self.execute_aggregation_test(pipeline, '$listSampledQueries Stage Test')
+
+    def test_listSearchIndexes_stage(self):
+        """
+        Test $listSearchIndexes stage.
+        """
+        pipeline = [
+            {
+                '$listSearchIndexes': {}
+            }
+        ]
+        self.execute_aggregation_test(pipeline, '$listSearchIndexes Stage Test')
+
+    def test_listSessions_stage(self):
+        """
+        Test $listSessions stage.
+        """
+        pipeline = [
+            {
+                '$listSessions': {
+                    'allUsers': False
+                }
+            }
+        ]
+        self.execute_aggregation_test(pipeline, '$listSessions Stage Test')
 
     def test_lookup_stage(self):
         """
@@ -392,6 +515,59 @@ class TestAggregation(BaseTest):
         ]
         self.execute_aggregation_test(pipeline, '$match Stage Test')
 
+    def test_merge_stage(self):
+        """
+        Test $merge stage.
+        """
+        # Ensure output collection is clean
+        self.output_collection.drop()
+
+        pipeline = [
+            {
+                '$group': {
+                    '_id': '$category',
+                    'total_value': {'$sum': '$value'}
+                }
+            },
+            {
+                '$merge': {
+                    'into': self.output_collection_name,
+                    'on': '_id',
+                    'whenMatched': 'replace',
+                    'whenNotMatched': 'insert'
+                }
+            }
+        ]
+        self.execute_aggregation_test(pipeline, '$merge Stage Test')
+
+    def test_out_stage(self):
+        """
+        Test $out stage.
+        """
+        # Ensure output collection is clean
+        self.output_collection.drop()
+
+        pipeline = [
+            {
+                '$match': {'category': 'A'}
+            },
+            {
+                '$out': self.output_collection_name
+            }
+        ]
+        self.execute_aggregation_test(pipeline, '$out Stage Test')
+
+    def test_planCacheStats_stage(self):
+        """
+        Test $planCacheStats stage.
+        """
+        pipeline = [
+            {
+                '$planCacheStats': {}
+            }
+        ]
+        self.execute_aggregation_test(pipeline, '$planCacheStats Stage Test')
+
     def test_project_stage(self):
         """
         Test $project stage.
@@ -406,6 +582,49 @@ class TestAggregation(BaseTest):
             }
         ]
         self.execute_aggregation_test(pipeline, '$project Stage Test')
+
+    def test_querySettings_stage(self):
+        """
+        Test $querySettings stage.
+        Available in MongoDB 8.0+
+        """
+        pipeline = [
+            {
+                '$querySettings': {}
+            }
+        ]
+        self.execute_aggregation_test(pipeline, '$querySettings Stage Test')
+
+    def test_queryStats_stage(self):
+        """
+        Test $queryStats stage.
+        Note: This stage is unsupported and not guaranteed to be stable.
+        """
+        pipeline = [
+            {
+                '$queryStats': {}
+            }
+        ]
+        self.execute_aggregation_test(pipeline, '$queryStats Stage Test')
+
+    def test_rankFusion_stage(self):
+        """
+        Test $rankFusion stage.
+        Combines results of input pipelines that rank documents using Reciprocal Rank Fusion.
+        """
+        pipeline = [
+            {
+                '$rankFusion': {
+                    'input': {
+                        'pipelines': [
+                            [{'$match': {'category': 'A'}}, {'$addFields': {'score': 1}}],
+                            [{'$match': {'value': {'$gt': 15}}}, {'$addFields': {'score': 1}}]
+                        ]
+                    }
+                }
+            }
+        ]
+        self.execute_aggregation_test(pipeline, '$rankFusion Stage Test')
 
     def test_redact_stage(self):
         """
@@ -457,6 +676,38 @@ class TestAggregation(BaseTest):
         ]
         self.execute_aggregation_test(pipeline, '$sample Stage Test')
 
+    def test_search_stage(self):
+        """
+        Test $search stage (Atlas Search).
+        """
+        pipeline = [
+            {
+                '$search': {
+                    'text': {
+                        'query': 'test',
+                        'path': 'description'
+                    }
+                }
+            }
+        ]
+        self.execute_aggregation_test(pipeline, '$search Stage Test')
+
+    def test_searchMeta_stage(self):
+        """
+        Test $searchMeta stage (Atlas Search).
+        """
+        pipeline = [
+            {
+                '$searchMeta': {
+                    'text': {
+                        'query': 'test',
+                        'path': 'description'
+                    }
+                }
+            }
+        ]
+        self.execute_aggregation_test(pipeline, '$searchMeta Stage Test')
+
     def test_set_stage(self):
         """
         Test $set stage.
@@ -469,6 +720,31 @@ class TestAggregation(BaseTest):
             }
         ]
         self.execute_aggregation_test(pipeline, '$set Stage Test')
+
+    def test_setWindowFields_stage(self):
+        """
+        Test $setWindowFields stage.
+        """
+        pipeline = [
+            {
+                '$setWindowFields': {
+                    'partitionBy': '$category',
+                    'sortBy': {'value': 1},
+                    'output': {
+                        'cumulativeValue': {
+                            '$sum': '$value',
+                            'window': {
+                                'documents': ['unbounded', 'current']
+                            }
+                        },
+                        'rank': {
+                            '$rank': {}
+                        }
+                    }
+                }
+            }
+        ]
+        self.execute_aggregation_test(pipeline, '$setWindowFields Stage Test')
 
     def test_skip_stage(self):
         """
@@ -541,6 +817,23 @@ class TestAggregation(BaseTest):
         ]
         self.execute_aggregation_test(pipeline, '$unwind Stage Test')
 
+    def test_vectorSearch_stage(self):
+        """
+        Test $vectorSearch stage (Atlas Vector Search).
+        """
+        pipeline = [
+            {
+                '$vectorSearch': {
+                    'index': 'vector_index',
+                    'path': 'embedding',
+                    'queryVector': [0.1, 0.2, 0.3],
+                    'numCandidates': 100,
+                    'limit': 10
+                }
+            }
+        ]
+        self.execute_aggregation_test(pipeline, '$vectorSearch Stage Test')
+
     def test_variables_in_expressions(self):
         """
         Test variables in aggregation expressions.
@@ -573,48 +866,6 @@ class TestAggregation(BaseTest):
             }
         ]
         self.execute_aggregation_test(pipeline, 'Variables Test')
-
-    def test_merge_stage(self):
-        """
-        Test $merge stage.
-        """
-        # Ensure output collection is clean
-        self.output_collection.drop()
-
-        pipeline = [
-            {
-                '$group': {
-                    '_id': '$category',
-                    'total_value': {'$sum': '$value'}
-                }
-            },
-            {
-                '$merge': {
-                    'into': self.output_collection_name,
-                    'on': '_id',
-                    'whenMatched': 'replace',
-                    'whenNotMatched': 'insert'
-                }
-            }
-        ]
-        self.execute_aggregation_test(pipeline, '$merge Stage Test')
-
-    def test_out_stage(self):
-        """
-        Test $out stage.
-        """
-        # Ensure output collection is clean
-        self.output_collection.drop()
-
-        pipeline = [
-            {
-                '$match': {'category': 'A'}
-            },
-            {
-                '$out': self.output_collection_name
-            }
-        ]
-        self.execute_aggregation_test(pipeline, '$out Stage Test')
 
     @classmethod
     def tearDownClass(cls):
